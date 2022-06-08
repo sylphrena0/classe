@@ -11,3 +11,9 @@
 * **Attended the CHESS user meeting and lab training**
 
 <br> 
+
+## Wednesday, June 8th, 2022
+---
+* **Attended Wilson safety training**
+* **Created introduction to superconducters presentation slide**
+* **Started search for materials database**
