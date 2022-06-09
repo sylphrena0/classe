@@ -17,3 +17,5 @@
 * **Attended Wilson safety training**
 * **Created introduction to superconducters presentation slide**
 * **Started search for materials database**
+1. [Supercon Database](https://en.iric.imet-db.ru/DBinfo.asp?idd=51)
+2. [ICSD Database](https://icsd.products.fiz-karlsruhe.de/) (not just superconducters, the world's largest database for completely identified inorganic crystal structures )
