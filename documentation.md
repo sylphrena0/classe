@@ -16,6 +16,14 @@
 ---
 * **Attended Wilson safety training**
 * **Created introduction to superconducters presentation slide**
-* **Started search for materials database**
+* **Searched for materials database**
 1. [Supercon Database](https://en.iric.imet-db.ru/DBinfo.asp?idd=51)
-2. [ICSD Database](https://icsd.products.fiz-karlsruhe.de/) (not just superconducters, the world's largest database for completely identified inorganic crystal structures )
+2. Matminer Database (matminer.datasets.load_dataset('superconductivity2018')
+3. [ICSD Database](https://icsd.products.fiz-karlsruhe.de/) (not just superconducters, the world's largest database for completely identified inorganic crystal structures )
+
+<br> 
+
+## Thursday, June 9th, 2022
+---
+* **Took online safety trainings**
+* **Looked into matminer documentation**
