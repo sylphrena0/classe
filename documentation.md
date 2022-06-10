@@ -29,7 +29,8 @@
 
 <br> 
 
-## Wednesday, June 10th, 2022
+## Friday, June 10th, 2022
 ---
 * **Imposter syndrome workshop!**
-<!-- * **Looked into matminer documentation** -->
+* **Started testing matminer featurizers and automatminer**
+* **Resolved python package conflicts**
