@@ -26,3 +26,10 @@
 ---
 * **Took online safety trainings**
 * **Looked into matminer documentation**
+
+<br> 
+
+## Wednesday, June 10th, 2022
+---
+* **Imposter syndrome workshop!**
+<!-- * **Looked into matminer documentation** -->
