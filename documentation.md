@@ -33,4 +33,4 @@
 ---
 * **Imposter syndrome workshop!**
 * **Started testing matminer featurizers and automatminer**
-* **Resolved python package conflicts**
+* **Worked on python package conflicts with automatminer (issue with sklearn depreciating a metric import)**
