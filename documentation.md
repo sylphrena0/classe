@@ -18,8 +18,7 @@
 * **Created introduction to superconducters presentation slide**
 * **Searched for materials database**
 1. [Supercon Database](https://en.iric.imet-db.ru/DBinfo.asp?idd=51)
-2. Matminer Database (matminer.datasets.load_dataset('superconductivity2018')
-3. [ICSD Database](https://icsd.products.fiz-karlsruhe.de/) (not just superconducters, the world's largest database for completely identified inorganic crystal structures )
+2. [ICSD Database](https://icsd.products.fiz-karlsruhe.de/) (not just superconducters, the world's largest database for completely identified inorganic crystal structures )
 
 <br> 
 
