@@ -43,3 +43,4 @@
 * **REU weekly meeting**
 * **CLASSE 998 Safety Training**
 * **Abandon automatminer for a manual implementation due to unresolved package errors**
+* **Worked more on testing matminer featurizers, still having some issues getting proper composition data.**
