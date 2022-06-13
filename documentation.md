@@ -34,3 +34,12 @@
 * **Imposter syndrome workshop!**
 * **Started testing matminer featurizers and automatminer**
 * **Worked on python package conflicts with automatminer (issue with sklearn depreciating a metric import)**
+
+<br> 
+
+## Monday, June 13th, 2022
+---
+* **Intro to Accelerator Science Workshop**
+* **REU weekly meeting**
+* **CLASSE 998 Safety Training**
+* **Abandon automatminer for a manual implementation due to unresolved package errors**
