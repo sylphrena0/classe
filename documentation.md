@@ -1,6 +1,8 @@
-# **Cornell CLASSE REU**
-### Mentor: Suchismita Sarker
-### Mentee: Kirk Kleinsasser
+# **REU Documentation**
+Documents daily work in the REU program, including events, meetings, and broad descriptions of programming work.
+
+*Author: Kirk Kleinsasser*
+
 
 <br>
 
@@ -65,3 +67,4 @@
 * **Ethics in science session**
 * **Featurizering complete**
 * **Started machine learning notebook**
+* **Organized code and added readme**
