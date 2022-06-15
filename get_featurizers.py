@@ -32,6 +32,16 @@ features = ['Number', 'MendeleevNumber', 'AtomicWeight', 'MeltingT',
             'NsUnfilled', 'NpUnfilled', 'NdUnfilled', 'NfUnfilled', 'NUnfilled', 
             'GSvolume_pa', 'GSbandgap', 'GSmagmom', 'SpaceGroupNumber']
 
+from matminer.featurizers.composition import ElectronAffinity, ElementProperty, TMetalFraction, Stoichiometry, BandCenter, OxidationStates, IonProperty, ElectronegativityDiff, AtomicOrbitals, ValenceOrbital, AtomicPackingEfficiency, CohesiveEnergy, CohesiveEnergyMP
+#WARNING - this will take a while (>2 hours) to run!
+
+#these are all the Magpie features. You can choose fewer if you want.
+features = ['Number', 'MendeleevNumber', 'AtomicWeight', 'MeltingT', 
+            'Column', 'Row', 'CovalentRadius', 'Electronegativity', 
+            'NsValence', 'NpValence', 'NdValence', 'NfValence', 'NValence', 
+            'NsUnfilled', 'NpUnfilled', 'NdUnfilled', 'NfUnfilled', 'NUnfilled', 
+            'GSvolume_pa', 'GSbandgap', 'GSmagmom', 'SpaceGroupNumber']
+
 ea_prop = ElementProperty(data_source='magpie', features=features, stats=['mean']) # can add 'minimum', 'maximum', 'range', 'avg_dev', 'mode' to stats
 ea_prop_data = ea_prop.featurize_dataframe(composition, 'composition', ignore_errors=True)
 
