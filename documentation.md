@@ -61,7 +61,7 @@
 
 <br> 
 
-## Tuesday, June 14th, 2022
+## Wednesday, June 15th, 2022
 * **Ethics in science session**
 * **Featurizering complete**
 * **Started machine learning notebook**
