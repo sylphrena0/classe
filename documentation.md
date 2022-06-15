@@ -58,3 +58,10 @@
 * **Composition issues fixed, featurizers working correctly**
 * **Testing some machine learning algorithms**
 * **Looking into the compute farm, as some of the featurizers have time estimates higher than an hour**
+
+<br> 
+
+## Tuesday, June 14th, 2022
+* **Ethics in science session**
+* **Featurizering complete**
+* **Started machine learning notebook**
