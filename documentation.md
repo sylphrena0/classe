@@ -62,6 +62,8 @@ Documents daily work in the REU program, including events, meetings, and broad d
 ## Thursday, June 16th, 2022
 * **Worked on moving residence halls**
 * **Futher work on regression models and gridsearch techniques**
+* **Optimization of models**
+* **Reading up on superconducters while code runs**
 </details>
 <br>
 
