@@ -58,6 +58,10 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Featurizering complete**
 * **Started machine learning notebook**
 * **Organized code and added readme**
+
+## Thursday, June 16th, 2022
+* **Worked on moving residence halls**
+* **Futher work on regression models and gridsearch techniques**
 </details>
 <br>
 
