@@ -62,9 +62,13 @@ Documents daily work in the REU program, including events, meetings, and broad d
 ## Thursday, June 16th, 2022
 * **Worked on moving residence halls**
 * **Futher work on regression models and gridsearch techniques**
-* **Started ptimization of SVR model**
+* **Optimized nonlinear SVR model**
 * **Added more comments to code**
 * **Reading up on superconducters while code runs**
+
+## Friday, June 17th, 2022
+* **Added slide to my [presentation](https://docs.google.com/presentation/d/1c-wVKFG8I19eHjtP6NVvT8W4JUKoA0xY--zjsJw1pV4/edit#slide=id.g13564193239_0_6)**
+* **Setup optimization for all remaining models and sent to compute farm to run overnight.**
 </details>
 <br>
 

@@ -1,0 +1,11 @@
+,0,1,2,3
+0,Support Vector Machines (Linear),ERROR,ERROR,name 'fixed_parm' is not defined
+1,Support Vector Machines (Poly),ERROR,ERROR,name 'fixed_parm' is not defined
+2,Elastic Net Regression,ERROR,ERROR,name 'fixed_parm' is not defined
+3,Decision Tree Regression,ERROR,ERROR,name 'fixed_parm' is not defined
+4,Random Forest Regression,ERROR,ERROR,name 'fixed_parm' is not defined
+5,KNeighbors Regression,ERROR,ERROR,name 'fixed_parm' is not defined
+6,Extra Trees Regression,ERROR,ERROR,name 'fixed_parm' is not defined
+7,Logistic Regression,ERROR,ERROR,name 'fixed_parm' is not defined
+8,Stochastic Gradient Descent,ERROR,ERROR,name 'fixed_parm' is not defined
+9,Bayesian Regression,ERROR,ERROR,name 'fixed_parm' is not defined
