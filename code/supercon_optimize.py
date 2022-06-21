@@ -70,8 +70,7 @@ SVR_PARAMETERS = {"kernel": ["poly","rbf","sigmoid"], "degree": np.arange(1,10,2
                     "epsilon": np.logspace(-3, 3, 10, 5), "gamma": [1.00000000e-03, 2.78255940e-03, 7.74263683e-03, 2.15443469e-02,
                     5.99484250e-02, 1.66810054e-01, 4.64158883e-01, 1.29154967e+00, 3.59381366e+00, 1.00000000e+01, "scale","auto"]}
 SVR_POLY_PARAMETERS = {"C": np.linspace(0,1000,10), "epsilon": np.logspace(-3, 3, 10, 5), 
-                    "gamma": [1.00000000e-03, 2.78255940e-03, 7.74263683e-03, 2.15443469e-02, 5.99484250e-02, 1.66810054e-01, 
-                    4.64158883e-01, 1.29154967e+00, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]}
+                    "gamma": [1.00000000e-03, 7.74263683e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]}
 ELASTIC_PARAMETERS = {"alpha": np.logspace(-5, 2, 10, 3), 'l1_ratio': np.arange(0, 1, 0.01)}
 DT_PARAMETERS = {'criterion': ['gini', 'entropy'], 'max_depth': [None, 1, 2, 3, 4, 5, 6, 7], 
                     'max_features': [None, 'sqrt', 'auto', 'log2', 0.3, 0.5, 0.7, n_features//2, n_features//3, ],
@@ -98,7 +97,7 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
                         param_grid = parameters, #hyperparameters
                         scoring = "neg_mean_squared_error", #metric for scoring
                         return_train_score = False, #we want test score
-                        cv = 5, #number of folds
+                        cv = 3, #number of folds
                         n_jobs = -1, #amount of threads to use
                         verbose = 1) #how much output to send while running
 
