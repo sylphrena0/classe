@@ -80,7 +80,8 @@ Documents daily work in the REU program, including events, meetings, and broad d
 ## Tuesday, June 14th, 2022
 * **Previous optimization run failed over the weekend - added error handling and multiprocessing to speed up script.**
 * **Continued work on presentation slides**
-
+* **Looked into compute farm syntax to optimize code. The compute farm is easier - while I can run it on my laptop, I need to turn off my laptop to switch operating systems at night, plus I can enable email notifications for scripts on the compute farm.**
+* **Added script that runs optimizers on compute farm instead of manually running code**
 
 </details>
 <br>
