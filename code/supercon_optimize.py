@@ -54,7 +54,10 @@ def import_data(replace_inf=False):
 
     #creates a test train split, with shuffle and random state for reproducibility 
     train_data, test_data, train_target, test_target = train_test_split(data, target, test_size=0.15, random_state=43, shuffle=True)
-######################################################
+
+#####################################################
+########### Setup Models for GridSearchCV ###########
+#####################################################
 
 import_data(replace_inf=True) #call the function that imports data, replacing infinity and NaN with 0
 
@@ -86,6 +89,7 @@ SGD_PARAMETERS = {'loss': ['hinge', 'log_loss', 'log', 'modified_huber', 'square
 BAYES_PARAMETERS = {'alpha_init':[1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.9], 'lambda_init': [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-9]}
 
 def optimize_model(model_name, regressor, parameters, fixed_params): #performs grid search on a given model with specified search and fixed model parameters and saves results to csv
+    print("Starting GridSearchCV on {}".format(model_name))
     #this function will allow us to use multiprocessing to do multiple grid searches at once.
     try: #try-excepts handles errors without ending process and allows us to read the error later on
         start_time = time.time() #sets start time for function so we can record processing time
@@ -96,7 +100,7 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
                         return_train_score = False, #we want test score
                         cv = 10, #number of folds
                         n_jobs = -1, #amount of threads to use
-                        verbose = 0) #how much output to send while running
+                        verbose = 1) #how much output to send while running
 
         search.fit(train_data, train_target) #fit the models
         results.append((model_name, search.best_estimator_, search.best_params_, search.best_score_, "Time Elapsed:" + str(time.time() - start_time))) #record results
@@ -106,6 +110,10 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
     result_df = pd.DataFrame(results)
     result_df.to_csv('./optimize_results_{}.csv'.format(model_name)) #saves data to './optimize_results.csv'
     # dill.dump_session('latest-run.db') #this can dump a python session so I can resume later, after restarts and such
+
+#####################################################
+############# Start Search Subprocesses #############
+#####################################################
 
 #define processes for each model search
 p_SVR = Process(target=optimize_model("Support Vector Machines (Linear)", SVR, SVR_PARAMETERS, {'max_iter': -1}))
