@@ -12,9 +12,11 @@
 ######################################################
 #general imports:
 # import warnings #to suppress grid search warnings
+import time
 import numpy as np 
 import pandas as pd
 import matplotlib.pyplot as plt
+from multiprocessing import Process
 # import seaborn as sns #heatmaps
 
 #regression models:
@@ -54,11 +56,13 @@ def import_data(replace_inf=False):
     train_data, test_data, train_target, test_target = train_test_split(data, target, test_size=0.15, random_state=43, shuffle=True)
 ######################################################
 
-import_data(replace_inf=True)
+import_data(replace_inf=True) #call the function that imports data, replacing infinity and NaN with 0
 
+#get number of rows and columns for use in parameters
 n_features = data.shape[1]
 n_samples = data.shape[0]
 
+#define parameters that will be searched with GridSearchCV
 SVR_PARAMETERS = {"kernel": ["poly","rbf","sigmoid"], "degree": np.arange(1,10,2), "C": np.linspace(0,1000,10),
                     "epsilon": np.logspace(-3, 3, 10, 5), "gamma": [1.00000000e-03, 2.78255940e-03, 7.74263683e-03, 2.15443469e-02,
                     5.99484250e-02, 1.66810054e-01, 4.64158883e-01, 1.29154967e+00,       3.59381366e+00, 1.00000000e+01, "scale","auto"]}
@@ -81,23 +85,10 @@ SGD_PARAMETERS = {'loss': ['hinge', 'log_loss', 'log', 'modified_huber', 'square
                     'penalty': ['l1', 'l2', 'elasticnet'], "alpha": np.logspace(-4, 3, 10, 7)}
 BAYES_PARAMETERS = {'alpha_init':[1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.9], 'lambda_init': [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-9]}
 
-model_list = [
-    ["Support Vector Machines (Linear)", SVR, SVR_PARAMETERS, {'max_iter': -1}],
-    ["Support Vector Machines (Poly)", SVR, SVR_POLY_PARAMETERS, {'max_iter': -1}],
-    ["Elastic Net Regression", ElasticNet, ELASTIC_PARAMETERS, {'fit_intercept': True}],
-    ["Decision Tree Regression", DecisionTreeRegressor, DT_PARAMETERS, {'random_state': 42}],
-    ["Random Forest Regression", RandomForestRegressor, RFR_PARAMETERS, {'bootstrap': True, 'n_jobs': -1}],
-    ["KNeighbors Regression", KNeighborsRegressor, KNN_PARAMETERS, {'n_jobs': -1}],
-    ["Extra Trees Regression", ExtraTreesRegressor, TREES_PARAMETERS, {'n_jobs': -1}],
-    ["Logistic Regression", LogisticRegression, LOG_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1}],
-    ["Stochastic Gradient Descent", SGDRegressor, SGD_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1}],
-    ["Bayesian Regression", BayesianRidge, BAYES_PARAMETERS, {'fit_intercept': True}]
-]
-
-
-results = [] #results list
-for model_name, regressor, parameters, fixed_params in model_list:
-    try:
+def optimize_model(model_name, regressor, parameters, fixed_params): #performs grid search on a given model with specified search and fixed model parameters and saves results to csv
+    #this function will allow us to use multiprocessing to do multiple grid searches at once.
+    try: #try-excepts handles errors without ending process and allows us to read the error later on
+        start_time = time.time() #sets start time for function so we can record processing time
         #define model, do grid search
         search = GridSearchCV(regressor(**fixed_params), #model
                         param_grid = parameters, #hyperparameters
@@ -108,10 +99,46 @@ for model_name, regressor, parameters, fixed_params in model_list:
                         verbose = 0) #how much output to send while running
 
         search.fit(train_data, train_target) #fit the models
-        results.append((model_name, search.best_estimator_, search.best_params_, search.best_score_)) #record results
+        results.append((model_name, search.best_estimator_, search.best_params_, search.best_score_, "Time Elapsed:" + str(time.time() - start_time))) #record results
     except Exception as error: #catch any issues and record them
         results.append((model_name, "ERROR", "ERROR", error)) #record errors
 
-result_df = pd.DataFrame(results)
-result_df.to_csv('./optimize_results.csv') #saves data to './optimize_results.csv'
-# dill.dump_session('latest-run.db') #this can dump a python session so I can resume later, after restarts and such
+    result_df = pd.DataFrame(results)
+    result_df.to_csv('./optimize_results_{}.csv'.format(model_name)) #saves data to './optimize_results.csv'
+    # dill.dump_session('latest-run.db') #this can dump a python session so I can resume later, after restarts and such
+
+#define processes for each model search
+p_SVR = Process(target=optimize_model("Support Vector Machines (Linear)", SVR, SVR_PARAMETERS, {'max_iter': -1}))
+p_SVR_POLY = Process(target=optimize_model("Support Vector Machines (Poly)", SVR, SVR_POLY_PARAMETERS, {'max_iter': -1}))
+p_ElasticNet = Process(target=optimize_model("Elastic Net Regression", ElasticNet, ELASTIC_PARAMETERS, {'fit_intercept': True}))
+p_DecisionTreeRegressor = Process(target=optimize_model("Decision Tree Regression", DecisionTreeRegressor, DT_PARAMETERS, {'random_state': 42}))
+p_RandomForestRegressor = Process(target=optimize_model("Random Forest Regression", RandomForestRegressor, RFR_PARAMETERS, {'bootstrap': True, 'n_jobs': -1}))
+p_KNeighborsRegressor = Process(target=optimize_model("KNeighbors Regression", KNeighborsRegressor, KNN_PARAMETERS, {'n_jobs': -1}))
+p_ExtraTreesRegressor = Process(target=optimize_model("Extra Trees Regression", ExtraTreesRegressor, TREES_PARAMETERS, {'n_jobs': -1}))
+p_LogisticRegression = Process(target=optimize_model("Logistic Regression", LogisticRegression, LOG_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1}))
+p_SGDRegressor = Process(target=optimize_model("Stochastic Gradient Descent", SGDRegressor, SGD_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1}))
+p_BayesianRidge = Process(target=optimize_model("Bayesian Regression", BayesianRidge, BAYES_PARAMETERS, {'fit_intercept': True}))
+
+#starts each subprocess
+p_SVR.start()
+p_SVR_POLY.start()
+p_ElasticNet.start()
+p_DecisionTreeRegressor.start()
+p_RandomForestRegressor.start()
+p_KNeighborsRegressor.start()
+p_ExtraTreesRegressor.start()
+p_LogisticRegression.start()
+p_SGDRegressor.start()
+p_BayesianRidge.start()
+
+#cleanly ends process upon completion
+p_SVR.join()
+p_SVR_POLY.join()
+p_ElasticNet.join()
+p_DecisionTreeRegressor.join()
+p_RandomForestRegressor.join()
+p_KNeighborsRegressor.join()
+p_ExtraTreesRegressor.join()
+p_LogisticRegression.join()
+p_SGDRegressor.join()
+p_BayesianRidge.join()
