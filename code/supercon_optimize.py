@@ -10,6 +10,7 @@
 ######################################################
 ### Import Libraries / Define Import Data Function ###
 ######################################################
+# %% 
 #general imports:
 # import warnings #to suppress grid search warnings
 import time
@@ -38,7 +39,7 @@ from sklearn.metrics import accuracy_score, recall_score, r2_score, mean_absolut
 #imports the data from get_featurizers. Function because some models we may want infinity:
 def import_data(replace_inf=False):
     global data, target, train_data, test_data, train_target, test_target #variables that we want to define globally (outside of this funtion)
-    data = pd.DataFrame(pd.read_csv('./supercon_feat.csv')) #loads data produced in get_featurizer.ipynb
+    data = pd.DataFrame(pd.read_csv('./supercon_feat.csv')) #loads data produced in get_featurizer.ipynb - NOTE: This should be '../data/supercon_feat.csv' if running locally
     target = data.pop('Tc') #remove target (critical temp) from data
 
     #TODO: add feature for infinite values or otherwise handle for models that cannot handle infinite data
@@ -58,6 +59,7 @@ def import_data(replace_inf=False):
 #####################################################
 ########### Setup Models for GridSearchCV ###########
 #####################################################
+# %% 
 
 import_data(replace_inf=True) #call the function that imports data, replacing infinity and NaN with 0
 
@@ -113,7 +115,7 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
 #####################################################
 ############# Start Search Subprocesses #############
 #####################################################
-
+# %% 
 #define processes for each model search
 p_SVR = Process(target=optimize_model("Support Vector Machines (Linear)", SVR, SVR_PARAMETERS, {'max_iter': -1}))
 p_SVR_POLY = Process(target=optimize_model("Support Vector Machines (Poly)", SVR, SVR_POLY_PARAMETERS, {'max_iter': -1}))
