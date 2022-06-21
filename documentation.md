@@ -72,13 +72,15 @@ Documents daily work in the REU program, including events, meetings, and broad d
 </details>
 <br>
 
-<!-- <details>
-<summary><font size=5>Week 1</font></summary>
+<details>
+<summary><font size=5>Week 3</font></summary>
 
 ---
 
-## Monday, June 20th, 2022
-* **Bullet**
+## Tuesday, June 14th, 2022
+* **Previous optimization run failed over the weekend - added error handling and multiprocessing to speed up script.**
+* **Continued work on presentation slides**
+
 
 </details>
-<br> -->
+<br>
