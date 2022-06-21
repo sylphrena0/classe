@@ -26,5 +26,7 @@ echo "In directory: "`pwd`
 source /opt/rh/rh-python38/enable
 export PYTHONPATH=/nfs/opt/python3.8/packages.sl7
 python3 ./supercon_optimize.py
-#
-#
+
+# Documentation:
+# https://wiki.classe.cornell.edu/Computing/GridEngine - CLASSE wiki
+# https://mail.google.com/mail/u/0/#inbox/FMfcgzGpGTHKnnfqXlTLRRSKVzDfDqrP - Cornell IT explaination of submiting items to queue while using python libraries
