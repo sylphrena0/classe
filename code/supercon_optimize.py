@@ -6,7 +6,6 @@
 # Author: Kirk Kleinsasser
 #################################################
 
-
 ######################################################
 ### Import Libraries / Define Import Data Function ###
 ######################################################
@@ -17,7 +16,7 @@ import time
 import numpy as np 
 import pandas as pd
 import matplotlib.pyplot as plt
-from multiprocessing import Process
+from multiprocessing import Pool
 # import seaborn as sns #heatmaps
 
 #regression models:
@@ -69,16 +68,15 @@ n_samples = data.shape[0]
 
 #define parameters that will be searched with GridSearchCV
 SVR_PARAMETERS = {"kernel": ["poly","rbf","sigmoid"], "degree": np.arange(1,10,2), "C": np.linspace(0,1000,5),
-                    "epsilon": np.logspace(-3, 3, 10, 5), "gamma": [1.00000000e-03, 2.78255940e-03, 7.74263683e-03, 2.15443469e-02,
-                    5.99484250e-02, 1.66810054e-01, 4.64158883e-01, 1.29154967e+00, 3.59381366e+00, 1.00000000e+01, "scale","auto"]}
-SVR_POLY_PARAMETERS = {"C": np.linspace(0,1000,10), "epsilon": np.logspace(-3, 3, 10, 5), 
-                    "gamma": [1.00000000e-03, 7.74263683e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]}
-ELASTIC_PARAMETERS = {"alpha": np.logspace(-5, 2, 10, 3), 'l1_ratio': np.arange(0, 1, 0.01)}
-DT_PARAMETERS = {'criterion': ['gini', 'entropy'], 'max_depth': [None, 1, 2, 3, 4, 5, 6, 7], 
+                    "epsilon": np.logspace(-3, 3, 10, 5), "gamma": [1.00000000e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]}
+SVR_POLY_PARAMETERS = {"C": np.linspace(0,1000,5), "epsilon": np.logspace(-3, 3, 10, 5), 
+                    "gamma": [1.00000000e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]}
+ELASTIC_PARAMETERS = {"alpha": np.logspace(-5, 2, 10, 3), 'l1_ratio': np.arange(0, 1, 0.05)}
+DT_PARAMETERS = {'criterion': ['gini', 'entropy'], 'max_depth': [None, 1, 3, 5, 7], 
                     'max_features': [None, 'sqrt', 'auto', 'log2', 0.3, 0.5, 0.7, n_features//2, n_features//3, ],
                     'min_samples_split': [2, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5], 
                     'min_samples_leaf':[1, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5]}
-RFR_PARAMETERS = {'max_depth': [80, 90, 100, 110], 'max_features': [2, 3], 'min_samples_leaf': [3, 4, 5],
+RFR_PARAMETERS = {'max_depth': [80, 95, 100, 110], 'max_features': [2, 3], 'min_samples_leaf': [3, 4, 5],
                     'min_samples_split': [8, 10, 12], 'n_estimators': np.linspace(0,1000,5)}
 KNN_PARAMETERS = {'n_neighbors': np.linspace(0,30,5), 'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'], 
                     'metric':['euclidean', 'manhattan']}
@@ -117,37 +115,26 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
 #####################################################
 # %% 
 #define processes for each model search
-p_SVR = Process(target=optimize_model("Support Vector Machines (Linear)", SVR, SVR_PARAMETERS, {'max_iter': -1}))
-p_SVR_POLY = Process(target=optimize_model("Support Vector Machines (Poly)", SVR, SVR_POLY_PARAMETERS, {'max_iter': -1}))
-p_ElasticNet = Process(target=optimize_model("Elastic Net Regression", ElasticNet, ELASTIC_PARAMETERS, {'fit_intercept': True}))
-p_DecisionTreeRegressor = Process(target=optimize_model("Decision Tree Regression", DecisionTreeRegressor, DT_PARAMETERS, {'random_state': 42}))
-p_RandomForestRegressor = Process(target=optimize_model("Random Forest Regression", RandomForestRegressor, RFR_PARAMETERS, {'bootstrap': True, 'n_jobs': -1}))
-p_KNeighborsRegressor = Process(target=optimize_model("KNeighbors Regression", KNeighborsRegressor, KNN_PARAMETERS, {'n_jobs': -1}))
-p_ExtraTreesRegressor = Process(target=optimize_model("Extra Trees Regression", ExtraTreesRegressor, TREES_PARAMETERS, {'n_jobs': -1}))
-p_LogisticRegression = Process(target=optimize_model("Logistic Regression", LogisticRegression, LOG_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1}))
-p_SGDRegressor = Process(target=optimize_model("Stochastic Gradient Descent", SGDRegressor, SGD_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1}))
-p_BayesianRidge = Process(target=optimize_model("Bayesian Regression", BayesianRidge, BAYES_PARAMETERS, {'fit_intercept': True}))
+pool = Pool()
+p_SVR = pool.apply_async(optimize_model, ["Support Vector Machines (Linear)", SVR, SVR_PARAMETERS, {'max_iter': -1}])
+p_SVR_POLY = pool.apply_async(optimize_model, ["Support Vector Machines (Poly)", SVR, SVR_POLY_PARAMETERS, {'max_iter': -1}])
+p_ElasticNet = pool.apply_async(optimize_model, ["Elastic Net Regression", ElasticNet, ELASTIC_PARAMETERS, {'fit_intercept': True}])
+p_DecisionTreeRegressor = pool.apply_async(optimize_model, ["Decision Tree Regression", DecisionTreeRegressor, DT_PARAMETERS, {'random_state': 42}])
+p_RandomForestRegressor = pool.apply_async(optimize_model, ["Random Forest Regression", RandomForestRegressor, RFR_PARAMETERS, {'bootstrap': True, 'n_jobs': -1}])
+p_KNeighborsRegressor = pool.apply_async(optimize_model, ["KNeighbors Regression", KNeighborsRegressor, KNN_PARAMETERS, {'n_jobs': -1}])
+p_ExtraTreesRegressor = pool.apply_async(optimize_model, ["Extra Trees Regression", ExtraTreesRegressor, TREES_PARAMETERS, {'n_jobs': -1}])
+p_LogisticRegression = pool.apply_async(optimize_model, ["Logistic Regression", LogisticRegression, LOG_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1}])
+p_SGDRegressor = pool.apply_async(optimize_model, ["Stochastic Gradient Descent", SGDRegressor, SGD_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1}])
+p_BayesianRidge = pool.apply_async(optimize_model, ["Bayesian Regression", BayesianRidge, BAYES_PARAMETERS, {'fit_intercept': True}])
 
 #starts each subprocess
-p_SVR.start()
-p_SVR_POLY.start()
-p_ElasticNet.start()
-p_DecisionTreeRegressor.start()
-p_RandomForestRegressor.start()
-p_KNeighborsRegressor.start()
-p_ExtraTreesRegressor.start()
-p_LogisticRegression.start()
-p_SGDRegressor.start()
-p_BayesianRidge.start()
-
-#cleanly ends process upon completion
-p_SVR.join()
-p_SVR_POLY.join()
-p_ElasticNet.join()
-p_DecisionTreeRegressor.join()
-p_RandomForestRegressor.join()
-p_KNeighborsRegressor.join()
-p_ExtraTreesRegressor.join()
-p_LogisticRegression.join()
-p_SGDRegressor.join()
-p_BayesianRidge.join()
+result_SVR = p_SVR.get()
+result_SVR_POLY = p_SVR_POLY.get()
+result_ElasticNet = p_ElasticNet.get()
+result_DecisionTreeRegressor = p_DecisionTreeRegressor.get()
+result_RandomForestRegressor = p_RandomForestRegressor.get()
+result_KNeighborsRegressor = p_KNeighborsRegressor.get()
+result_ExtraTreesRegressor = p_ExtraTreesRegressor.get()
+result_LogisticRegression = p_LogisticRegression.get()
+result_SGDRegressor = p_SGDRegressor.get()
+result_BayesianRidge = p_BayesianRidge.get()
