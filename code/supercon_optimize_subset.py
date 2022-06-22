@@ -16,7 +16,6 @@ import time
 import numpy as np 
 import pandas as pd
 import matplotlib.pyplot as plt
-from multiprocessing import Pool
 # import seaborn as sns #heatmaps
 
 #regression models:
@@ -72,11 +71,11 @@ n_features = data.shape[1]
 n_samples = data.shape[0]
 
 #define parameters that will be searched with GridSearchCV
-SVR_PARAMETERS = {"kernel": ["poly","rbf","sigmoid"], "degree": np.arange(1,10,2), "C": np.linspace(0,1000,5), "epsilon": np.logspace(-3, 3, 10, 5),
+SVR_PARAMETERS = {"kernel": ["poly","rbf","sigmoid"], "degree": np.arange(1,10,2), "C": np.linspace(0,1000,5), "epsilon": np.logspace(-3, 3, 5),
                     "gamma": [1.00000000e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]} #3150 candidates
-SVR_POLY_PARAMETERS = {"C": np.linspace(0,1000,5), "epsilon": np.logspace(-3, 3, 10, 5), 
+SVR_POLY_PARAMETERS = {"C": np.linspace(0,1000,5), "epsilon": np.logspace(-3, 3, 5), 
                     "gamma": [1.00000000e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]} #525 candidates
-ELASTIC_PARAMETERS = {"alpha": np.logspace(-5, 2, 10, 3), 'l1_ratio': np.arange(0, 1, 0.05)}
+ELASTIC_PARAMETERS = {"alpha": np.logspace(-5, 2, 3), 'l1_ratio': np.arange(0, 1, 0.05)}
 DT_PARAMETERS = {'criterion': ['gini', 'entropy'], 'max_depth': [None, 1, 3, 5, 7], 
                     'max_features': [None, 'sqrt', 'auto', 'log2', 0.3, 0.5, 0.7, n_features//2, n_features//3, ],
                     'min_samples_split': [2, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5], 
@@ -89,7 +88,7 @@ TREES_PARAMETERS = {'n_estimators': np.linspace(0,1000,5),'max_features': np.lin
                     'min_samples_leaf': np.linspace(0,40,4),'min_samples_split': np.linspace(5,20,4)} #1200 candidates
 LOG_PARAMETERS = {'solver': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'], 'penalty': ['none', 'l1', 'l2', 'elasticnet'], 'C': np.linspace(0,1000,5)} #300 candidates
 SGD_PARAMETERS = {'loss': ['hinge', 'log_loss', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_error', 'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive'],
-                    'penalty': ['l1', 'l2', 'elasticnet'], "alpha": np.logspace(-4, 3, 10, 3)} #927 candidates
+                    'penalty': ['l1', 'l2', 'elasticnet'], "alpha": np.logspace(-4, 3, 3)} #927 candidates
 BAYES_PARAMETERS = {'alpha_init':[1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.9], 'lambda_init': [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-9]} #147 candidates
 
 def optimize_model(model_name, regressor, parameters, fixed_params): #performs grid search on a given model with specified search and fixed model parameters and saves results to csv
@@ -115,31 +114,17 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
     result_df.to_csv('./optimize_results_{}.csv'.format(model_name)) #saves data to './optimize_results.csv'
     # dill.dump_session('latest-run.db') #this can dump a python session so I can resume later, after restarts and such
 
-#####################################################
-############# Start Search Subprocesses #############
-#####################################################
+####################################################
+################### Start Search ###################
+####################################################
 # %% 
-#define processes for each model search
-pool = Pool()
-p_SVR = pool.apply_async(optimize_model, ["Support Vector Machines (Linear)", SVR, SVR_PARAMETERS, {'max_iter': -1}])
-p_SVR_POLY = pool.apply_async(optimize_model, ["Support Vector Machines (Poly)", SVR, SVR_POLY_PARAMETERS, {'max_iter': -1}])
-p_ElasticNet = pool.apply_async(optimize_model, ["Elastic Net Regression", ElasticNet, ELASTIC_PARAMETERS, {'fit_intercept': True}])
-p_DecisionTreeRegressor = pool.apply_async(optimize_model, ["Decision Tree Regression", DecisionTreeRegressor, DT_PARAMETERS, {'random_state': 42}])
-p_RandomForestRegressor = pool.apply_async(optimize_model, ["Random Forest Regression", RandomForestRegressor, RFR_PARAMETERS, {'bootstrap': True, 'n_jobs': -1}])
-p_KNeighborsRegressor = pool.apply_async(optimize_model, ["KNeighbors Regression", KNeighborsRegressor, KNN_PARAMETERS, {'n_jobs': -1}])
-p_ExtraTreesRegressor = pool.apply_async(optimize_model, ["Extra Trees Regression", ExtraTreesRegressor, TREES_PARAMETERS, {'n_jobs': -1}])
-p_LogisticRegression = pool.apply_async(optimize_model, ["Logistic Regression", LogisticRegression, LOG_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1}])
-p_SGDRegressor = pool.apply_async(optimize_model, ["Stochastic Gradient Descent", SGDRegressor, SGD_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1}])
-p_BayesianRidge = pool.apply_async(optimize_model, ["Bayesian Regression", BayesianRidge, BAYES_PARAMETERS, {'fit_intercept': True}])
-
-#starts each subprocess
-result_SVR = p_SVR.get()
-result_SVR_POLY = p_SVR_POLY.get()
-result_ElasticNet = p_ElasticNet.get()
-result_DecisionTreeRegressor = p_DecisionTreeRegressor.get()
-result_RandomForestRegressor = p_RandomForestRegressor.get()
-result_KNeighborsRegressor = p_KNeighborsRegressor.get()
-result_ExtraTreesRegressor = p_ExtraTreesRegressor.get()
-result_LogisticRegression = p_LogisticRegression.get()
-result_SGDRegressor = p_SGDRegressor.get()
-result_BayesianRidge = p_BayesianRidge.get()
+optimize_model("Support Vector Machines (Linear)", SVR, SVR_PARAMETERS, {'max_iter': -1})
+optimize_model("Support Vector Machines (Poly)", SVR, SVR_POLY_PARAMETERS, {'max_iter': -1})
+optimize_model("Elastic Net Regression", ElasticNet, ELASTIC_PARAMETERS, {'fit_intercept': True})
+optimize_model("Decision Tree Regression", DecisionTreeRegressor, DT_PARAMETERS, {'random_state': 42})
+optimize_model("Random Forest Regression", RandomForestRegressor, RFR_PARAMETERS, {'bootstrap': True, 'n_jobs': -1})
+optimize_model("KNeighbors Regression", KNeighborsRegressor, KNN_PARAMETERS, {'n_jobs': -1})
+optimize_model("Extra Trees Regression", ExtraTreesRegressor, TREES_PARAMETERS, {'n_jobs': -1})
+optimize_model("Logistic Regression", LogisticRegression, LOG_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1})
+optimize_model("Stochastic Gradient Descent", SGDRegressor, SGD_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1})
+optimize_model("Bayesian Regression", BayesianRidge, BAYES_PARAMETERS, {'fit_intercept': True})
