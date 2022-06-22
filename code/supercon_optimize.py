@@ -67,25 +67,25 @@ n_features = data.shape[1]
 n_samples = data.shape[0]
 
 #define parameters that will be searched with GridSearchCV
-SVR_PARAMETERS = {"kernel": ["poly","rbf","sigmoid"], "degree": np.arange(1,10,2), "C": np.linspace(0,1000,5),
-                    "epsilon": np.logspace(-3, 3, 10, 5), "gamma": [1.00000000e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]}
+SVR_PARAMETERS = {"kernel": ["poly","rbf","sigmoid"], "degree": np.arange(1,10,2), "C": np.linspace(0,1000,5), "epsilon": np.logspace(-3, 3, 10, 5),
+                    "gamma": [1.00000000e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]} #3150 candidates
 SVR_POLY_PARAMETERS = {"C": np.linspace(0,1000,5), "epsilon": np.logspace(-3, 3, 10, 5), 
-                    "gamma": [1.00000000e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]}
+                    "gamma": [1.00000000e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]} #525 candidates
 ELASTIC_PARAMETERS = {"alpha": np.logspace(-5, 2, 10, 3), 'l1_ratio': np.arange(0, 1, 0.05)}
 DT_PARAMETERS = {'criterion': ['gini', 'entropy'], 'max_depth': [None, 1, 3, 5, 7], 
                     'max_features': [None, 'sqrt', 'auto', 'log2', 0.3, 0.5, 0.7, n_features//2, n_features//3, ],
                     'min_samples_split': [2, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5], 
-                    'min_samples_leaf':[1, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5]}
+                    'min_samples_leaf':[1, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5]} #9720 candidates
 RFR_PARAMETERS = {'max_depth': [80, 95, 100, 110], 'max_features': [2, 3], 'min_samples_leaf': [3, 4, 5],
-                    'min_samples_split': [8, 10, 12], 'n_estimators': np.linspace(0,1000,5)}
+                    'min_samples_split': [8, 10, 12], 'n_estimators': np.linspace(0,1000,5)} #1080 candidates
 KNN_PARAMETERS = {'n_neighbors': np.linspace(0,30,5), 'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'], 
-                    'metric':['euclidean', 'manhattan']}
+                    'metric':['euclidean', 'manhattan']} #120 candidates
 TREES_PARAMETERS = {'n_estimators': np.linspace(0,1000,5),'max_features': np.linspace(10,500,5),
-                    'min_samples_leaf': np.linspace(0,40,4),'min_samples_split': np.linspace(5,20,4)}
-LOG_PARAMETERS = {'solver': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'], 'penalty': ['none', 'l1', 'l2', 'elasticnet'], 'C': np.linspace(0,1000,5)}
+                    'min_samples_leaf': np.linspace(0,40,4),'min_samples_split': np.linspace(5,20,4)} #1200 candidates
+LOG_PARAMETERS = {'solver': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'], 'penalty': ['none', 'l1', 'l2', 'elasticnet'], 'C': np.linspace(0,1000,5)} #300 candidates
 SGD_PARAMETERS = {'loss': ['hinge', 'log_loss', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_error', 'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive'],
-                    'penalty': ['l1', 'l2', 'elasticnet'], "alpha": np.logspace(-4, 3, 10, 3)}
-BAYES_PARAMETERS = {'alpha_init':[1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.9], 'lambda_init': [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-9]}
+                    'penalty': ['l1', 'l2', 'elasticnet'], "alpha": np.logspace(-4, 3, 10, 3)} #927 candidates
+BAYES_PARAMETERS = {'alpha_init':[1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.9], 'lambda_init': [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-9]} #147 candidates
 
 def optimize_model(model_name, regressor, parameters, fixed_params): #performs grid search on a given model with specified search and fixed model parameters and saves results to csv
     print("Starting GridSearchCV on {}".format(model_name))
