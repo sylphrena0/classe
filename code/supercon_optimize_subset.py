@@ -112,7 +112,7 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
 
     result_df = pd.DataFrame(results)
     result_df.to_csv('./optimize_results_{}.csv'.format(model_name)) #saves data to './optimize_results.csv'
-    # dill.dump_session('latest-run.db') #this can dump a python session so I can resume later, after restarts and such
+    dill.dump_session('optimize_results_{}.db'.format(model_name)) #this can dump a python session so I can resume later, after restarts and such
 
 ####################################################
 ################### Start Search ###################
