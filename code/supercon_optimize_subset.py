@@ -86,7 +86,7 @@ KNN_PARAMETERS = {'n_neighbors': np.linspace(0,30,5), 'algorithm': ['auto', 'bal
                     'metric':['euclidean', 'manhattan']} #120 candidates
 TREES_PARAMETERS = {'n_estimators': np.linspace(0,1000,5),'max_features': np.linspace(10,500,5),
                     'min_samples_leaf': np.linspace(0,40,4),'min_samples_split': np.linspace(5,20,4)} #1200 candidates
-LOG_PARAMETERS = {'solver': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'], 'penalty': ['none', 'l1', 'l2', 'elasticnet'], 'C': np.linspace(0,1000,5)} #300 candidates
+ADA_PARAMETERS = {} #? candidates - TODO: find grid parameters for adaboost
 SGD_PARAMETERS = {'loss': ['hinge', 'log_loss', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_error', 'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive'],
                     'penalty': ['l1', 'l2', 'elasticnet'], "alpha": np.logspace(-4, 3, 3)} #927 candidates
 BAYES_PARAMETERS = {'alpha_init':[1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.9], 'lambda_init': [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-9]} #147 candidates
@@ -125,6 +125,6 @@ optimize_model("Decision Tree Regression", DecisionTreeRegressor, DT_PARAMETERS,
 optimize_model("Random Forest Regression", RandomForestRegressor, RFR_PARAMETERS, {'bootstrap': True, 'n_jobs': -1})
 optimize_model("KNeighbors Regression", KNeighborsRegressor, KNN_PARAMETERS, {'n_jobs': -1})
 optimize_model("Extra Trees Regression", ExtraTreesRegressor, TREES_PARAMETERS, {'n_jobs': -1})
-optimize_model("Logistic Regression", LogisticRegression, LOG_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1})
+optimize_model("AdaBoost Regressor", AdaBoostRegressor, ADA_PARAMETERS, {'n_jobs': -1})
 optimize_model("Stochastic Gradient Descent", SGDRegressor, SGD_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1})
 optimize_model("Bayesian Regression", BayesianRidge, BAYES_PARAMETERS, {'fit_intercept': True})
