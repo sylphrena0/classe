@@ -110,10 +110,10 @@ DT_PARAMETERS = {'criterion': ['squared_error', 'friedman_mse', 'absolute_error'
                     'min_samples_split': [2, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5], 
                     'min_samples_leaf':[1, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5]} #9720 candidates
 RFR_PARAMETERS = {'max_depth': [80, 95, 100, 110], 'max_features': [2, 3], 'min_samples_leaf': [3, 4, 5],
-                    'min_samples_split': [8, 10, 12], 'n_estimators': np.linspace(0,1000,5,dtype=int)} #1080 candidates
+                    'min_samples_split': [8, 10, 12], 'n_estimators': np.linspace(1,1000,5,dtype=int)} #1080 candidates
 KNN_PARAMETERS = {'n_neighbors': np.linspace(1,30,5,dtype=int), 'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'], 
                     'metric':['euclidean', 'manhattan']} #120 candidates
-TREES_PARAMETERS = {'n_estimators': np.linspace(0,1000,5,dtype=int),'max_features': np.linspace(10,500,5),
+TREES_PARAMETERS = {'n_estimators': np.linspace(1,1000,5,dtype=int),'max_features': np.linspace(10,500,5),
                     'min_samples_leaf': np.linspace(1,40,4),'min_samples_split': np.linspace(0,1,8)} #1200 candidates
 SGD_PARAMETERS = {'loss': ['hinge', 'log_loss', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_error', 'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive'],
                     'penalty': ['l1', 'l2', 'elasticnet'], "alpha": np.logspace(-4, 3, 3)} #927 candidates
