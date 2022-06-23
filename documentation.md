@@ -89,5 +89,7 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Calculated complexity of calculations**
 * **Submitted a second optimizer that only optimizes a subset of the dataset to save on computations - will use if the other computation takes too long**
 
+## Thursday, June 23rd, 2022
+* **Overhauled optimization scripts - now accepts sample size argument and can disable overly computationaly heavy models (ahem SVMs). This vastly improves optimization and should make future optimization much easier.**
 </details>
 <br>

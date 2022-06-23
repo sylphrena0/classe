@@ -16,7 +16,7 @@
 #$ -m bea -M kvk23@cornell.edu
 #
 # Set thread requirements
-#$ -pe sge_pe 12
+#$ -pe sge_pe 40
 # Print some environment information - for reporting diagnostics only.
 echo "Job ${JOBNAME} Starting at: "`date`
 echo "Running on host: "`hostname`
@@ -25,7 +25,7 @@ echo "In directory: "`pwd`
 # Run the python script
 source /opt/rh/rh-python38/enable
 export PYTHONPATH=/nfs/opt/python3.8/packages.sl7
-python3 ./supercon_optimize.py
+python3 ./supercon_optimize.py --samplesize 1000 --svr --svrpoly # pass inputs to python (limits and enabled types)
 
 # Documentation:
 # https://wiki.classe.cornell.edu/Computing/GridEngine - CLASSE wiki
