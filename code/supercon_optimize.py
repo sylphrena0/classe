@@ -16,7 +16,6 @@ import time
 import numpy as np 
 import pandas as pd
 import matplotlib.pyplot as plt
-from multiprocessing import Pool
 # import seaborn as sns #heatmaps
 
 #regression models:
@@ -24,7 +23,7 @@ from multiprocessing import Pool
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import AdaBoostRegressor, BaggingRegressor, ExtraTreesRegressor, RandomForestRegressor
-from sklearn.linear_model import LinearRegression, AdaBoostRegressor, Ridge, Lasso, ElasticNet, SGDRegressor, BayesianRidge
+from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge, Lasso, ElasticNet, SGDRegressor, BayesianRidge
 from sklearn.svm import SVR
 # from xgboost import XGBRegressor
 
@@ -36,7 +35,7 @@ from sklearn.metrics import accuracy_score, recall_score, r2_score, mean_absolut
 # from skopt import BayesSearchCV #bayesian optimization
 
 #imports the data from get_featurizers. Function because some models we may want infinity:
-def import_data(replace_inf=False):
+def import_data(replace_inf=False,limit=16414):
     global data, target, train_data, test_data, train_target, test_target #variables that we want to define globally (outside of this funtion)
     data = pd.DataFrame(pd.read_csv('./supercon_feat.csv')) #loads data produced in get_featurizer.ipynb - NOTE: This should be '../data/supercon_feat.csv' if running locally
     target = data.pop('Tc') #remove target (critical temp) from data
@@ -54,24 +53,28 @@ def import_data(replace_inf=False):
 
     #creates a test train split, with shuffle and random state for reproducibility 
     train_data, test_data, train_target, test_target = train_test_split(data, target, test_size=0.15, random_state=43, shuffle=True)
+    
+    #drop data that will not be used for optimization after shuffle, to limit defined in function
+    train_data = train_data.iloc[:limit]
+    test_data = test_data.iloc[:limit]
+    train_target = train_target.iloc[:limit]
+    test_target = test_target.iloc[:limit]
 
 #####################################################
 ########### Setup Models for GridSearchCV ###########
 #####################################################
 # %% 
 
-import_data(replace_inf=True) #call the function that imports data, replacing infinity and NaN with 0
-
 #get number of rows and columns for use in parameters
 n_features = data.shape[1]
 n_samples = data.shape[0]
 
 #define parameters that will be searched with GridSearchCV
-SVR_PARAMETERS = {"kernel": ["poly","rbf","sigmoid"], "degree": np.arange(1,10,2), "C": np.linspace(0,1000,5), "epsilon": np.logspace(-3, 3, 10, 5),
+SVR_PARAMETERS = {"kernel": ["poly","rbf","sigmoid"], "degree": np.arange(1,10,2), "C": np.linspace(0,1000,5), "epsilon": np.logspace(-3, 3, 5),
                     "gamma": [1.00000000e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]} #3150 candidates
-SVR_POLY_PARAMETERS = {"C": np.linspace(0,1000,5), "epsilon": np.logspace(-3, 3, 10, 5), 
+SVR_POLY_PARAMETERS = {"C": np.linspace(0,1000,5), "epsilon": np.logspace(-3, 3, 5), 
                     "gamma": [1.00000000e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]} #525 candidates
-ELASTIC_PARAMETERS = {"alpha": np.logspace(-5, 2, 10, 3), 'l1_ratio': np.arange(0, 1, 0.05)}
+ELASTIC_PARAMETERS = {"alpha": np.logspace(-5, 2, 3), 'l1_ratio': np.arange(0, 1, 0.05)}
 DT_PARAMETERS = {'criterion': ['gini', 'entropy'], 'max_depth': [None, 1, 3, 5, 7], 
                     'max_features': [None, 'sqrt', 'auto', 'log2', 0.3, 0.5, 0.7, n_features//2, n_features//3, ],
                     'min_samples_split': [2, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5], 
@@ -82,9 +85,19 @@ KNN_PARAMETERS = {'n_neighbors': np.linspace(0,30,5), 'algorithm': ['auto', 'bal
                     'metric':['euclidean', 'manhattan']} #120 candidates
 TREES_PARAMETERS = {'n_estimators': np.linspace(0,1000,5),'max_features': np.linspace(10,500,5),
                     'min_samples_leaf': np.linspace(0,40,4),'min_samples_split': np.linspace(5,20,4)} #1200 candidates
-SGD_PARAMETERS = {'loss': ['hinge', 'ADA_loss', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_error', 'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive'],
-                    'penalty': ['l1', 'l2', 'elasticnet'], "alpha": np.logspace(-4, 3, 10, 3)} #927 candidates
+SGD_PARAMETERS = {'loss': ['hinge', 'log_loss', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_error', 'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive'],
+                    'penalty': ['l1', 'l2', 'elasticnet'], "alpha": np.logspace(-4, 3, 3)} #927 candidates
 BAYES_PARAMETERS = {'alpha_init':[1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.9], 'lambda_init': [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-9]} #147 candidates
+
+models =   [["Support Vector Machines (Linear)", SVR, SVR_PARAMETERS, {'max_iter': -1}],
+            ["Support Vector Machines (Poly)", SVR, SVR_POLY_PARAMETERS, {'max_iter': -1}],
+            ["Elastic Net Regression", ElasticNet, ELASTIC_PARAMETERS, {'fit_intercept': True}],
+            ["Decision Tree Regression", DecisionTreeRegressor, DT_PARAMETERS, {'random_state': 42}],
+            ["Random Forest Regression", RandomForestRegressor, RFR_PARAMETERS, {'bootstrap': True, 'n_jobs': -1}],
+            ["KNeighbors Regression", KNeighborsRegressor, KNN_PARAMETERS, {'n_jobs': -1}],
+            ["Extra Trees Regression", ExtraTreesRegressor, TREES_PARAMETERS, {'n_jobs': -1}],
+            ["Stochastic Gradient Descent", SGDRegressor, SGD_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1}],
+            ["Bayesian Regression", BayesianRidge, BAYES_PARAMETERS, {'fit_intercept': True}]]
 
 def optimize_model(model_name, regressor, parameters, fixed_params): #performs grid search on a given model with specified search and fixed model parameters and saves results to csv
     print("Starting GridSearchCV on {}".format(model_name))
@@ -107,31 +120,38 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
 
     result_df = pd.DataFrame(results)
     result_df.to_csv('./optimize_results_{}.csv'.format(model_name)) #saves data to './optimize_results.csv'
-    # dill.dump_session('latest-run.db') #this can dump a python session so I can resume later, after restarts and such
+    dill.dump_session('optimize_results_{}.db'.format(model_name)) #this can dump a python session so I can resume later, after restarts and such
 
-#####################################################
-############# Start Search Subprocesses #############
-#####################################################
+####################################################
+#################### Run Search ####################
+####################################################
 # %% 
-#define processes for each model search
-pool = Pool()
-p_SVR = pool.apply_async(optimize_model, ["Support Vector Machines (Linear)", SVR, SVR_PARAMETERS, {'max_iter': -1}])
-p_SVR_POLY = pool.apply_async(optimize_model, ["Support Vector Machines (Poly)", SVR, SVR_POLY_PARAMETERS, {'max_iter': -1}])
-p_ElasticNet = pool.apply_async(optimize_model, ["Elastic Net Regression", ElasticNet, ELASTIC_PARAMETERS, {'fit_intercept': True}])
-p_DecisionTreeRegressor = pool.apply_async(optimize_model, ["Decision Tree Regression", DecisionTreeRegressor, DT_PARAMETERS, {'random_state': 42}])
-p_RandomForestRegressor = pool.apply_async(optimize_model, ["Random Forest Regression", RandomForestRegressor, RFR_PARAMETERS, {'bootstrap': True, 'n_jobs': -1}])
-p_KNeighborsRegressor = pool.apply_async(optimize_model, ["KNeighbors Regression", KNeighborsRegressor, KNN_PARAMETERS, {'n_jobs': -1}])
-p_ExtraTreesRegressor = pool.apply_async(optimize_model, ["Extra Trees Regression", ExtraTreesRegressor, TREES_PARAMETERS, {'n_jobs': -1}])
-p_SGDRegressor = pool.apply_async(optimize_model, ["Stochastic Gradient Descent", SGDRegressor, SGD_PARAMETERS, {'fit_intercept': True, 'n_jobs': -1}])
-p_BayesianRidge = pool.apply_async(optimize_model, ["Bayesian Regression", BayesianRidge, BAYES_PARAMETERS, {'fit_intercept': True}])
 
-#starts each subprocess
-result_SVR = p_SVR.get()
-result_SVR_POLY = p_SVR_POLY.get()
-result_ElasticNet = p_ElasticNet.get()
-result_DecisionTreeRegressor = p_DecisionTreeRegressor.get()
-result_RandomForestRegressor = p_RandomForestRegressor.get()
-result_KNeighborsRegressor = p_KNeighborsRegressor.get()
-result_ExtraTreesRegressor = p_ExtraTreesRegressor.get()
-result_SGDRegressor = p_SGDRegressor.get()
-result_BayesianRidge = p_BayesianRidge.get()
+#prompt user to select script options
+invalid = True
+limit = input("Select the GridSearch Data Sample Size.\nEnter 'all' or a number between 0 and 16414: ")
+while invalid: #if the user doesn't specify a valid limit, we'll bug them until they do
+    if 0 < int(limit) < 16414:
+        invalid = False #end the loop
+    elif str(limit) == 'all':
+        invalid = False #end the loop
+        limit = 16414
+    else:
+        limit = input("Invalid option. Enter 'all' or a number between 0 and 16414: ") #i am once again asking for a valid input :(
+
+print("Select which models to search.")
+if str(input("Enter 'all' to run all models: ")).lower() == 'all': #allows us to not prompt the user ten times if we are runnning all models
+    enabled_models = models #define our enabled models as all models
+else: 
+    enabled_models = [] #make a new list that we will populate with enabled models
+    for [model_name, regressor, parameters, fixed_params] in models: #iterate through each model
+        enabled = str(input(f"{regressor} [y/n]: ")).lower() #prompt user to enable/disable model
+        if enabled in ['y','yes','t','true']:
+            enabled_models.append([model_name, regressor, parameters, fixed_params]) #add to list if yes
+        elif enabled in ['n','no','f','false']: #pass if no
+            pass
+        else: #if the input is invalid, we skip for simplicity
+            print(f"Invalid option, will not optimize {regressor}.")
+
+for [model_name, regressor, parameters, fixed_params] in enabled_models: #optimize enabled models
+    optimize_model(model_name, regressor, parameters, fixed_params)
