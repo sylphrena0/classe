@@ -113,8 +113,8 @@ RFR_PARAMETERS = {'max_depth': [80, 95, 100, 110], 'max_features': [2, 3], 'min_
                     'min_samples_split': [8, 10, 12], 'n_estimators': np.linspace(1,1000,5,dtype=int)} #1080 candidates
 KNN_PARAMETERS = {'n_neighbors': np.linspace(1,30,5,dtype=int), 'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'], 
                     'metric':['euclidean', 'manhattan']} #120 candidates
-TREES_PARAMETERS = {'n_estimators': np.linspace(1,1000,5,dtype=int),'max_features': np.linspace(10,500,5),
-                    'min_samples_leaf': np.linspace(1,40,4),'min_samples_split': np.linspace(0,1,8)} #1200 candidates
+TREES_PARAMETERS = {'n_estimators': np.linspace(1,1000,5,dtype=int),
+                    'min_samples_leaf': np.linspace(1,40,4),'min_samples_split': np.linspace(0.1,1,5)} #1200 candidates
 SGD_PARAMETERS = {'loss': ['hinge', 'log_loss', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_error', 'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive'],
                     'penalty': ['l1', 'l2', 'elasticnet'], "alpha": np.logspace(-4, 3, 3)} #927 candidates
 BAYES_PARAMETERS = {'alpha_init':[1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.9], 'lambda_init': [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-9]} #147 candidates
@@ -137,14 +137,15 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
         #define model, do grid search
         search = GridSearchCV(regressor(**fixed_params), #model
                         param_grid = parameters, #hyperparameters
-                        scoring = "neg_mean_squared_error", #metric for scoring
+                        scoring='r2', #metrics for scoring
                         return_train_score = False, #we want test score
                         cv = 3, #number of folds
                         n_jobs = -1, #amount of threads to use
+                        # refit = 'r2', #metric we are optimizing (no need to set for single metric scorring)
                         verbose = 1) #how much output to send while running
 
         search.fit(train_data, train_target) #fit the models
-        return (model_name, search.best_estimator_, search.best_params_, search.best_score_, "Time Elapsed:" + str(time.time() - start_time)) #record results
+        return (model_name, search.best_estimator_, search.best_params_, "Best Score: " + str(search.best_score_), "Time Elapsed: " + str(time.time() - start_time)) #record results
     except Exception as error: #catch any issues and record them
         return (model_name, "ERROR", "ERROR", error) #record errors
 
