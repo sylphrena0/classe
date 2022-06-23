@@ -1,0 +1,12 @@
+,0,1,2,3,4
+0,Elastic Net Regression,"ElasticNet(lpha=1ea-05, l1_ratio=0.0)","{'alpha': 1e-05, 'l1_ratio': 0.0}",Best Score: 0.358875821684942,Time Elapsed: 3.893540143966675
+1,Decision Tree Regression,"DecisionTreeRegressor(criterion='poisson', max_depth=5, max_features=0.5,
+                      random_state=42)","{'criterion': 'poisson', 'max_depth': 5, 'max_features': 0.5, 'min_samples_leaf': 1, 'min_samples_split': 2}",Best Score: 0.4278845929797355,Time Elapsed: 15.803161144256592
+2,Random Forest Regression,"RandomForestRegressor(max_depth=80, max_features=3, min_samples_leaf=3,
+                      min_samples_split=8, n_estimators=500, n_jobs=-1)","{'max_depth': 80, 'max_features': 3, 'min_samples_leaf': 3, 'min_samples_split': 8, 'n_estimators': 500}",Best Score: 0.5594709240349599,Time Elapsed: 73.91324877738953
+3,KNeighbors Regression,"KNeighborsRegressor(metric='manhattan', n_jobs=-1, n_neighbors=8)","{'algorithm': 'auto', 'metric': 'manhattan', 'n_neighbors': 8}",Best Score: 0.44511789411908126,Time Elapsed: 0.6104686260223389
+4,Extra Trees Regression,"ExtraTreesRegressor(min_samples_leaf=1.0, min_samples_split=0.1,
+                    n_estimators=250, n_jobs=-1)","{'min_samples_leaf': 1.0, 'min_samples_split': 0.1, 'n_estimators': 250}",Best Score: -0.002449073645224361,Time Elapsed: 10.863366842269897
+5,Stochastic Gradient Descent,"SGDRegressor(alpha=1000.0, loss='epsilon_insensitive', max_iter=1500,
+             penalty='l1')","{'alpha': 1000.0, 'loss': 'epsilon_insensitive', 'penalty': 'l1'}",Best Score: -0.24893276478673462,Time Elapsed: 0.5774672031402588
+6,Bayesian Regression,"BayesianRidge(alpha_init=1.2, lambda_init=0.0001)","{'alpha_init': 1.2, 'lambda_init': 0.0001}",Best Score: 0.3027970640967621,Time Elapsed: 0.6279463768005371
