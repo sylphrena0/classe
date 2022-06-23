@@ -12,8 +12,8 @@
 # To make sure that the error.e and output.o files arrive in the current working directory
 #$ -cwd
 #
-# Send an email when the job starts, ends, or errors out
-#$ -m bea -M kvk23@cornell.edu
+# Send an email when the job ends
+#$ -m e -M kvk23@cornell.edu
 #
 # Set thread requirements
 #$ -pe sge_pe 40
