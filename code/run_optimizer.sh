@@ -25,7 +25,7 @@ echo "In directory: "`pwd`
 # Run the python script
 source /opt/rh/rh-python38/enable
 export PYTHONPATH=/nfs/opt/python3.8/packages.sl7
-python3 ./supercon_optimize.py --samplesize 1000 --svr --svrpoly # pass inputs to python (limits and enabled types)
+python3 ./supercon_optimize.py --samplesize 2000 --svr --svrpoly # pass inputs to python (limits and enabled types)
 
 # Documentation:
 # https://wiki.classe.cornell.edu/Computing/GridEngine - CLASSE wiki
