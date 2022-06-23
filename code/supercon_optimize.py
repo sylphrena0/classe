@@ -144,7 +144,7 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
                         verbose = 1) #how much output to send while running
 
         search.fit(train_data, train_target) #fit the models
-        reutrn (model_name, search.best_estimator_, search.best_params_, search.best_score_, "Time Elapsed:" + str(time.time() - start_time)) #record results
+        return (model_name, search.best_estimator_, search.best_params_, search.best_score_, "Time Elapsed:" + str(time.time() - start_time)) #record results
     except Exception as error: #catch any issues and record them
         return (model_name, "ERROR", "ERROR", error) #record errors
 
