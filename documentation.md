@@ -93,6 +93,8 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Overhauled optimization scripts - now accepts sample size argument and can disable overly computationaly heavy models (ahem SVMs). This vastly improves optimization and should make future optimization much easier. Our best R2 value to date is around .80, with a mean squared error of aroun 140.**
 
 ## Friday, June 24th, 2022
-* **Added plots for predicted vs actual values. Configured annotations to show metrics. Functionalized model training so that each**
+* **Made matplotlib function that plots actual vs. predicted values. Added plots for predicted vs actual values. Configured annotations to show metrics and added heatmap to show distance from target.**
+* **Made second matplotlib function that plots up to eight models at a time for easy comparision with all previously mentioned features.**
+* **Reoganized and better documented purpose of files in /code/.**
 </details>
 <br>
