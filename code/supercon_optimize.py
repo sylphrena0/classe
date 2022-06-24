@@ -113,8 +113,7 @@ RFR_PARAMETERS = {'max_depth': [None, 70, 80, 100, 110], 'max_features': ['auto'
                     'min_samples_split': [8, 10, 12], 'n_estimators': np.linspace(1,1000,5,dtype=int)} #1080 candidates
 KNN_PARAMETERS = {'n_neighbors': np.linspace(1,15,5,dtype=int), 'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'], 
                     'metric':['euclidean', 'manhattan']} #120 candidates
-TREES_PARAMETERS = {'n_estimators': np.linspace(1,750,5,dtype=int),
-                    'min_samples_leaf': np.linspace(1,40,4),'min_samples_split': np.linspace(0.01,1,5)} #1200 candidates
+TREES_PARAMETERS = {'n_estimators': np.linspace(1,750,15,dtype=int)} 
 SGD_PARAMETERS = {'loss': ['hinge', 'log_loss', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_error', 'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive'],
                     'penalty': ['l1', 'l2', 'elasticnet'], "alpha": np.logspace(-4, 5, 5)} #927 candidates
 BAYES_PARAMETERS = {'alpha_init':[1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.9], 'lambda_init': [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-9]} #147 candidates
