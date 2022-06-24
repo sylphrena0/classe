@@ -90,6 +90,9 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Submitted a second optimizer that only optimizes a subset of the dataset to save on computations - will use if the other computation takes too long**
 
 ## Thursday, June 23rd, 2022
-* **Overhauled optimization scripts - now accepts sample size argument and can disable overly computationaly heavy models (ahem SVMs). This vastly improves optimization and should make future optimization much easier.**
+* **Overhauled optimization scripts - now accepts sample size argument and can disable overly computationaly heavy models (ahem SVMs). This vastly improves optimization and should make future optimization much easier. Our best R2 value to date is around .80, with a mean squared error of aroun 140.**
+
+## Friday, June 24th, 2022
+* **Added plots for predicted vs actual values. Configured annotations to show metrics. Functionalized model training so that each**
 </details>
 <br>
