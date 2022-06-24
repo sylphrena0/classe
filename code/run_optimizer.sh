@@ -1,5 +1,14 @@
 #!/bin/bash
 #
+##############################################
+##### Superconductivity Optimizer Script #####
+##############################################
+# This bash script runs the superconductivy model optimizer in ./model_optimizer.py on the Cornell CLASSE compute farm
+# and emails kvk23@cornell.edu when completed
+#
+# Author: Kirk Kleinsasser
+##############################################
+#
 # Passes variable to set the run time name of the job
 #$ -N supercon_optimize_results
 #
