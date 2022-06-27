@@ -98,3 +98,17 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Reoganized and better documented purpose of files in /code/.**
 </details>
 <br>
+
+<details>
+<summary><font size=5>Week 4</font></summary>
+
+---
+
+## Monday, June 27th, 2022
+* **Introduction to Accelerator Physics Talk**
+* **Weekly REU meeting**
+* **Worked on matplotlib graphs - adding y=x line to subplots to show the optimial results.**
+* **Fixed mislabeled axises.**
+
+</details>
+<br>
