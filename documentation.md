@@ -110,5 +110,10 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Worked on matplotlib graphs - adding y=x line to subplots to show the optimial results.**
 * **Fixed mislabeled axises.**
 
+## Tuesday, June 28th, 2022
+* **Worked on presentation**
+* **Added MAE and Max Error (max error is mainly to make metrics symmetrical on graph)**
+* **Started running of superlearner model to add to graphs**
+
 </details>
 <br>
