@@ -115,8 +115,11 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Added MAE and Max Error (max error is mainly to make metrics symmetrical on graph)**
 * **Started running of superlearner model to add to graphs**
 
-## Wednesday, June 2th, 2022
-* **Worked on presentation**
+## Wednesday, June 29th, 2022
+* **Finished presentation slides**
+* **Enabled superlearners results in compute functions**
+* **Added optimized results to presentation**
+* **Started to practice presentation**
 
 </details>
 <br>
