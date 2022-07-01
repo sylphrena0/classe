@@ -121,9 +121,12 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Added optimized results to presentation**
 * **Started to practice presentation**
 
-## Thursday, June 20th, 2022
+## Thursday, June 30th, 2022
 * **Practiced presentation**
 * **Completed REU interview Q&A**
+
+## Friday, July 1st, 2022
+* **Presented for other REU students**
 
 </details>
 <br>
