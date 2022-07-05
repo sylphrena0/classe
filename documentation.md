@@ -205,6 +205,7 @@ Documents daily work in the REU program, including events, meetings, and broad d
 
 ## Monday, June 27th, 2022
 * **Started looking into lolopy and uncertainty calculations**
+* **Started latex document (trouble with configuration)**
 
 </details>
 <br>
