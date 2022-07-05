@@ -130,3 +130,81 @@ Documents daily work in the REU program, including events, meetings, and broad d
 
 </details>
 <br>
+
+<details>
+<summary><font size=5>Week 4</font></summary>
+
+---
+
+## Monday, June 27th, 2022
+* **Introduction to Accelerator Physics Talk**
+* **Weekly REU meeting**
+* **Worked on matplotlib graphs - adding y=x line to subplots to show the optimial results.**
+* **Fixed mislabeled axises.**
+
+## Tuesday, June 28th, 2022
+* **Worked on presentation**
+* **Added MAE and Max Error (max error is mainly to make metrics symmetrical on graph)**
+* **Started running of superlearner model to add to graphs**
+
+## Wednesday, June 29th, 2022
+* **Finished presentation slides**
+* **Enabled superlearners results in compute functions**
+* **Added optimized results to presentation**
+* **Started to practice presentation**
+
+## Thursday, June 30th, 2022
+* **Practiced presentation**
+* **Completed REU interview Q&A**
+
+## Friday, July 1st, 2022
+* **Presented for other REU students**
+
+</details>
+<br>
+
+<details>
+<summary><font size=5>Week 4</font></summary>
+
+---
+
+## Monday, June 27th, 2022
+* **Introduction to Accelerator Physics Talk**
+* **Weekly REU meeting**
+* **Worked on matplotlib graphs - adding y=x line to subplots to show the optimial results.**
+* **Fixed mislabeled axises.**
+
+## Tuesday, June 28th, 2022
+* **Worked on presentation**
+* **Added MAE and Max Error (max error is mainly to make metrics symmetrical on graph)**
+* **Started running of superlearner model to add to graphs**
+
+## Wednesday, June 29th, 2022
+* **Finished presentation slides**
+* **Enabled superlearners results in compute functions**
+* **Added optimized results to presentation**
+* **Started to practice presentation**
+
+## Thursday, June 30th, 2022
+* **Practiced presentation**
+* **Completed REU interview Q&A**
+
+## Friday, July 1st, 2022
+* **Presented for other REU students**
+
+</details>
+<br>
+
+</details>
+<br>
+
+<details>
+<summary><font size=5>Week 4</font></summary>
+
+---
+
+## Monday, June 27th, 2022
+* **Started looking into lolopy and uncertainty calculations**
+
+</details>
+<br>
