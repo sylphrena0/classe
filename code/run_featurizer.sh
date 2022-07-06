@@ -10,7 +10,7 @@
 ###############################################
 #
 # Passes variable to set the run time name of the job
-#$ -N supercon_optimize_results
+#$ -N supercon_featurizer_results
 #
 # Set the queue
 #$ -q all.q
