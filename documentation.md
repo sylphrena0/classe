@@ -203,10 +203,14 @@ Documents daily work in the REU program, including events, meetings, and broad d
 
 ---
 
-## Monday, June 27th, 2022
+## Tuesday, July 5th, 2022
 * **Started looking into lolopy and uncertainty calculations**
 * **Started latex document (trouble with configuration)**
 * **Did some code organization**
+
+## Wednesday, July 6th, 2022
+* **Switched compute farm scripts to use user installed python packages**
+* **Sent lolopy training to compute farm to due computational cost of training model (upwards of two hours)**
 
 </details>
 <br>
