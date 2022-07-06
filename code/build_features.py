@@ -21,7 +21,7 @@ from matminer.featurizers.conversions import StrToComposition
 #load supercon databse and metadata
 #print(get_all_dataset_info("superconductivity2018")) #print metadata
 #features will be made with matminer, target is Tc
-data = pd.DataFrame(pd.read_csv('../data/supercon.csv'))
+data = pd.DataFrame(pd.read_csv('./supercon.csv'))
 stc = StrToComposition()
 composition = stc.featurize_dataframe(data,'name', ignore_errors=True)
 composition.head()
