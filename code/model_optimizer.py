@@ -40,7 +40,7 @@ from sklearn.metrics import accuracy_score, recall_score, r2_score, mean_absolut
 #imports the data from get_featurizers. Function because some models we may want infinity:
 def import_data(replace_inf=False,limit=16414):
     global data, target, train_data, test_data, train_target, test_target #variables that we want to define globally (outside of this funtion)
-    data = pd.DataFrame(pd.read_csv('./supercon_feat.csv')) #loads data produced in get_featurizer.ipynb - NOTE: This should be '../data/supercon_feat.csv' if running locally
+    data = pd.DataFrame(pd.read_csv('./supercon_features.csv')) #loads data produced in get_featurizer.ipynb - NOTE: This should be '../data/supercon_feat.csv' if running locally
     target = data.pop('Tc') #remove target (critical temp) from data
 
     #TODO: add feature for infinite values or otherwise handle for models that cannot handle infinite data
@@ -102,22 +102,22 @@ n_samples = data.shape[0]
 
 #define parameters that will be searched with GridSearchCV
 SVR_PARAMETERS = {"kernel": ["poly","rbf","sigmoid"], "degree": np.arange(1,10,2), "C": np.linspace(0,1000,5), "epsilon": np.logspace(-3, 3, 5),
-                    "gamma": [1.00000000e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]} #3150 candidates
+                    "gamma": [1.00000000e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]}
 SVR_POLY_PARAMETERS = {"C": np.linspace(0,1000,5), "epsilon": np.logspace(-3, 3, 5), 
-                    "gamma": [1.00000000e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]} #525 candidates
+                    "gamma": [1.00000000e-03, 5.99484250e-02, 4.64158883e-01, 3.59381366e+00, 1.00000000e+01, "scale", "auto"]}
 ELASTIC_PARAMETERS = {"alpha": np.logspace(-10, 2, 5), 'l1_ratio': np.arange(0, 1, 0.1)}
 DT_PARAMETERS = {'criterion': ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'], 'max_depth': [None, 1, 3, 5, 7], 
                     'max_features': [None, 'sqrt', 'log2', 0.3, 0.5, 0.7, n_features//2, n_features//3, ],
                     'min_samples_split': [3, 2, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5], 
-                    'min_samples_leaf':[1, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5]} #9720 candidates
-RFR_PARAMETERS = {'max_depth': [None, 70, 80, 100, 110], 'max_features': ['auto', 2, 3], 'min_samples_leaf': [3, 4, 5],
-                    'min_samples_split': [8, 10, 12], 'n_estimators': np.linspace(1,1000,5,dtype=int)} #1080 candidates
+                    'min_samples_leaf':[1, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5]}
+RFR_PARAMETERS = {'max_depth': [None, 65, 75, 100, 110], 'max_features': ['auto', 2, 3, 5], 'min_samples_leaf': [1, 2, 3, 4, 5],
+                    'min_samples_split': [2, 5, 8, 10, 12], 'n_estimators': np.linspace(1,1000,5,dtype=int)}
 KNN_PARAMETERS = {'n_neighbors': np.linspace(1,15,5,dtype=int), 'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'], 
-                    'metric':['euclidean', 'manhattan']} #120 candidates
+                    'metric':['euclidean', 'manhattan']}
 TREES_PARAMETERS = {'n_estimators': np.linspace(1,750,15,dtype=int)} 
 SGD_PARAMETERS = {'loss': ['hinge', 'log_loss', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_error', 'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive'],
-                    'penalty': ['l1', 'l2', 'elasticnet'], "alpha": np.logspace(-4, 5, 5)} #927 candidates
-BAYES_PARAMETERS = {'alpha_init':[1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.9], 'lambda_init': [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-9]} #147 candidates
+                    'penalty': ['l1', 'l2', 'elasticnet'], "alpha": np.logspace(-4, 5, 5)}
+BAYES_PARAMETERS = {'alpha_init':[1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.9], 'lambda_init': [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-9]}
 
 models =   [[args.SVR, "Support Vector Machines (Linear)", SVR, SVR_PARAMETERS, {'max_iter': -1}],
             [args.SVR_POLY, "Support Vector Machines (Poly)", SVR, SVR_POLY_PARAMETERS, {'max_iter': -1}],
@@ -165,3 +165,8 @@ for [enabled, model_name, regressor, parameters, fixed_params] in models: #optim
 
 result_df = pd.DataFrame(results)
 result_df.to_csv('./supercon_optimize_results.csv') #saves data to './optimize_results.csv'
+
+###################################################
+############## Elbow Method (KMeans) ##############
+###################################################
+# %% 
