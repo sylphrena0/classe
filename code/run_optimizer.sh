@@ -32,8 +32,8 @@ echo "Running on host: "`hostname`
 echo "In directory: "`pwd`
 #
 # Run the python script
-source /opt/rh/rh-python38/enable
-export PYTHONPATH=/nfs/opt/python3.8/packages.sl7
+source /opt/rh/rh-python36/enable
+export PYTHONPATH=/home/kvk23/.local/lib/python3.6/site-packages #use local python packages, installed with pip3 install --user <package>
 python3 ./model_optimizer.py --samplesize 1000 # pass inputs to python (limits and enabled types)
 
 # Documentation:
