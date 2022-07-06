@@ -210,7 +210,8 @@ Documents daily work in the REU program, including events, meetings, and broad d
 
 ## Wednesday, July 6th, 2022
 * **Switched compute farm scripts to use user installed python packages**
-* **Sent lolopy training to compute farm to due computational cost of training model (upwards of two hours)**
+* **Sent lolopy training to compute farm due to computational cost of training model (upwards of two hours)**
+* **Sent remaining optimization script to compute farm**
 
 </details>
 <br>
