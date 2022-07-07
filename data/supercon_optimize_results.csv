@@ -1,12 +1,3 @@
 ,0,1,2,3,4
-0,Elastic Net Regression,ElasticNet(alpha=0.0001),"{'alpha': 0.0001, 'l1_ratio': 0.5}",Best Score: 0.35978363825837373,Time Elapsed: 9.619943141937256
-1,Decision Tree Regression,"DecisionTreeRegressor(criterion='poisson', max_depth=3, max_features=0.5,
-                      min_samples_split=3, random_state=43)","{'criterion': 'poisson', 'max_depth': 3, 'max_features': 0.5, 'min_samples_leaf': 1, 'min_samples_split': 3}",Best Score: 0.41850829508383197,Time Elapsed: 29.427475929260254
-2,Random Forest Regression,"RandomForestRegressor(max_depth=110, max_features='auto', min_samples_leaf=3,
-                      min_samples_split=8, n_estimators=250, n_jobs=-1)","{'max_depth': 110, 'max_features': 'auto', 'min_samples_leaf': 3, 'min_samples_split': 8, 'n_estimators': 250}",Best Score: 0.5827636138313178,Time Elapsed: 159.84249424934387
-3,KNeighbors Regression,"KNeighborsRegressor(metric='manhattan', n_jobs=-1, n_neighbors=4)","{'algorithm': 'auto', 'metric': 'manhattan', 'n_neighbors': 4}",Best Score: 0.47565224119287236,Time Elapsed: 0.6426424980163574
-4,Extra Trees Regression,"ExtraTreesRegressor(min_samples_leaf=1.0, min_samples_split=0.01,
-                    n_estimators=188, n_jobs=-1)","{'min_samples_leaf': 1.0, 'min_samples_split': 0.01, 'n_estimators': 188}",Best Score: -0.0024490736452245088,Time Elapsed: 6.159650564193726
-5,Stochastic Gradient Descent,"SGDRegressor(alpha=100000.0, loss='squared_epsilon_insensitive', max_iter=1500,
-             penalty='l1')","{'alpha': 100000.0, 'loss': 'squared_epsilon_insensitive', 'penalty': 'l1'}",Best Score: -0.002227604589716936,Time Elapsed: 1.1148605346679688
-6,Bayesian Regression,"BayesianRidge(alpha_init=1.2, lambda_init=0.0001)","{'alpha_init': 1.2, 'lambda_init': 0.0001}",Best Score: 0.3027970640967621,Time Elapsed: 0.9809958934783936
+0,Random Forest Regression,"RandomForestRegressor(max_features='auto', n_estimators=250, n_jobs=-1)","{'max_depth': None, 'max_features': 'auto', 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 250}",Best Score: 0.5938437515502933,Time Elapsed: 549.5243966579437
+1,Extra Trees Regression,"ExtraTreesRegressor(n_estimators=589, n_jobs=-1)",{'n_estimators': 589},Best Score: 0.5919313347085267,Time Elapsed: 5.062953948974609
