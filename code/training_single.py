@@ -17,7 +17,7 @@ import argparse
 import warnings #to suppress grid search warnings
 import numpy as np 
 import pandas as pd
-import lolopy #allows easy uncertainty
+import lolopy.learners #allows easy uncertainty
 import matplotlib.pyplot as plt
 import seaborn as sns #heatmaps
 import forestci as fci #error for RFR - http://contrib.scikit-learn.org/forest-confidence-interval/index.html
@@ -89,7 +89,11 @@ def evaluate_one(model_name, regressor, parameters, error=False): #define functi
             model.fit(train_data.values, train_target.values) #fit the model
         else:
             model.fit(train_data, train_target) #fit the model
-        model_pred = model.predict(test_data) #make predictions on test data
+
+        if model_name == "Random Forest Regression - Lolopy": #handle lolopy as it does not work with sklearn-style predict
+            model_pred, pred_error = model.predict(test_data, return_std=True)
+        else:
+            model_pred = model.predict(test_data) #make predictions on test data
 
         mse = round(mean_squared_error(test_target, model_pred),3) #find mean square error
         mae = round(mean_absolute_error(test_target, model_pred),3) #find mean square error
@@ -101,8 +105,10 @@ def evaluate_one(model_name, regressor, parameters, error=False): #define functi
         im = plt.scatter(model_pred, test_target, cmap='plasma_r', norm=plt.Normalize(0, 120), c=difference, label="Critical Temperature (K)", zorder=2) #create scatter plot of data 
         plt.plot((0,135), (0,135), 'k--', alpha=0.75, zorder=3) #add expected line. Values must be changed with different data to look good
         if error: #plot error bars
-            model_unbiased = fci.random_forest_error(model, train_data, test_data)
-            plt.errorbar(model_pred, test_target, yerr=np.sqrt(model_unbiased), fmt=".", ecolor="black", alpha=0.5, zorder=1)
+            if model_name != "Random Forest Regression - Lolopy": #lolopy doesn't need this, forestci does!
+                model_unbiased = fci.random_forest_error(model, train_data, test_data)
+                pred_error = np.sqrt(model_unbiased)
+            plt.errorbar(model_pred, test_target, yerr=pred_error, fmt=".", ecolor="black", alpha=0.5, zorder=1)
         plt.title(model_name, c='white')
         plt.ylabel('Actual Value', c='white')
         plt.xlabel('Prediction', c='white')
