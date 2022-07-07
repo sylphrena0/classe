@@ -70,15 +70,15 @@ def import_data(replace_inf=False,limit=16414):
 # %% 
 parser = argparse.ArgumentParser(description="A program that optimizes regression models for predicting superconductor critical temperatures.")
 parser.add_argument('-s', '--samplesize', action='store', dest='limit', default=1000, help='Limit the GridSearch Data Sample Size. Value must be \'all\' or a number between 0 and 16414')
-parser.add_argument('-sv', '--svr', action='store_false', dest='SVR', help='Boolean option to disable the Support Vector Machines (Linear) model.')
-parser.add_argument('-svp', '--svrpoly', action='store_false', dest='SVR_POLY', help='Boolean option to disable the Support Vector Machines (Poly) model.')
-parser.add_argument('-el', '--elastic', action='store_false', dest='ELASTIC', help='Boolean option to disable the Elastic Net Regression model.')
-parser.add_argument('-dt', '--decisiontree', action='store_false', dest='DT', help='Boolean option to disable the Decision Tree Regression model.')
-parser.add_argument('-rf', '--randomforest', action='store_false', dest='RFR', help='Boolean option to disable the Random Forest Regression model.')
-parser.add_argument('-knn', '--knn', action='store_false', dest='KNN', help='Boolean option to disable the KNeighbors Regression model.')
-parser.add_argument('-et', '--extratrees', action='store_false', dest='TREES', help='Boolean option to disable the Extra Trees Regression model.')
-parser.add_argument('-sgd', '--stochastic', action='store_false', dest='SGD', help='Boolean option to disable the Stochastic Gradient Descent model.')
-parser.add_argument('-by', '--bayes', action='store_false', dest='BAYES', help='Boolean option to disable the Bayesian Regression model.')
+parser.add_argument('-sv', '--svr', action='store_true', dest='SVR', help='Boolean option to enable the Support Vector Machines (Linear) model.')
+parser.add_argument('-svp', '--svrpoly', action='store_true', dest='SVR_POLY', help='Boolean option to enable the Support Vector Machines (Poly) model.')
+parser.add_argument('-el', '--elastic', action='store_true', dest='ELASTIC', help='Boolean option to enable the Elastic Net Regression model.')
+parser.add_argument('-dt', '--decisiontree', action='store_true', dest='DT', help='Boolean option to enable the Decision Tree Regression model.')
+parser.add_argument('-rf', '--randomforest', action='store_true', dest='RFR', help='Boolean option to enable the Random Forest Regression model.')
+parser.add_argument('-knn', '--knn', action='store_true', dest='KNN', help='Boolean option to enable the KNeighbors Regression model.')
+parser.add_argument('-et', '--extratrees', action='store_true', dest='TREES', help='Boolean option to enable the Extra Trees Regression model.')
+parser.add_argument('-sgd', '--stochastic', action='store_true', dest='SGD', help='Boolean option to enable the Stochastic Gradient Descent model.')
+parser.add_argument('-by', '--bayes', action='store_true', dest='BAYES', help='Boolean option to enable the Bayesian Regression model.')
 
 args = parser.parse_args()
 
@@ -157,16 +157,11 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
 results = []
 warnings.filterwarnings('ignore') #got tired of non-converging errors
 for [enabled, model_name, regressor, parameters, fixed_params] in models: #optimize enabled models
-    if enabled:
+    if enabled is True:
         print("Starting GridSearchCV on {}".format(model_name))
         results.append(optimize_model(model_name, regressor, parameters, fixed_params))
     else:
-        print(f"Skipping {model_name} as it is disabled.")
+        print(f"Skipping {model_name} as it is enabled.")
 
 result_df = pd.DataFrame(results)
 result_df.to_csv('./supercon_optimize_results.csv') #saves data to './optimize_results.csv'
-
-###################################################
-############## Elbow Method (KMeans) ##############
-###################################################
-# %% 
