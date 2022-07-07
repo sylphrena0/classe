@@ -216,6 +216,8 @@ Documents daily work in the REU program, including events, meetings, and broad d
 ## Thursday, July 7th, 2022
 * **Discovered and fixed bugs in both compute farm scripts**
 * **Added quality of life bash functions to speed up compute farm work**
+* **Found much better RFR (same metrics, much better certainty)**
+* **Overhauled compute scripts and crushed bugs**
 
 </details>
 <br>
