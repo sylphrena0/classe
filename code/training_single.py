@@ -1,15 +1,19 @@
+#################################################
+##### Superconductivity Regression Notebook #####
+#################################################
+# Trains models to predict critical temperatures based on features found with "*../code/get_featurizers.ipynb*". 
+# Imports data from "*../data/supercon_feat.csv*", which is produced in *get_featurizers.ipynb*. 
+# The orginal data is from the supercon database. This notebook is for testing single models.
+# Compute-Farm version
+# Author: Kirk Kleinsasser
+#################################################
 
-# %% [markdown]
-# # **Superconductivity Regression Notebook - Testing Single Models**
-# Trains models to predict critical temperatures based on features found with "*../code/get_featurizers.ipynb*". Imports data from "*../data/supercon_feat.csv*", which is produced in *get_featurizers.ipynb*. The orginal data is from the supercon database. This notebook is for testing single models.
-# 
-# *Author: Kirk Kleinsasser*
-
-# %% [markdown]
-# ## Import Libraries / Define Import Data Function
-
+######################################################
+#### Import Libraries / Define All Data Functions ####
+######################################################
 # %%
 #general imports:
+import argparse
 import warnings #to suppress grid search warnings
 import numpy as np 
 import pandas as pd
@@ -34,6 +38,28 @@ from sklearn.model_selection import train_test_split, GridSearchCV, KFold, cross
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error, max_error
 from skopt import BayesSearchCV #bayesian optimization
 
+# %%
+# create a list of base-models
+def get_models():
+	models = list()
+	models.append(SVR())
+	models.append(ElasticNet(alpha=1e-05, l1_ratio=0.0))
+	models.append(DecisionTreeRegressor())
+	models.append(RandomForestRegressor())
+	models.append(KNeighborsRegressor(metric='manhattan', n_jobs=-1, n_neighbors=8))
+	# models.append(ExtraTreesRegressor())
+	# models.append(SGDRegressor(alpha=1000.0, loss='epsilon_insensitive', max_iter=1500, penalty='l1'))
+	# models.append(BayesianRidge(alpha_init=1.2, lambda_init=0.0001))
+	return models
+def get_super_learner(X):
+	ensemble = SuperLearner(scorer=r2_score, folds=10, shuffle=True, sample_size=len(X))
+	# add base models
+	models = get_models()
+	ensemble.add(models)
+	# add the meta model
+	ensemble.add_meta(LinearRegression())
+	return ensemble
+
 #imports the data from get_featurizers. Function because some models we may want infinity:
 def import_data(replace_inf=False):
     global data, target, train_data, test_data, train_target, test_target #variables that we want to define globally (outside of this funtion)
@@ -53,11 +79,6 @@ def import_data(replace_inf=False):
     #creates a test train split, with shuffle and random state for reproducibility 
     train_data, test_data, train_target, test_target = train_test_split(data, target, test_size=0.15, random_state=43, shuffle=True)
 
-# %% [markdown]
-# ## Evaluation Functions
-# To train models and return results
-
-# %%
 warnings.filterwarnings("ignore", message="X has feature names, but DecisionTreeRegressor was fitted without feature names")
 def evaluate_one(model_name, regressor, parameters, error=False): #define function that trains a model and prints scores and plots
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
@@ -93,126 +114,62 @@ def evaluate_one(model_name, regressor, parameters, error=False): #define functi
         plt.colorbar().set_label(label="Difference from Actual (K)", color='white') #using .set_label() as colorbar() does accept color arguments
         plt.savefig(f'../data/{regressor}.png', bbox_inches='tight')
         plt.show()
+        plt.clf()
 
-# %% [markdown]
-# ## Linear Regression
+###################################################
+######## Define and Validate CLI Arguments ########
+###################################################
+# %% 
+parser = argparse.ArgumentParser(description="A program that trains regression models for predicting superconductor critical temperatures.")
+parser.add_argument('-l', '--lr', action='store_true', dest='LR', help='Boolean option to enable the Linear Regression model.')
+parser.add_argument('-s', '--svr', action='store_true', dest='SVR', help='Boolean option to enable the Support Vector Machines (Poly) model.')
+parser.add_argument('-el', '--elastic', action='store_true', dest='ELASTIC', help='Boolean option to enable the Elastic Net Regression model.')
+parser.add_argument('-dt', '--decisiontree', action='store_true', dest='DT', help='Boolean option to enable the Decision Tree Regression model.')
+parser.add_argument('-rf', '--randomforest', action='store_true', dest='RFR', help='Boolean option to enable the Random Forest Regression model.')
+parser.add_argument('-lrf', '--lolopyrandomforest', action='store_true', dest='LRFR', help='Boolean option to enable the lolopy Random Forest Regression model.')
+parser.add_argument('-knn', '--knn', action='store_true', dest='KNN', help='Boolean option to enable the KNeighbors Regression model.')
+parser.add_argument('-et', '--extratrees', action='store_true', dest='TREES', help='Boolean option to enable the Extra Trees Regression model.')
+parser.add_argument('-sgd', '--stochastic', action='store_true', dest='SGD', help='Boolean option to enable the Stochastic Gradient Descent model.')
+parser.add_argument('-by', '--bayes', action='store_true', dest='BAYES', help='Boolean option to enable the Bayesian Regression model.')
+parser.add_argument('-sp', '--super', action='store_true', dest='SUPER', help='Boolean option to enable the Superlearner model.')
 
-# %%
-import_data(replace_inf=True) #reimport data without infinities
+args = parser.parse_args()
+#################################################
+########### Setup Models for Training ###########
+#################################################
+# %% 
+import_data(replace_inf=True) #import data without infinities
 
-evaluate_one("Linear Regression", LinearRegression, {})
-
-# %% [markdown]
-# ## Support Vector Regression
-
-# %%
-evaluate_one("Support Vector Regression - Linear", SVR, {'kernel':'rbf', 'C':100, 'epsilon':0.1, 'gamma':0.1, 'degree':1})
-
-# %%
-# evaluate_one("Support Vector Regression - Nonlinear", SVR, {'C':1, 'epsilon':10, 'gamma':'auto', 'kernel':'linear'})
-
-# %% [markdown]
-# ## Elastic Net Regressor
-
-# %%
-evaluate_one("Elastic Net - Unoptimized", ElasticNet, {})
-
-# %%
-evaluate_one("Elastic Net - Optimized", ElasticNet, {'alpha':1e-05, 'l1_ratio':0.0})
-
-# %% [markdown]
-# ## Descision Tree Regressor
-
-# %%
-evaluate_one("Decision Tree - Unoptimized", DecisionTreeRegressor, {})
-
-# %%
-evaluate_one("Decision Tree - Optimized", DecisionTreeRegressor, {'criterion':'poisson', 'max_depth':5, 'max_features':0.5})
-
-# %% [markdown]
-# ## Random Forest Regressor
-
-# %%
-import_data(replace_inf=True)
-evaluate_one("Random Forest Regression", RandomForestRegressor, {}, error=True)
-#compare with lolopy
-
-# %%
-import_data(replace_inf=True)
-evaluate_one("Random Forest Regression - Lolopy", lolopy.learners.RandomForestRegressor, {'return_std':True}, error=False)
-#compare with lolopy
-
-# %% [markdown]
-# ## KNeighbors Regressor
+models = ((args.LR, "Linear Regression", LinearRegression, {}),
+            (args.SVR, "Support Vector Regression - Linear", SVR, {'kernel':'rbf', 'C':100, 'epsilon':0.1, 'gamma':0.1, 'degree':1}),
+            (args.ELASTIC, "Elastic Net - Unoptimized", ElasticNet, {}),
+            (args.ELASTIC, "Elastic Net - Optimized", ElasticNet, {'alpha':1e-05, 'l1_ratio':0.0}),
+            (args.DT, "Decision Tree - Unoptimized", DecisionTreeRegressor, {}),
+            (args.DT, "Decision Tree - Optimized", DecisionTreeRegressor, {'criterion':'poisson', 'max_depth':5, 'max_features':0.5}),
+            (args.RFR, "Random Forest Regression", RandomForestRegressor, {'error':True}),
+            (args.LRFR, "Random Forest Regression - Lolopy", lolopy.learners.RandomForestRegressor, {'return_std':True}),
+            (args.KNN, "KNeighbors - Unoptimized", KNeighborsRegressor, {}),
+            (args.KNN, "KNeighbors - Optimized", KNeighborsRegressor, {'metric':'manhattan', 'n_jobs':-1, 'n_neighbors':8}),
+            (args.TREES, "Extra Trees - Unoptimized", ExtraTreesRegressor, {}),
+            (args.TREES, "Extra Trees - Optimized", ExtraTreesRegressor, {'min_samples_leaf':1.0, 'min_samples_split':0.1, 'n_estimators':250, 'n_jobs':-1}),
+            (args.SGD, "Stochastic Gradient Descent - Unoptimized", SGDRegressor, {}),
+            (args.SGD, "Stochastic Gradient Descent - Optimized", SGDRegressor, {'alpha':1000.0, 'loss':'epsilon_insensitive', 'max_iter':1500, 'penalty':'l1'}),
+            (args.BAYES, "Bayesian Regression - Unoptimized", BayesianRidge, {}),
+            (args.BAYES, "Bayesian Regression - Optimized", BayesianRidge, {'alpha_init':1.2, 'lambda_init':0.0001}),
+            (args.SUPER, "Superlearner", get_super_learner, {'X': train_data}))
 
 # %%
-evaluate_one("KNeighbors - Unoptimized", KNeighborsRegressor, {})
+######################################################
+#################### Run Training ####################
+######################################################
 
-# %%
-evaluate_one("KNeighbors - Optimized", KNeighborsRegressor, {'metric':'manhattan', 'n_jobs':-1, 'n_neighbors':8})
-
-# %% [markdown]
-# ## Extra Trees Regressor
-
-# %%
-evaluate_one("Extra Trees - Unoptimized", KNeighborsRegressor, {})
-
-# %%
-evaluate_one("Extra Trees - Optimized", KNeighborsRegressor, {'min_samples_leaf':1.0, 'min_samples_split':0.1, 'n_estimators':250, 'n_jobs':-1})
-
-# %% [markdown]
-# ## Stochastic Gradient Descent
-
-# %%
-evaluate_one("Stochastic Gradient Descent - Unoptimized", SGDRegressor, {})
-
-# %%
-evaluate_one("Stochastic Gradient Descent - Optimized", SGDRegressor, {'alpha':1000.0, 'loss':'epsilon_insensitive', 'max_iter':1500, 'penalty':'l1'})
-
-# %% [markdown]
-# ## Bayesian Regression
-
-# %%
-evaluate_one("Bayesian Regression - Unoptimized", BayesianRidge, {})
-
-# %%
-evaluate_one("Bayesian Regression - Optimized", BayesianRidge, {'alpha_init':1.2, 'lambda_init':0.0001})
-
-# %% [markdown]
-# ## Superlearner
-
-# %%
-import_data(replace_inf=True)
-# create a list of base-models
-def get_models():
-	models = list()
-	models.append(SVR())
-	models.append(ElasticNet(alpha=1e-05, l1_ratio=0.0))
-	models.append(DecisionTreeRegressor())
-	models.append(RandomForestRegressor())
-	models.append(KNeighborsRegressor(metric='manhattan', n_jobs=-1, n_neighbors=8))
-	# models.append(ExtraTreesRegressor())
-	# models.append(SGDRegressor(alpha=1000.0, loss='epsilon_insensitive', max_iter=1500, penalty='l1'))
-	# models.append(BayesianRidge(alpha_init=1.2, lambda_init=0.0001))
-
-	return models
-
-# %%
-def get_super_learner(X):
-	ensemble = SuperLearner(scorer=r2_score, folds=10, shuffle=True, sample_size=len(X))
-	# add base models
-	models = get_models()
-	ensemble.add(models)
-	# add the meta model
-	ensemble.add_meta(LinearRegression())
-
-	return ensemble
-ensemble = get_super_learner(train_data)
-
-# %%
-evaluate_one("Superlearner", get_super_learner, {'X': train_data})
-
-# %%
-# dill.dump_session('../data/supercon_ml_latest_run.db') #this can dump a python session so I can resume later, after restarts and such
-
-
+warnings.filterwarnings('ignore') #got tired of non-converging errors
+for [enabled, model_name, regressor, parameters] in models: #optimize enabled models
+    try:
+        if enabled is True:
+            print("Starting training on {}".format(model_name))
+            evaluate_one(model_name, regressor, parameters)
+        else:
+            print(f"Skipping {model_name} as it not enabled.")
+    except Exception as e:
+        print(e)
