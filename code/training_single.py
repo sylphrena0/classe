@@ -118,7 +118,7 @@ def evaluate_one(model_name, regressor, parameters, error=False): #define functi
         plt.annotate(f'MSE: {mse}', xy = (1.0, -0.15), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MSE
         plt.legend()
         plt.colorbar().set_label(label="Difference from Actual (K)", color='white') #using .set_label() as colorbar() does accept color arguments
-        plt.savefig(f'../data/{regressor}.png', bbox_inches='tight')
+        plt.savefig(f'./{model_name}.png', bbox_inches='tight')
         plt.show()
         plt.clf()
 
@@ -153,7 +153,7 @@ models = ((args.LR, "Linear Regression", LinearRegression, {}),
             (args.DT, "Decision Tree - Unoptimized", DecisionTreeRegressor, {}),
             (args.DT, "Decision Tree - Optimized", DecisionTreeRegressor, {'criterion':'poisson', 'max_depth':5, 'max_features':0.5}),
             (args.RFR, "Random Forest Regression", RandomForestRegressor, {'error':True}),
-            (args.LRFR, "Random Forest Regression - Lolopy", lolopy.learners.RandomForestRegressor, {'return_std':True}),
+            (args.LRFR, "Random Forest Regression - Lolopy", lolopy.learners.RandomForestRegressor, {}),
             (args.KNN, "KNeighbors - Unoptimized", KNeighborsRegressor, {}),
             (args.KNN, "KNeighbors - Optimized", KNeighborsRegressor, {'metric':'manhattan', 'n_jobs':-1, 'n_neighbors':8}),
             (args.TREES, "Extra Trees - Unoptimized", ExtraTreesRegressor, {}),
@@ -171,11 +171,8 @@ models = ((args.LR, "Linear Regression", LinearRegression, {}),
 
 warnings.filterwarnings('ignore') #got tired of non-converging errors
 for [enabled, model_name, regressor, parameters] in models: #optimize enabled models
-    try:
-        if enabled is True:
-            print("Starting training on {}".format(model_name))
-            evaluate_one(model_name, regressor, parameters)
-        else:
-            print(f"Skipping {model_name} as it not enabled.")
-    except Exception as e:
-        print(e)
+    if enabled is True:
+        print("Starting training on {}".format(model_name))
+        evaluate_one(model_name, regressor, parameters)
+    else:
+        print(f"Skipping {model_name} as it not enabled.")
