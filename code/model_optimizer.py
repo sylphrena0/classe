@@ -164,4 +164,4 @@ for [enabled, model_name, regressor, parameters, fixed_params] in models: #optim
         print(f"Skipping {model_name} as it is not enabled.")
 
 result_df = pd.DataFrame(results)
-result_df.to_csv('./supercon_optimize_results.csv') #saves data to './optimize_results.csv'
+result_df.to_csv('./optimize.results.csv') #saves data to './optimize_results.csv'
