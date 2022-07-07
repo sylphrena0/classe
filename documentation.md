@@ -213,5 +213,9 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Sent lolopy training to compute farm due to computational cost of training model (upwards of two hours)**
 * **Sent remaining optimization script to compute farm**
 
+## Thursday, July 7th, 2022
+* **Discovered and fixed bugs in both compute farm scripts**
+* **Added quality of life bash functions to speed up compute farm work**
+
 </details>
 <br>
