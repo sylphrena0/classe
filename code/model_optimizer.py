@@ -110,8 +110,7 @@ DT_PARAMETERS = {'criterion': ['squared_error', 'friedman_mse', 'absolute_error'
                     'max_features': [None, 'sqrt', 'log2', 0.3, 0.5, 0.7, n_features//2, n_features//3, ],
                     'min_samples_split': [3, 2, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5], 
                     'min_samples_leaf':[1, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5]}
-RFR_PARAMETERS = {'max_depth': [None, 65, 75, 100, 110], 'max_features': ['auto', 2, 3, 5], 'min_samples_leaf': [1, 2, 3, 4, 5],
-                    'min_samples_split': [2, 5, 8, 10, 12], 'n_estimators': np.linspace(1,1000,5,dtype=int)}
+RFR_PARAMETERS = {'max_features': ['auto', 1, 2, 3, 4, 5], 'n_estimators': np.linspace(1,1000,20,dtype=int)}
 KNN_PARAMETERS = {'n_neighbors': np.linspace(1,15,5,dtype=int), 'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'], 
                     'metric':['euclidean', 'manhattan']}
 TREES_PARAMETERS = {'n_estimators': np.linspace(1,750,15,dtype=int)} 
