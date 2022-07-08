@@ -87,7 +87,7 @@ def evaluate_one(model_name, regressor, parameters, error=False): #define functi
         plt.annotate(f'MSE: {mse}', xy = (1.0, -0.15), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MSE
         plt.legend()
         plt.colorbar().set_label(label="Difference from Actual (K)", color='white') #using .set_label() as colorbar() does accept color arguments
-        plt.savefig(f'../data/{regressor}.png', bbox_inches='tight')
+        plt.savefig(f'../data/{model_name}.png', bbox_inches='tight')
         plt.show()
         plt.clf()
 
@@ -127,8 +127,6 @@ def evaluate(models, title, filename='results.png'): #define function that train
             ax[ax1, ax2].set_title(model_name, c='white')
             ax[ax1, ax2].set_xlabel('Prediction', c='white')
             ax[ax1, ax2].set_ylabel('Actual Value', c='white')
-            # ax[ax1, ax2].patch.set_facecolor('white')
-            # ax[ax1, ax2].patch.set_alpha(0)
             ax[ax1, ax2].annotate(f'R2: {r_squared}', xy = (0, -0.15), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
             ax[ax1, ax2].annotate(f'MXE: {mxe}', xy = (0, -0.20), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
             ax[ax1, ax2].annotate(f'MAE: {mae}', xy = (1.0, -0.20), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MAE
@@ -138,6 +136,5 @@ def evaluate(models, title, filename='results.png'): #define function that train
         fig.legend(handles=handles,loc='lower center')
 
         fig.colorbar(im, ax=ax.ravel().tolist()).set_label(label="Difference from Actual (K)", color='white') #using .set_label() as colorbar() does accept color arguments
-        # facecolor=fig.get_facecolor()
         plt.savefig(f'../data/{filename}', bbox_inches='tight')
         plt.show()
