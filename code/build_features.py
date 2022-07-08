@@ -21,7 +21,7 @@ from matminer.featurizers.conversions import StrToComposition
 #load supercon databse and metadata
 #print(get_all_dataset_info("superconductivity2018")) #print metadata
 #features will be made with matminer, target is Tc
-data = pd.DataFrame(pd.read_csv('./supercon.csv'))
+data = pd.DataFrame(pd.read_csv('../data/supercon_dataset.csv'))
 stc = StrToComposition()
 composition = stc.featurize_dataframe(data,'name', ignore_errors=True)
 composition.head()
@@ -101,8 +101,8 @@ cohesive_en_mp_data = cohesive_en_mp.featurize_dataframe(composition, 'compositi
 all_feat = ea_aff_data
 for featurizer in [el_prop_data, met_frac_data, stoich_data, band_center_data, ox_states_data, ion_prop_data, en_diff_data, atom_orbitals_data, val_orbitals_data, atom_pack_eff_data, cohesive_en_data, cohesive_en_mp_data]:
     all_feat = pd.merge(all_feat, featurizer, how="left") #merges each featurizer with the main set, but drops any duplicate columns (otherwise we'd have many Tc and name columns)
-all_feat.to_csv('supercon_features.csv') #export features for use in juypter
+all_feat.to_csv('../data/supercon_features.csv') #export features for use in juypter
 
-dill.dump_session('latest-run.db') #dump python session for external use
+# dill.dump_session('../data/latest-run.db') #dump python session for external use
 
 #################################################
