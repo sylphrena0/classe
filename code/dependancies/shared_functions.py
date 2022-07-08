@@ -91,7 +91,7 @@ def evaluate_one(model_name, regressor, parameters, error=False): #define functi
         plt.show()
         plt.clf()
 
-def evaluate(models, title, filename='results.png'): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
+def evaluate(models, title, filename='results.png', export=False): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
     with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':(1, 1, 1, 0),'text.color':'white','legend.labelcolor':'black'}):
         warnings.filterwarnings("ignore")
@@ -136,5 +136,6 @@ def evaluate(models, title, filename='results.png'): #define function that train
         fig.legend(handles=handles,loc='lower center')
 
         fig.colorbar(im, ax=ax.ravel().tolist()).set_label(label="Difference from Actual (K)", color='white') #using .set_label() as colorbar() does accept color arguments
-        plt.savefig(f'../data/{filename}', bbox_inches='tight')
+        if export:
+            plt.savefig(f'../data/{filename}', bbox_inches='tight')
         plt.show()
