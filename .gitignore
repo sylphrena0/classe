@@ -1,1 +1,5 @@
 code/dependancies/__pycache__
+latex
+!latex/classe_paper.tex
+!latex/classe_paper.bib
+!latex/classe_paper.pdf
