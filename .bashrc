@@ -2,7 +2,7 @@ alias cstat="clear; cd /cdat/tem/kvk23/queue; qstat; ls -lXr" #shows queue statu
 alias wcompute="while true; do cstat; sleep 5; done" #runs cstat every five seconds till interupt
 
 compute() { #starts a job
-    cd /cdat/tem/kvk23/queue
+    cd /cdat/tem/kvk23/queue/code
     qsub $@
     qstat
 }
