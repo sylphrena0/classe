@@ -219,5 +219,8 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Found much better RFR (same metrics, much better certainty)**
 * **Overhauled compute scripts and crushed bugs**
 
+## Friday, July 8th, 2022
+* **Moved functions that are shared between files to ./dependancies and imported them in relevent files to limit redundancy. This also means we have less variables stored in each file.**
+
 </details>
 <br>
