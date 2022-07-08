@@ -75,7 +75,7 @@ def evaluate_one(model_name, regressor, parameters, error=False): #define functi
         plt.plot((0,135), (0,135), 'k--', alpha=0.75, zorder=3) #add expected line. Values must be changed with different data to look good
         if error: #plot error bars
             if model_name != "Random Forest Regression - Lolopy": #lolopy doesn't need this, forestci does!
-                model_unbiased = fci.random_forest_error(model, train_data, test_data)
+                model_unbiased = fci.random_forest_error(model, train_data, test_data, calibrate=False)
                 pred_error = np.sqrt(model_unbiased)
             plt.errorbar(model_pred, test_target, yerr=pred_error, fmt=".", ecolor="black", alpha=0.5, zorder=1)
         plt.title(model_name, c='white')
@@ -117,11 +117,11 @@ def evaluate(models, title, filename='results.png'): #define function that train
 
             #make our plot - with plt.rc_context sets theme to look good in dark mode
             difference = np.abs(test_target - model_pred) #function that finds the absolute difference between predicted and actual value
-            im = ax[ax1, ax2].scatter(model_pred, test_target, cmap='plasma_r', norm=plt.Normalize(0, 120), c=difference, label="Critical Temperature (K)") #create scatter plot of data 
-            ax[ax1, ax2].plot((0,135), (0,135), 'k--', alpha=0.75) #add expected line. Values must be changed with different data to look good
+            im = ax[ax1, ax2].scatter(model_pred, test_target, cmap='plasma_r', norm=plt.Normalize(0, 120), c=difference, label="Critical Temperature (K)", zorder=2) #create scatter plot of data 
+            ax[ax1, ax2].plot((0,135), (0,135), 'k--', alpha=0.75, zorder=3) #add expected line. Values must be changed with different data to look good
             if error: #plot error bars
                 if model_name != "Random Forest Regression - Lolopy": #lolopy doesn't need this, forestci does!
-                    model_unbiased = fci.random_forest_error(model, train_data, test_data)
+                    model_unbiased = fci.random_forest_error(model, train_data, test_data, calibrate=False)
                     pred_error = np.sqrt(model_unbiased)
                 ax[ax1, ax2].errorbar(model_pred, test_target, yerr=pred_error, fmt=".", ecolor="black", alpha=0.5, zorder=1)
             ax[ax1, ax2].set_title(model_name, c='white')
