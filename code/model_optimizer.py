@@ -28,7 +28,6 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import AdaBoostRegressor, BaggingRegressor, ExtraTreesRegressor, RandomForestRegressor
 from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge, Lasso, ElasticNet, SGDRegressor, BayesianRidge
 from sklearn.svm import SVR
-# from xgboost import XGBRegressor
 
 #various ML tools:
 from sklearn.pipeline import make_pipeline, Pipeline
@@ -37,32 +36,8 @@ from sklearn.model_selection import train_test_split, GridSearchCV, KFold, cross
 from sklearn.metrics import accuracy_score, recall_score, r2_score, mean_absolute_error, mean_squared_error
 # from skopt import BayesSearchCV #bayesian optimization
 
-#imports the data from get_featurizers. Function because some models we may want infinity:
-def import_data(replace_inf=False,limit=16414):
-    global data, target, train_data, test_data, train_target, test_target #variables that we want to define globally (outside of this funtion)
-    data = pd.DataFrame(pd.read_csv('./supercon_features.csv')) #loads data produced in get_featurizer.ipynb - NOTE: This should be '../data/supercon_feat.csv' if running locally
-    target = data.pop('Tc') #remove target (critical temp) from data
-
-    #TODO: add feature for infinite values or otherwise handle for models that cannot handle infinite data
-    if replace_inf: #replaces values of infinity with NaN if replace_inf is True
-        data.replace([np.inf, -np.inf], np.nan, inplace=True) 
-
-    #TODO: debug feaurizers - NaN is entered when there is an error in the featurizer
-    data.drop(['name','Unnamed: 0', 'composition'], axis=1, inplace=True) #drop columns irrelevant to training
-    data = data[data.columns[data.notnull().any()]] #drop columns that are entirely NaN (12 columns) 
-
-    for col in data: #replaces NaN with zeros
-        data[col] = pd.to_numeric(data[col], errors ='coerce').fillna(0).astype('float')
-
-    #creates a test train split, with shuffle and random state for reproducibility 
-    train_data, test_data, train_target, test_target = train_test_split(data, target, test_size=0.15, random_state=43, shuffle=True)
-    
-    #drop data that will not be used for optimization after shuffle, to limit defined in function
-    limit = int(limit)
-    train_data = train_data.iloc[:limit]
-    test_data = test_data.iloc[:limit]
-    train_target = train_target.iloc[:limit]
-    test_target = test_target.iloc[:limit]
+#imports custom libraries (shared functions)
+import dependancies.shared_functions as sfn
 
 ###################################################
 ######## Define and Validate CLI Arguments ########
@@ -94,11 +69,18 @@ else:
 #####################################################
 # %% 
 
-import_data(replace_inf=True,limit=args.limit)
+snf.import_data(replace_inf=False) #grab data
+
+#drop data that will not be used for optimization after shuffle, to limit defined in function
+limit = int(limit)
+train_data = snf.train_data.iloc[:limit]
+test_data = snf.test_data.iloc[:limit]
+train_target = snf.train_target.iloc[:limit]
+test_target = snf.test_target.iloc[:limit]
 
 #get number of rows and columns for use in parameters
-n_features = data.shape[1]
-n_samples = data.shape[0]
+n_features = snf.data.shape[1]
+n_samples = snf.data.shape[0]
 
 #define parameters that will be searched with GridSearchCV
 SVR_PARAMETERS = {"kernel": ["poly","rbf","sigmoid"], "degree": np.arange(1,10,2), "C": np.linspace(0,1000,5), "epsilon": np.logspace(-3, 3, 5),
