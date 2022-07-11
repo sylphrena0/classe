@@ -34,7 +34,7 @@ echo "In directory: "`pwd`
 # Run the python script
 source /opt/rh/rh-python38/enable
 export PYTHONPATH=/nfs/opt/python3.8/packages.sl7
-python3 ./code/build_features.py
+python3 ./code/build_features.py $@
 
 # Documentation:
 # https://wiki.classe.cornell.edu/Computing/GridEngine - CLASSE wiki
