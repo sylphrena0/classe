@@ -160,3 +160,14 @@ Documents daily work in the REU program, including events, meetings, and broad d
 
 </details>
 <br>
+
+<details>
+<summary><font size=5>Week 5</font></summary>
+
+---
+
+## Monday, July 11th, 2022
+* **Research into mapie, implemented into an errorbar. Considered just adding a metric, tryed to replicate results from forestci.**
+
+</details>
+<br>
