@@ -27,9 +27,9 @@ from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error, m
 ############ Define Import Function ############
 ################################################
 #imports the data from get_featurizers. Function because some models we may want infinity:
-def import_data(replace_inf=False):
+def import_data(filename="supercon_features.csv", replace_inf=False):
     global data, target, train_data, test_data, train_target, test_target #variables that we want to define globally (outside of this funtion)
-    data = pd.DataFrame(pd.read_csv('../data/supercon_features.csv')) #loads data produced in get_featurizer.ipynb
+    data = pd.DataFrame(pd.read_csv(f'../data/{filename}')) #loads data produced in get_featurizer.ipynb
     target = data.pop('Tc') #remove target (critical temp) from data
 
     if replace_inf: #replaces values of infinity with NaN if replace_inf is True
