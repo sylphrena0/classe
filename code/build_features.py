@@ -12,16 +12,21 @@
 ################## Run Imports ##################
 #################################################
 # %%
+import argparse
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matminer.datasets import get_available_datasets, load_dataset, get_all_dataset_info
 from matminer.featurizers.conversions import StrToComposition
 
+parser = argparse.ArgumentParser(description="A program that gets feature from composition of superconductor critical temperatures.")
+parser.add_argument('-f', '--file', action='store', default="supercon_dataset.csv", dest='file', help='Specify filename to featurize. ')
+filename = supercon_dataset.csv
+
 #load supercon databse and metadata
 #print(get_all_dataset_info("superconductivity2018")) #print metadata
 #features will be made with matminer, target is Tc
-data = pd.DataFrame(pd.read_csv('../data/supercon_dataset.csv'))
+data = pd.DataFrame(pd.read_csv(f'../data/{filename}'))
 stc = StrToComposition()
 composition = stc.featurize_dataframe(data,'name', ignore_errors=True)
 composition.head()
