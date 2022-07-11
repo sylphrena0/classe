@@ -48,7 +48,7 @@ def import_data(replace_inf=False):
 ###############################################
 ######### Define Evaluation Functions #########
 ###############################################
-def evaluate_one(model_name, regressor, parameters, error=False): #define function that trains a model and prints scores and plots
+def evaluate_one(model_name, regressor, parameters, forestci=False, export=False): #define function that trains a model and prints scores and plots
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
     with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'}):
         warnings.filterwarnings("ignore")
@@ -73,11 +73,11 @@ def evaluate_one(model_name, regressor, parameters, error=False): #define functi
         difference = np.abs(test_target - model_pred) #function that finds the absolute difference between predicted and actual value
         im = plt.scatter(model_pred, test_target, cmap='plasma_r', norm=plt.Normalize(0, 120), c=difference, label="Critical Temperature (K)", zorder=2) #create scatter plot of data 
         plt.plot((0,135), (0,135), 'k--', alpha=0.75, zorder=3) #add expected line. Values must be changed with different data to look good
-        if error: #plot error bars
+        if forestci: #plot error bars
             if model_name != "Random Forest Regression - Lolopy": #lolopy doesn't need this, forestci does!
                 model_unbiased = fci.random_forest_error(model, train_data, test_data, calibrate=False)
                 pred_error = np.sqrt(model_unbiased)
-            plt.errorbar(model_pred, test_target, yerr=pred_error, fmt=".", ecolor="black", alpha=0.5, zorder=1)
+            plt.errorbar(model_pred, test_target, xerr=pred_error, fmt=".", ecolor="black", alpha=0.5, zorder=1)
         plt.title(model_name, c='white')
         plt.ylabel('Actual Value', c='white')
         plt.xlabel('Prediction', c='white')
@@ -87,11 +87,12 @@ def evaluate_one(model_name, regressor, parameters, error=False): #define functi
         plt.annotate(f'MSE: {mse}', xy = (1.0, -0.15), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MSE
         plt.legend()
         plt.colorbar().set_label(label="Difference from Actual (K)", color='white') #using .set_label() as colorbar() does accept color arguments
-        plt.savefig(f'../data/{model_name}.png', bbox_inches='tight')
+        if export:
+            plt.savefig(f'../data/{model_name}.png', bbox_inches='tight')
         plt.show()
         plt.clf()
 
-def evaluate(models, title, filename='results.png', export=False): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
+def evaluate(models, title, filename='results.png', forestci=False, export=True): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
     with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':(1, 1, 1, 0),'text.color':'white','legend.labelcolor':'black'}):
         warnings.filterwarnings("ignore")
@@ -119,11 +120,12 @@ def evaluate(models, title, filename='results.png', export=False): #define funct
             difference = np.abs(test_target - model_pred) #function that finds the absolute difference between predicted and actual value
             im = ax[ax1, ax2].scatter(model_pred, test_target, cmap='plasma_r', norm=plt.Normalize(0, 120), c=difference, label="Critical Temperature (K)", zorder=2) #create scatter plot of data 
             ax[ax1, ax2].plot((0,135), (0,135), 'k--', alpha=0.75, zorder=3) #add expected line. Values must be changed with different data to look good
-            if error: #plot error bars
-                if model_name != "Random Forest Regression - Lolopy": #lolopy doesn't need this, forestci does!
-                    model_unbiased = fci.random_forest_error(model, train_data, test_data, calibrate=False)
-                    pred_error = np.sqrt(model_unbiased)
-                ax[ax1, ax2].errorbar(model_pred, test_target, yerr=pred_error, fmt=".", ecolor="black", alpha=0.5, zorder=1)
+            if forestci: #plot error bars
+                if "Random Forest Regression" in model_name: #check if it is forest model
+                    if lolopy in model_name: #lolopy doesn't need this, forestci does!
+                        model_unbiased = fci.random_forest_error(model, train_data, test_data, calibrate=False)
+                        pred_error = np.sqrt(model_unbiased)
+                    ax[ax1, ax2].errorbar(model_pred, test_target, yerr=pred_error, fmt=".", ecolor="black", alpha=0.5, zorder=1)
             ax[ax1, ax2].set_title(model_name, c='white')
             ax[ax1, ax2].set_xlabel('Prediction', c='white')
             ax[ax1, ax2].set_ylabel('Actual Value', c='white')
