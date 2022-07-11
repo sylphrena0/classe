@@ -20,8 +20,7 @@ from matminer.datasets import get_available_datasets, load_dataset, get_all_data
 from matminer.featurizers.conversions import StrToComposition
 
 parser = argparse.ArgumentParser(description="A program that gets feature from composition of superconductor critical temperatures.")
-parser.add_argument('-f', '--file', action='store', default="supercon_dataset.csv", dest='file', help='Specify filename to featurize. ')
-filename = supercon_dataset.csv
+parser.add_argument('-f', '--file', action='store', default="supercon_dataset.csv", dest='filename', help='Specify filename to featurize. ')
 
 #load supercon databse and metadata
 #print(get_all_dataset_info("superconductivity2018")) #print metadata
