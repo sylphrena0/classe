@@ -170,5 +170,9 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Research into mapie, implemented into an errorbar. Considered just adding a metric, tryed to replicate results from forestci.**
 * **Updated feaurizer scripts and submitted compute job to generate features for simulated dataset.**
 
+## Tuesday, July 12th, 2022
+* **Implemented mapie with errorbars that work on any model**
+* **Modified functions to accept mapie arguments**
+
 </details>
 <br>
