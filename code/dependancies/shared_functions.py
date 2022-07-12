@@ -105,27 +105,27 @@ def evaluate_one(model_name, model, parameters, error=True, method="plus", fores
 
         #make our plot - with plt.rc_context sets theme to look good in dark mode
         difference = np.abs(test_target - model_pred) #function that finds the absolute difference between predicted and actual value
-        im = plt.scatter(model_pred, test_target, cmap='plasma_r', norm=plt.Normalize(0, 120), c=difference, label="Critical Temperature (K)", zorder=2) #create scatter plot of data 
+        im = plt.scatter(test_target, model_pred, cmap='plasma_r', norm=plt.Normalize(0, 120), c=difference, label="Critical Temperature (K)", zorder=2) #create scatter plot of data 
         plt.plot((0,135), (0,135), 'k--', alpha=0.75, zorder=3) #add expected line. Values must be changed with different data to look good
         if error: #plot error bars
             if forestci and model is not RandomForestRegressor:
                 raise NameError("RandomForestRegressor must be selected to use forestci")
             elif forestci:
-                model_unbiased = fci.random_forest_error(regressor, train_data, test_data, calibrate=False)
-                xerror = np.sqrt(model_unbiased)
-                print(xerror.shape)
+                model_unbiased = fci.random_forest_error(regressor, train_data, test_data, calibrate=False) #NOTE: forestci calibration is disabled as there is a bug in the code (they use a too small datatype)
+                yerror = np.sqrt(model_unbiased)
+                print(yerror.shape)
             elif method == "prefit":
                 raise NameError("Prefit method is not implemented in this program as our current implementation have error bars that do not align with the test data")
                 # mapie = MapieRegressor(estimator=model, cv="prefit").fit(cal_data, cal_target) #important: calibration data must be different from training data!
                 # pred_interval = pd.DataFrame(mapie.predict(test_data, alpha=.05)[1].reshape(-1,2), index=test_data.index, columns=["lower", "upper"]) #get interval predictions on test data, with alpha=5%
-                # xerror = pred_interval.values.reshape(2,-1)
+                # yerror = pred_interval.values.reshape(2,-1)
             else:
                 #model_pis contains absolute points for upper/lower bounds. We need absolute error, like (3, 3) for ± 3:
-                xerror = np.abs(model_pis[:,:,0].transpose() - np.tile(model_pred, (2, 1))) #error must be in shape (n, 2) for errorbars
-            plt.errorbar(model_pred, test_target, xerr=xerror, fmt=".", ecolor="black", alpha=0.5, zorder=1)
+                yerror = np.abs(model_pis[:,:,0].transpose() - np.tile(model_pred, (2, 1))) #error must be in shape (n, 2) for errorbars
+            plt.errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1, label="Prediction Intervals")
         plt.title(model_name, c='white')
-        plt.ylabel('Actual Value', c='white')
-        plt.xlabel('Prediction', c='white')
+        plt.xlabel('Actual Value', c='white')
+        plt.ylabel('Prediction', c='white')
         plt.annotate(f'R2: {r_squared}', xy = (0, -0.15), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
         plt.annotate(f'MXE: {mxe}', xy = (0, -0.20), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
         plt.annotate(f'MAE: {mae}', xy = (1.0, -0.20), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MAE
@@ -168,26 +168,26 @@ def evaluate(models, title, filename='results.png', error=True, method="plus", f
 
             #make our plot - with plt.rc_context sets theme to look good in dark mode
             difference = np.abs(test_target - model_pred) #function that finds the absolute difference between predicted and actual value
-            im = ax[ax1, ax2].scatter(model_pred, test_target, cmap='plasma_r', norm=plt.Normalize(0, 120), c=difference, label="Critical Temperature (K)", zorder=2) #create scatter plot of data 
+            im = ax[ax1, ax2].scatter(test_target, model_pred, cmap='plasma_r', norm=plt.Normalize(0, 120), c=difference, label="Critical Temperature (K)", zorder=2) #create scatter plot of data 
             ax[ax1, ax2].plot((0,135), (0,135), 'k--', alpha=0.75, zorder=3) #add expected line. Values must be changed with different data to look good
 
             if error: #plot error bars
                 if forestci and model is RandomForestRegressor:
-                    model_unbiased = fci.random_forest_error(regressor, train_data, test_data, calibrate=False)
-                    xerror = np.sqrt(model_unbiased)
+                    model_unbiased = fci.random_forest_error(regressor, train_data, test_data, calibrate=False) #NOTE: forestci calibration is disabled as there is a bug in the code (they use a too small datatype)
+                    yerror = np.sqrt(model_unbiased)
                 elif method == "prefit":
                     raise NameError("Prefit method is not implemented in this program as our current implementation have error bars that do not align with the test data")
                     # mapie = MapieRegressor(estimator=model, cv="prefit").fit(cal_data, cal_target) #important: calibration data must be different from training data!
                     # pred_interval = pd.DataFrame(mapie.predict(test_data, alpha=.05)[1].reshape(-1,2), index=test_data.index, columns=["lower", "upper"]) #get interval predictions on test data, with alpha=5%
-                    # xerror = pred_interval.values.reshape(2,-1)
+                    # yerror = pred_interval.values.reshape(2,-1)
                 else:
                     #model_pis contains absolute points for upper/lower bounds. We need absolute error, like (3, 3) for ± 3:
-                    xerror = np.abs(model_pis[:,:,0].transpose() - np.tile(model_pred, (2, 1))) #error must be in shape (n, 2) for errorbars
-                ax[ax1, ax2].errorbar(model_pred, test_target, xerr=xerror, fmt=".", ecolor="black", alpha=0.5, zorder=1)
+                    yerror = np.abs(model_pis[:,:,0].transpose() - np.tile(model_pred, (2, 1))) #error must be in shape (n, 2) for errorbars
+                ax[ax1, ax2].errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1, label="Prediction Intervals")
 
             ax[ax1, ax2].set_title(model_name, c='white')
-            ax[ax1, ax2].set_xlabel('Prediction', c='white')
-            ax[ax1, ax2].set_ylabel('Actual Value', c='white')
+            ax[ax1, ax2].set_ylabel('Prediction', c='white')
+            ax[ax1, ax2].set_xlabel('Actual Value', c='white')
             ax[ax1, ax2].annotate(f'R2: {r_squared}', xy = (0, -0.15), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
             ax[ax1, ax2].annotate(f'MXE: {mxe}', xy = (0, -0.20), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
             ax[ax1, ax2].annotate(f'MAE: {mae}', xy = (1.0, -0.20), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MAE
