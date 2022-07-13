@@ -174,5 +174,10 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Implemented mapie with errorbars that work on any model**
 * **Modified functions to accept mapie arguments**
 
+## Wednesday, July 13th, 2022
+* **Worked on featurizing simulated dataset, squished some bugs**
+* **Started to draft paper - superconducters/matminer/ml background**
+* **Continued to try lolopy training - compute farm**
+
 </details>
 <br>
