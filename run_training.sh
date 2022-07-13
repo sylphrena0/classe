@@ -25,7 +25,7 @@
 #$ -m e -M kvk23@cornell.edu
 #
 # Set thread requirements
-#$ -pe sge_pe 64
+#$ -pe sge_pe 32
 # Print some environment information - for reporting diagnostics only.
 echo "Job ${JOBNAME} Starting at: "`date`
 echo "Running on host: "`hostname`
