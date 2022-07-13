@@ -74,36 +74,37 @@
 
 %
 \begin{abstract}
-   Many conference series have adopted the same standards
-   for electronic publication and have joined the Joint
-   Accelerator Conferences Website (JACoW) collaboration
-   for the publication of their proceedings. This document
-   describes the common requirements for the submission of
-   papers to these conferences. Please consult individual
-   conference information for page limits, method of electronic
-   submission, etc. It is not intended that this should
-   be a tutorial in word processing; the aim is to explain the
-   particular requirements for electronic publication at
-   www.JACoW.org. The abstract itself is to act as a stand-alone
-   entity and, as such, should not include citations. Any acronyms 
-   should be expanded on their first occurrence, both in the 
-   abstract and in the rest of the paper. 
-   The abstract itself is to act as a stand-alone entity and, 
-   as such, should not include citations. Any acronyms should 
-   be expanded on their first occurrence, both in the abstract 
-   and in the rest of the paper.
+   Ooo, scarry abstract...
 \end{abstract}
 
 
-\section{SUBMISSION OF PAPERS}
-Each author should submit the PDF file and all source
-files (text and figures) to enable the paper to be
-reconstructed if there are processing difficulties.
+\section{Introduction}
+\subsection{Background on Superconductors}
+Superconductors are materials that lose all electrical resistance at low temperatures. These materials have a critical temperature, TC at which they lose their resistance. Most of these materials have very low TC, but “unconventional superconductors” can have higher TC. Electrons in superconductors form Cooper Pairs below TC. Held together with phonouns, atomic-level collective excitations. Phonouns are similar to photons in that they also have particle-like properties.1
+Unconventional superconductors are still not well understood - they remain an open question in Physics. Understanding them would be invaluable. Potential discovery of superconducting materials stable at atmospheric conditions. Super efficient electricity transfer - particle accelerators, powerlines.
 
-\section{MANUSCRIPTS}
-Templates are provided for recommended software and
-authors are advised to use them. Please consult the
-individual conference help pages if questions arise.
+
+\subsection{Background on Matminer}
+Matminer is a python library that generates data from various measured properties of a material
+Matminer collects existing calculations into an scikit-learn friendly python package
+Our database only provides composition data, which generates 53 features 
+Featurizers analyze an aspect of a material, such as Stoichiometry or Valence Orbitals.
+Matminer can also extract features from band structure and other properties 
+
+[FLOWCHART FIGURE]
+
+\subsection{Background on Machine Learning}
+Previous papers have used random forest models to predict critical temperature [citation needed], but this paper will examine eight models before settling on two for further investigation. These models are descibed below. Each model's hyperparameters\footnote{Hyperparameters are machine learning parameters that change how a model is trained.} was optimized with Scikit-Learn's GridSearchCV, which tests combinations from a grid of hyperparameters and returns the best performing model based on a specifed metric. 
+
+We started our model search with some linear models. Besides the base Linear Regression model, we used linear (and polynomial) Support Vector Regression (SVR) models. SVR uses decision boundaries, which are lines parallel to the regression line. The model aims to maximize the amount of data within the decision boundaries and has hyperparamters to modify sensitivity to prevent overfitting.\footnote{Overfitting occurs when a model is trained to be too specific to a particular dataset and is not generalizable.} We also trialed Elastic Net and Bayesian Ridge models. Elastic Net uses L1 and L2 penalties to stabilize the model, and Bayesian Ridge uses probablity distributors instead of point estimates.
+
+Additionally, we trialed Decision Tree and KNeighbors (KNN) models. Decision trees are very interpretable - they break predictions into nodes of the tree, eventually leading to a prediction value. These trees can be represented graphically and show how they produce results, unlike most machine learning models. KNN models are a little different, they store all the data and predict values based on a similarity measure. The model looks at a specified number of similar neighbors to produce a prediction.
+
+Finally, we tried multiple ensemble models - Random Forest Regression (RFR), Extra Trees, and a superlearner. RFR models use numberous decision trees and subsamples the data with replacement. This means that the model replace data after using it in a subset. Extra Trees is like RFR, but it does not replace the data after use in a subset. The final ensemble model we tested is a superlearner, a model that can combine mutliple high-scoring Scikit-Learn model predictions and sometimes improve the performance from the indvidual models.
+
+
+\section{Methodology}
+We evaluated our models using several metrics - R2 scores for regression evaluation, Mean Squared Error (MSE) and Mean Absolute Error (MAE) for error evaluation, and prediction intervals for uncertainty evaluation.
 
 \subsection{General Layout}
 
