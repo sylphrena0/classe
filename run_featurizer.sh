@@ -9,6 +9,8 @@
 # Author: Kirk Kleinsasser
 ###############################################
 #
+# Could do "qsub -e `pwd` -m e -M kvk23@cornell.edu -N featurizer.results -o `pwd` -pe sge_pe 12 -q all.q -S /bin/bash"
+#
 # Passes variable to set the run time name of the job
 #$ -N featurizer.results
 #
@@ -25,7 +27,7 @@
 #$ -m e -M kvk23@cornell.edu
 #
 # Set thread requirements
-#$ -pe sge_pe 64
+#$ -pe sge_pe 32
 # Print some environment information - for reporting diagnostics only.
 echo "Job ${JOBNAME} Starting at: "`date`
 echo "Running on host: "`hostname`
