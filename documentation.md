@@ -180,7 +180,8 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Continued to try lolopy training - compute farm**
 
 ## Thursday, July 14th, 2022
-* **Featurized failed to export data after running for ~8 hours, reran with updated export command**
+* **Featurized failed to export data after running for <5 hours, reran with updated export command**
+* **Successfully featurized simulated data, ready to train/apply models**
 * **Continued to draft paper - superconducters/matminer**
 * **Ran into another lolopy issue, may have traced the issue to the source - one of the dependancies might not be able to be installed with `pip3 install--user`**
 
