@@ -179,5 +179,10 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Started to draft paper - superconducters/matminer/ml background**
 * **Continued to try lolopy training - compute farm**
 
+## Thursday, July 14th, 2022
+* **Featurized failed to export data after running for ~8 hours, reran with updated export command**
+* **Continued to draft paper - superconducters/matminer**
+* **Ran into another lolopy issue, may have traced the issue to the source - one of the dependancies might not be able to be installed with `pip3 install--user`**
+
 </details>
 <br>
