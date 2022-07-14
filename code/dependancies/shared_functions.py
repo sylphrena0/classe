@@ -50,31 +50,6 @@ def import_data(filename="supercon_features.csv", replace_inf=False):
 ###############################################
 ######### Define Evaluation Functions #########
 ###############################################
-################################################
-############ Define Import Function ############
-################################################
-#imports the data from get_featurizers. Function because some models we may want infinity:
-def import_data(replace_inf=False):
-    global data, target, train_data, test_data, train_target, test_target, cal_data, cal_target #variables that we want to define globally (outside of this funtion)
-    data = pd.DataFrame(pd.read_csv('../data/supercon_features.csv')) #loads data produced in get_featurizer.ipynb
-    target = data.pop('Tc') #remove target (critical temp) from data
-
-    if replace_inf: #replaces values of infinity with NaN if replace_inf is True
-        data.replace([np.inf, -np.inf], np.nan, inplace=True) 
-
-    #TODO: debug feaurizers - NaN is entered when there is an error in the featurizer
-    data.drop(['name','Unnamed: 0', 'composition'], axis=1, inplace=True) #drop columns irrelevant to training
-    data = data[data.columns[data.notnull().any()]] #drop columns that are entirely NaN (12 columns) 
-
-    for col in data: #replaces NaN with zeros
-        data[col] = pd.to_numeric(data[col], errors ='coerce').fillna(0).astype('float')
-
-    #creates a test train split, with shuffle and random state for reproducibility 
-    train_data, test_data, train_target, test_target = train_test_split(data, target, test_size=0.15, random_state=43, shuffle=True)
-
-###############################################
-######### Define Evaluation Functions #########
-###############################################
 def evaluate_one(model_name, model, parameters, error=True, method="plus", forestci=False, export=False):
     #define function that trains a model to predict critical temp and plots with metrics and optional error 
     #error and forestci arguments override method specifications. forestci is much faster than mapie and is only applicable to random forest models
