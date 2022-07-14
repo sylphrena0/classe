@@ -80,7 +80,7 @@ models = ((args.LR, "Linear Regression", LinearRegression, {}),
             (args.SGD, "Stochastic Gradient Descent - Optimized", SGDRegressor, {'alpha':1000.0, 'loss':'epsilon_insensitive', 'max_iter':1500, 'penalty':'l1'}),
             (args.BAYES, "Bayesian Regression - Unoptimized", BayesianRidge, {}),
             (args.BAYES, "Bayesian Regression - Optimized", BayesianRidge, {'alpha_init':1.2, 'lambda_init':0.0001}),
-            (args.SUPER, "Superlearner", superlearner, {'X': train_data}))
+            (args.SUPER, "Superlearner", superlearner, {'X': sfn.train_data}))
 
 # %%
 ######################################################
