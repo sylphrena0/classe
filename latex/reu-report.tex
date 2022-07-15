@@ -73,13 +73,14 @@ First, the featurizer script imports the dataset, extracts features from the mat
 
 After the features are exported, our analysis jupyter notebook imports the data with the shared import function and exports histograms and a correlation matrix. 
 
-Next, the training\_single jupyter notebook or script can train individual models with the shared evaluation functions. This is used to get a landscape of initial performance before optimization. Our evaluation functions can produce error calculation using mapie, forestci, or lolopy. After training, the function plots the actual $T_C$ versus the model prediction, using a heatmap to visualize the difference from the ideal prediction.
+Next, the training\_single jupyter notebook or script can train individual models with the shared evaluation functions. This is used to get a landscape of initial performance before optimization. After training, the function plots the actual $T_C$ versus the model prediction, using a heatmap to visualize the difference from the ideal prediction.
 
 The optimizer script then uses a grid of manually defined hyperparameters to optimize models based on R2 score. This allowed significant improvements to baseline models. After optimization, the optimized models can be plotted in our single training notebook. After confirmation that the model is better than the baseline, the models can then be plotted together in a single graph using our bulk training notebook. 
 
 We evaluated our models using several metrics - R2 scores for regression evaluation, Mean Squared Error (MSE) and Mean Absolute Error (MAE) for error evaluation, and prediction intervals for uncertainty evaluation.
 
-
+\subsection{Uncertainty}
+Our evaluation functions can produce error calculation using mapie, forestci, or lolopy. 
 
 \section{Results}
 
