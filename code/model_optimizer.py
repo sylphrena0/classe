@@ -43,6 +43,8 @@ import dependancies.shared_functions as sfn
 ######## Define and Validate CLI Arguments ########
 ###################################################
 # %% 
+sfn.syncdir() #ensures working directory is inside code on compute farm
+
 parser = argparse.ArgumentParser(description="A program that optimizes regression models for predicting superconductor critical temperatures.")
 parser.add_argument('-s', '--samplesize', action='store', dest='limit', default=1000, help='Limit the GridSearch Data Sample Size. Value must be \'all\' or a number between 0 and 16414')
 parser.add_argument('-sv', '--svr', action='store_true', dest='SVR', help='Boolean option to enable the Support Vector Machines (Linear) model.')
@@ -145,4 +147,4 @@ for [enabled, model_name, regressor, parameters, fixed_params] in models: #optim
         print(f"Skipping {model_name} as it is not enabled.")
 
 result_df = pd.DataFrame(results)
-result_df.to_csv('./optimize.results.csv') #saves data to './optimize_results.csv'
+result_df.to_csv('../data/optimize.results.csv') #saves data to './optimize_results.csv'

@@ -16,8 +16,15 @@ import argparse
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from matminer.datasets import get_available_datasets, load_dataset, get_all_dataset_info
 from matminer.featurizers.conversions import StrToComposition
+from matminer.datasets import get_available_datasets, load_dataset, get_all_dataset_info
+from matminer.featurizers.composition import ElectronAffinity, ElementProperty, TMetalFraction, Stoichiometry, BandCenter, OxidationStates, IonProperty, ElectronegativityDiff, AtomicOrbitals, ValenceOrbital, AtomicPackingEfficiency, CohesiveEnergy, CohesiveEnergyMP
+
+
+#imports custom libraries (shared functions)
+import dependancies.shared_functions as sfn
+
+sfn.syncdir() #ensures working directory is inside code on compute farm
 
 parser = argparse.ArgumentParser(description="A program that gets feature from composition of superconductor critical temperatures.")
 parser.add_argument('-f', '--file', action='store', default="supercon_dataset.csv", dest='filename', help='Specify filename to featurize. ')
@@ -25,9 +32,8 @@ args = parser.parse_args()
 filename = args.filename
 
 #load supercon databse and metadata
-#print(get_all_dataset_info("superconductivity2018")) #print metadata
 #features will be made with matminer, target is Tc
-data = pd.DataFrame(pd.read_csv(f'./data/{filename}'))
+data = pd.DataFrame(pd.read_csv(f'../data/{filename}'))
 stc = StrToComposition()
 composition = stc.featurize_dataframe(data, 'name', ignore_errors=True)
 composition.head()
@@ -36,7 +42,6 @@ composition.head()
 ################ Get Featurizers ################
 #################################################
 # %% 
-from matminer.featurizers.composition import ElectronAffinity, ElementProperty, TMetalFraction, Stoichiometry, BandCenter, OxidationStates, IonProperty, ElectronegativityDiff, AtomicOrbitals, ValenceOrbital, AtomicPackingEfficiency, CohesiveEnergy, CohesiveEnergyMP
 #WARNING - this will take a while to run!
 #works but returns nan
 

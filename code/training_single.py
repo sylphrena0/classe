@@ -62,6 +62,7 @@ args = parser.parse_args()
 ########### Setup Models for Training ###########
 #################################################
 # %% 
+sfn.syncdir() #ensures working directory is inside code on compute farm
 sfn.import_data(replace_inf=True) #import data without infinities
 
 models = ((args.LR, "Linear Regression", LinearRegression, {}),
