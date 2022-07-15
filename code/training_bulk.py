@@ -43,6 +43,7 @@ from dependancies.superlearner import get_superlearner as Superlearner
 # %% 
 parser = argparse.ArgumentParser(description="A program that trains regression models for predicting superconductor critical temperatures.")
 parser.add_argument('-fn', '--filename', action='store', default="supercon_features.csv", dest='filename', help='Select file to train models from /data/. Default is supercon_features.csv.')
+parser.add_argument('-o', '--optimized', action='store_true', default=True, dest='optimized', help='Boolean to enable/disable using optimized models. Defaults to True')
 parser.add_argument('-u', '--uncert', action='store_true', default=True, dest='uncert', help='Enbable/disable uncertainty. Default is enabled.')
 parser.add_argument('-um', '--uncertmethod', action='store', default="plus", dest='method', help='Select uncertainty method for mapie. Default is plus.')
 parser.add_argument('-ci', '--forestci', action='store_true', default=False, dest='forestci', help='Boolean option to enable forestci uncertainty for random forests. Overrides --uncertmethod.')
@@ -57,21 +58,32 @@ sfn.import_data(filename=args.filename,replace_inf=True) #import data without in
 
 prefix = "Simulated " if "_sim" in args.filename else ""
 
-#defines the optimized arguments for each model
-ELASTIC_ARGS = {'alpha':1e-05, 'l1_ratio':0.0}
-BAYES_ARGS = {}
-SVR_ARGS = {'C':1, 'epsilon':10, 'gamma':'auto', 'kernel':'linear'}
-RFR_ARGS = {}
-SP_ARGS = {'X': sfn.train_data}
-KNN_ARGS = {'metric':'manhattan', 'n_jobs':-1, 'n_neighbors':5}
-DT_ARGS = {'criterion':'poisson', 'max_features':0.5, 'random_state':43}
-TREES_ARGS = {}
+if args.optimized:
+    optimized = "Optimized"
+    
+    #defines the optimized arguments for each model
+    ELASTIC_ARGS = {'alpha':1e-05, 'l1_ratio':0.0}
+    BAYES_ARGS = {}
+    SVR_ARGS = {'C':1, 'epsilon':10, 'gamma':'auto', 'kernel':'linear'}
+    RFR_ARGS = {}
+    SP_ARGS = {'X': sfn.train_data}
+    KNN_ARGS = {'metric':'manhattan', 'n_jobs':-1, 'n_neighbors':5}
+    DT_ARGS = {'criterion':'poisson', 'max_features':0.5, 'random_state':43}
+    TREES_ARGS = {}
 
-#defines the models in a list of pairs of lists. The first item in a pair is the top graph in a column, the second is the bottom. The last item of a model is to enable uncert calc
-models  =  (((f"{prefix}Elastic Net Regression", ElasticNet, ELASTIC_ARGS, args.uncert),   (f"{prefix}Decision Tree Regression", DecisionTreeRegressor, DT_ARGS, args.uncert)),
-            ((f"{prefix}Bayesian Regression", BayesianRidge, BAYES_ARGS, args.uncert),     (f"{prefix}Random Forest Regression", RandomForestRegressor, RFR_ARGS, args.uncert)),
-            ((f"{prefix}Support Vector Machines", SVR, SVR_ARGS, args.uncert),             (f"{prefix}Extra Trees Regression", ExtraTreesRegressor, TREES_ARGS, args.uncert)),
-            ((f"{prefix}Superlearner", Superlearner, SP_ARGS, args.uncert),                (f"{prefix}KNeighbors Regression", KNeighborsRegressor, KNN_ARGS, args.uncert)))
+    #defines the models in a list of pairs of lists. The first item in a pair is the top graph in a column, the second is the bottom. The last item of a model is to enable uncert calc
+    models  =  (((f"{prefix}Elastic Net Regression", ElasticNet, ELASTIC_ARGS, args.uncert),   (f"{prefix}Decision Tree Regression", DecisionTreeRegressor, DT_ARGS, args.uncert)),
+                ((f"{prefix}Bayesian Regression", BayesianRidge, BAYES_ARGS, args.uncert),     (f"{prefix}Random Forest Regression", RandomForestRegressor, RFR_ARGS, args.uncert)),
+                ((f"{prefix}Support Vector Machines", SVR, SVR_ARGS, args.uncert),             (f"{prefix}Extra Trees Regression", ExtraTreesRegressor, TREES_ARGS, args.uncert)),
+                ((f"{prefix}Superlearner", Superlearner, SP_ARGS, args.uncert),                (f"{prefix}KNeighbors Regression", KNeighborsRegressor, KNN_ARGS, args.uncert)))
+else:
+    optimized = "Unoptimized"
+
+    #defines the models in a list of pairs of lists. The first item in a pair is the top graph in a column, the second is the bottom. The last item of a model is to enable uncert calc
+    models  =  (((f"{prefix}Elastic Net Regression", ElasticNet, {}, args.uncert),      (f"{prefix}Decision Tree Regression", DecisionTreeRegressor, {}, args.uncert)),
+                ((f"{prefix}Bayesian Regression", BayesianRidge, {}, args.uncert),      (f"{prefix}Random Forest Regression", RandomForestRegressor, {}, args.uncert)),
+                ((f"{prefix}Support Vector Machines", SVR, {}, args.uncert),            (f"{prefix}Extra Trees Regression", ExtraTreesRegressor, {}, args.uncert)),
+                ((f"{prefix}Linear Regression", LinearRegression(), {}, args.uncert),   (f"{prefix}KNeighbors Regression", KNeighborsRegressor, {}, args.uncert)))
 
 # %%
 ######################################################
@@ -80,4 +92,4 @@ models  =  (((f"{prefix}Elastic Net Regression", ElasticNet, ELASTIC_ARGS, args.
 
 warnings.filterwarnings('ignore') #got tired of non-converging errors
 print("Starting training!")
-sfn.evaluate(models, title="Prediction vs. Actual Value (CV) - Optimized", filename="results_optimized.png", error=True, forestci=args.forestci, method=args.method)
+sfn.evaluate(models, title="Prediction vs. Actual Value (CV) - {optimized}", filename="results_optimized.png", error=True, forestci=args.forestci, method=args.method)
