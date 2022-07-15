@@ -12,6 +12,7 @@
 ########## Import Required Libraries ##########
 ###############################################
 import warnings #to suppress grid search warnings
+import os
 import numpy as np 
 import pandas as pd
 import lolopy.learners #allows easy uncertainty
@@ -24,6 +25,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error, max_error
 from sklearn.ensemble import RandomForestRegressor
 from mapie.regression import MapieRegressor
+
+################################################
+############# Define Sync Function #############
+################################################
+def syncdir():
+    if os.getcwd().endswith('kvk23/queue'): #if working directory is queue
+        os.chdir("code") #enter into code (prevents conflicts with running shared function locally)
 
 ################################################
 ############ Define Import Function ############
