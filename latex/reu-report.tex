@@ -50,7 +50,7 @@ Most superconducter databases do not include enough information to train an effe
 Our database only provides the superconductor composition data. Matminer's featurizers can generate 53 features from the composition of a material. If we had band structure or other data, we could produce more information that we could use in our model.
 
 \subsection{Machine Learning}
-Previous papers have used random forest models to predict critical temperature [citation needed], but this paper will examine eight models before settling on two for further investigation. These models are described below. Each model's hyperparameters\footnote{Hyperparameters are machine learning parameters that change how a model is trained.} was optimized with Scikit-Learn's GridSearchCV, which tests combinations from a grid of hyperparameters and returns the best performing model based on a specified metric. 
+Previous papers have used random forest models to predict critical temperature [citation needed], but this paper will examine eight models before settling on two for further investigation. All models are implemented with Scikit-Learn, with the notable exception of a mlens superlearner \cite{scikit-learn, flennerhag:2017mlens}. We will also use MAPIE models for uncertainty, discussed in Section~\ref{sec:uncertainty}. These models are described below. Each model's hyperparameters\footnote{Hyperparameters are machine learning parameters that change how a model is trained.} was optimized with Scikit-Learn's GridSearchCV, which tests combinations from a grid of hyperparameters and returns the best performing model based on a specified metric. 
 
 We started our model search with some linear models. Besides the base Linear Regression model, we used linear (and polynomial) Support Vector Regression (SVR) models. SVR uses decision boundaries, which are lines parallel to the regression line. The model aims to maximize the amount of data within the decision boundaries and has hyperparamters to modify sensitivity to prevent overfitting.\footnote{Overfitting occurs when a model is trained to be too specific to a particular dataset and is not generalizable.} We also trialed Elastic Net and Bayesian Ridge models. Elastic Net uses L1 and L2 penalties to stabilize the model, and Bayesian Ridge uses probability distributors instead of point estimates.
 
@@ -60,8 +60,10 @@ Finally, we tried multiple ensemble models - Random Forest Regression (RFR), Ext
 
 
 \section{Methodology}
-\subsection{Code Structure}
+\subsection{Code Structure} %MENTION PANDAS/NUMPY/ETC
 The source code used for this paper is available publicly on github at \url{https://github.com/sylphrena0/classe2022}. This repository also includes the source files for this latex paper, data files, images, and documentation files.
+
+Our research uses numpy and pandas throughout our code to handle arrays and tabular data \cite{Harris2020array, Reback2020pandas}. We also use matplotlib and seaborns to generate our graphs \cite{Hunter2007, Waskom2021}.
 
 The code is split into multiple python files so processes could be completed in stages and to maintain readability in the code. Most of our testing and final training was completed in juypter notebooks, but some computations were highly computationally expensive and needed to be run remotely. For these jobs, we created simple python files and made bash scripts to run them on Cornell's CLASSE compute farm. We also made several bash aliases and functions to simplify the compute farm workflow, which are also available on the github repository. 
 
@@ -79,8 +81,12 @@ The optimizer script then uses a grid of manually defined hyperparameters to opt
 
 We evaluated our models using several metrics - R2 scores for regression evaluation, Mean Squared Error (MSE) and Mean Absolute Error (MAE) for error evaluation, and prediction intervals for uncertainty evaluation.
 
-\subsection{Uncertainty}
-Our evaluation functions can produce error calculation using mapie, forestci, or lolopy. 
+\subsection{Uncertainty}\label{sec:uncertainty}
+Our evaluation functions can produce uncertainty calculations using forestci, mapie, or lolopy \cite{Polimis2017, Taquet2022, Hutchinson2022}. 
+
+Forestci is python implementation of an algorithm from \cite{Wager2014} that predicts confidence intervals for random forest models. It is the fastest of the uncertainty methods listed. 
+
+Mapie is 
 
 \section{Results}
 
