@@ -185,5 +185,10 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Continued to draft paper - superconducters/matminer**
 * **Ran into another lolopy issue, may have traced the issue to the source - one of the dependancies might not be able to be installed with `pip3 install--user`**
 
+## Friday, July 15th, 2022
+* **Lolopy ran out of memory, reran with more allocated**
+* **Worked on methodlogy in the REU report, started results section**
+
+
 </details>
 <br>
