@@ -120,61 +120,63 @@ def evaluate_one(model_name, model, parameters, error=True, method="plus", fores
         plt.show()
         plt.clf()
 
-def evaluate(models, title, filename='results.png', error=True, method="plus", forestci=False, export=True): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
+def evaluate(models, title, filename='results.png', method="plus", forestci=False, export=True): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
     with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':(1, 1, 1, 0),'text.color':'white','legend.labelcolor':'black'}):
         warnings.filterwarnings("ignore")
         fig, ax = plt.subplots(2, 4, sharey='row', figsize=(28,10))
         fig.subplots_adjust(hspace=0.35)
         fig.suptitle(title, color='white', size=16)
-        for [model_name, model, parameters, error, ax1, ax2] in models:
-            regressor = model(**parameters)
-            if error and not forestci and method != "prefit": #error calculations need magie training if not forestci/prefit mapie
-                mapie_regressor = MapieRegressor(estimator=regressor, method=method) #unpacks model and params
-                if model_name in ("Superlearner", "Random Forest Regression - Lolopy"): #need to get values for these models
-                    mapie_regressor.fit(train_data.values, train_target.values) #fit the model
-                else:
-                    mapie_regressor.fit(train_data, train_target) #fit the model
-                    model_pred, model_pis = mapie_regressor.predict(test_data, alpha=0.05) #make predictions on test data
-            else: #no need for error calculations during training, use sklearn
-                if model_name in ("Superlearner", "Random Forest Regression - Lolopy"): #need to get values for these models
-                    regressor.fit(train_data.values, train_target.values) #fit the model
-                else:
-                    regressor.fit(train_data, train_target) #fit the model
-                model_pred = regressor.predict(test_data) #make predictions on test data
-                    
 
-            mse = round(mean_squared_error(test_target, model_pred),3) #find mean square error
-            mae = round(mean_absolute_error(test_target, model_pred),3) #find mean square error
-            mxe = round(max_error(test_target, model_pred),3)
-            r_squared = round(r2_score(test_target, model_pred),3) #find r2 score
+        for y, col in enumerate(models):
+            for x, [model_name, model, parameters, uncert] in enumerate(col):
+                regressor = model(**parameters)
+                if uncert and not forestci and method != "prefit": #error calculations need magie training if not forestci/prefit mapie
+                    mapie_regressor = MapieRegressor(estimator=regressor, method=method) #unpacks model and params
+                    if model_name in ("Superlearner", "Random Forest Regression - Lolopy"): #need to get values for these models
+                        mapie_regressor.fit(train_data.values, train_target.values) #fit the model
+                    else:
+                        mapie_regressor.fit(train_data, train_target) #fit the model
+                        model_pred, model_pis = mapie_regressor.predict(test_data, alpha=0.05) #make predictions on test data
+                else: #no need for error calculations during training, use sklearn
+                    if model_name in ("Superlearner", "Random Forest Regression - Lolopy"): #need to get values for these models
+                        regressor.fit(train_data.values, train_target.values) #fit the model
+                    else:
+                        regressor.fit(train_data, train_target) #fit the model
+                    model_pred = regressor.predict(test_data) #make predictions on test data
+                        
 
-            #make our plot - with plt.rc_context sets theme to look good in dark mode
-            difference = np.abs(test_target - model_pred) #function that finds the absolute difference between predicted and actual value
-            im = ax[ax1, ax2].scatter(test_target, model_pred, cmap='plasma_r', norm=plt.Normalize(0, 120), c=difference, label="Critical Temperature (K)", zorder=2) #create scatter plot of data 
-            ax[ax1, ax2].plot((0,135), (0,135), 'k--', alpha=0.75, zorder=3) #add expected line. Values must be changed with different data to look good
+                mse = round(mean_squared_error(test_target, model_pred),3) #find mean square error
+                mae = round(mean_absolute_error(test_target, model_pred),3) #find mean square error
+                mxe = round(max_error(test_target, model_pred),3)
+                r_squared = round(r2_score(test_target, model_pred),3) #find r2 score
 
-            if error: #plot error bars
-                if forestci and model is RandomForestRegressor:
-                    model_unbiased = fci.random_forest_error(regressor, train_data, test_data, calibrate=False) #NOTE: forestci calibration is disabled as there is a bug in the code (they use a too small datatype)
-                    yerror = np.sqrt(model_unbiased)
-                elif method == "prefit":
-                    raise NameError("Prefit method is not implemented in this program as our current implementation have error bars that do not align with the test data")
-                    # mapie = MapieRegressor(estimator=model, cv="prefit").fit(cal_data, cal_target) #important: calibration data must be different from training data!
-                    # pred_interval = pd.DataFrame(mapie.predict(test_data, alpha=.05)[1].reshape(-1,2), index=test_data.index, columns=["lower", "upper"]) #get interval predictions on test data, with alpha=5%
-                    # yerror = pred_interval.values.reshape(2,-1)
-                else:
-                    #model_pis contains absolute points for upper/lower bounds. We need absolute error, like (3, 3) for ± 3:
-                    yerror = np.abs(model_pis[:,:,0].transpose() - np.tile(model_pred, (2, 1))) #error must be in shape (n, 2) for errorbars
-                ax[ax1, ax2].errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1, label="Prediction Intervals")
+                #make our plot - with plt.rc_context sets theme to look good in dark mode
+                difference = np.abs(test_target - model_pred) #function that finds the absolute difference between predicted and actual value
+                im = ax[x, y].scatter(test_target, model_pred, cmap='plasma_r', norm=plt.Normalize(0, 120), c=difference, label="Critical Temperature (K)", zorder=2) #create scatter plot of data 
+                ax[x, y].plot((0,135), (0,135), 'k--', alpha=0.75, zorder=3) #add expected line. Values must be changed with different data to look good
 
-            ax[ax1, ax2].set_title(model_name, c='white')
-            ax[ax1, ax2].set_ylabel('Prediction', c='white')
-            ax[ax1, ax2].set_xlabel('Actual Value', c='white')
-            ax[ax1, ax2].annotate(f'R2: {r_squared}', xy = (0, -0.15), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
-            ax[ax1, ax2].annotate(f'MXE: {mxe}', xy = (0, -0.20), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
-            ax[ax1, ax2].annotate(f'MAE: {mae}', xy = (1.0, -0.20), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MAE
-            ax[ax1, ax2].annotate(f'MSE: {mse}', xy = (1.0, -0.15), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MSE
+                if uncert: #plot error bars
+                    if forestci and model is RandomForestRegressor:
+                        model_unbiased = fci.random_forest_error(regressor, train_data, test_data, calibrate=False) #NOTE: forestci calibration is disabled as there is a bug in the code (they use a too small datatype)
+                        yerror = np.sqrt(model_unbiased)
+                    elif method == "prefit":
+                        raise NameError("Prefit method is not implemented in this program as our current implementation have error bars that do not align with the test data")
+                        # mapie = MapieRegressor(estimator=model, cv="prefit").fit(cal_data, cal_target) #important: calibration data must be different from training data!
+                        # pred_interval = pd.DataFrame(mapie.predict(test_data, alpha=.05)[1].reshape(-1,2), index=test_data.index, columns=["lower", "upper"]) #get interval predictions on test data, with alpha=5%
+                        # yerror = pred_interval.values.reshape(2,-1)
+                    else:
+                        #model_pis contains absolute points for upper/lower bounds. We need absolute error, like (3, 3) for ± 3:
+                        yerror = np.abs(model_pis[:,:,0].transpose() - np.tile(model_pred, (2, 1))) #error must be in shape (n, 2) for errorbars
+                    ax[x, y].errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1, label="Prediction Intervals")
+
+                ax[x, y].set_title(model_name, c='white')
+                ax[x, y].set_ylabel('Prediction', c='white')
+                ax[x, y].set_xlabel('Actual Value', c='white')
+                ax[x, y].annotate(f'R2: {r_squared}', xy = (0, -0.15), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
+                ax[x, y].annotate(f'MXE: {mxe}', xy = (0, -0.20), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
+                ax[x, y].annotate(f'MAE: {mae}', xy = (1.0, -0.20), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MAE
+                ax[x, y].annotate(f'MSE: {mse}', xy = (1.0, -0.15), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MSE
 
         handles, labels = ax[0,0].get_legend_handles_labels()
         fig.legend(handles=handles,loc='lower center')
