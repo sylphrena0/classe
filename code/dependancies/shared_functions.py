@@ -116,7 +116,7 @@ def evaluate_one(model_name, model, parameters, error=True, method="plus", fores
         plt.legend()
         plt.colorbar().set_label(label="Difference from Actual (K)", color='white') #using .set_label() as colorbar() does accept color arguments
         if export:
-            plt.savefig(f'../data/{model_name}.png', bbox_inches='tight')
+            plt.savefig(f'../data/indvidual_results/{model_name}.png', bbox_inches='tight')
         plt.show()
         plt.clf()
 
