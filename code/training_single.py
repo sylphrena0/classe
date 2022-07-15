@@ -45,6 +45,7 @@ from dependancies.superlearner import get_superlearner as superlearner
 ###################################################
 # %% 
 parser = argparse.ArgumentParser(description="A program that trains regression models for predicting superconductor critical temperatures.")
+parser.add_argument('-fn', '--filename', action='store', default="supercon_features.csv", dest='filename', help='Select file to train models from /data/. Default is supercon_features.csv.')
 parser.add_argument('-l', '--lr', action='store_true', dest='LR', help='Boolean option to enable the Linear Regression model.')
 parser.add_argument('-s', '--svr', action='store_true', dest='SVR', help='Boolean option to enable the Support Vector Machines (Poly) model.')
 parser.add_argument('-el', '--elastic', action='store_true', dest='ELASTIC', help='Boolean option to enable the Elastic Net Regression model.')
@@ -63,7 +64,7 @@ args = parser.parse_args()
 #################################################
 # %% 
 sfn.syncdir() #ensures working directory is inside code on compute farm
-sfn.import_data(replace_inf=True) #import data without infinities
+sfn.import_data(filename=args.filename,replace_inf=True) #import data without infinities
 
 models = ((args.LR, "Linear Regression", LinearRegression, {}),
             (args.SVR, "Support Vector Regression - Linear", SVR, {'kernel':'rbf', 'C':100, 'epsilon':0.1, 'gamma':0.1, 'degree':1}),
