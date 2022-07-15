@@ -1,5 +1,14 @@
 code/dependancies/__pycache__
-latex
+latex/APS
+latex/jacow
+latex/mk
+latex/*.blg
+latex/*.bbl
+latex/*.aux
+latex/*.bcf
+latex/*.log
+latex/*.toc
+latex/*.xml
 !latex/reu-report.tex
 !latex/reu-report.bib
 !latex/reu-report.pdf
