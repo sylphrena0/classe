@@ -9,6 +9,8 @@ latex/*.bcf
 latex/*.log
 latex/*.toc
 latex/*.xml
+latex/*.gz
+latex/*Notes.bib
 !latex/reu-report.tex
 !latex/reu-report.bib
 !latex/reu-report.pdf
