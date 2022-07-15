@@ -190,6 +190,7 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Worked on methodlogy in the REU report, started results section**
 * **Ran simulated model training (single), results in ./data/indvidual_results/**
 * **Tried to troubleshoot lens superlearner error with mapie so we can get bulk_results (we can now, but not with error with superlearner)**
+* **Added a bulk training script and updated bulk training function**
 
 </details>
 <br>
