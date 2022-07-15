@@ -188,7 +188,8 @@ Documents daily work in the REU program, including events, meetings, and broad d
 ## Friday, July 15th, 2022
 * **Lolopy ran out of memory, reran with more allocated**
 * **Worked on methodlogy in the REU report, started results section**
-
+* **Ran simulated model training (single), results in ./data/indvidual_results/**
+* **Tried to troubleshoot lens superlearner error with mapie so we can get bulk_results (we can now, but not with error with superlearner)**
 
 </details>
 <br>
