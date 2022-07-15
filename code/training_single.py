@@ -25,16 +25,13 @@ import forestci as fci #error for RFR - http://contrib.scikit-learn.org/forest-c
 #regression models:
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import AdaBoostRegressor, BaggingRegressor, ExtraTreesRegressor, RandomForestRegressor
-from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge, Lasso, ElasticNet, SGDRegressor, BayesianRidge
+from sklearn.ensemble import ExtraTreesRegressor, RandomForestRegressor
+from sklearn.linear_model import LinearRegression, ElasticNet, SGDRegressor, BayesianRidge
 from sklearn.svm import SVR
 
 #various ML tools:
-from sklearn.pipeline import make_pipeline, Pipeline
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
 from sklearn.model_selection import train_test_split, GridSearchCV, KFold, cross_val_predict, cross_val_score
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error, max_error
-from skopt import BayesSearchCV #bayesian optimization
 
 #imports custom libraries (shared functions)
 import dependancies.shared_functions as sfn 
