@@ -93,6 +93,6 @@ warnings.filterwarnings('ignore') #got tired of non-converging errors
 for [enabled, model_name, regressor, parameters] in models: #optimize enabled models
     if enabled is True:
         print("Starting training on {}".format(model_name))
-        sfn.evaluate_one(model_name, regressor, parameters)
+        sfn.evaluate_one(model_name, regressor, parameters, export=True)
     else:
         print(f"Skipping {model_name} as it not enabled.")
