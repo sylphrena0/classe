@@ -10,7 +10,7 @@
 ####################################################
 #
 # Passes variable to set the run time name of the job
-#$ -N train.results
+#$ -N train_single.results
 #
 # Set the queue
 #$ -q all.q
