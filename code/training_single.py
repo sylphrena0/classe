@@ -66,23 +66,25 @@ args = parser.parse_args()
 sfn.syncdir() #ensures working directory is inside code on compute farm
 sfn.import_data(filename=args.filename,replace_inf=True) #import data without infinities
 
-models = ((args.LR, "Linear Regression", LinearRegression, {}),
-            (args.SVR, "Support Vector Regression - Linear", SVR, {'kernel':'rbf', 'C':100, 'epsilon':0.1, 'gamma':0.1, 'degree':1}),
-            (args.ELASTIC, "Elastic Net - Unoptimized", ElasticNet, {}),
-            (args.ELASTIC, "Elastic Net - Optimized", ElasticNet, {'alpha':1e-05, 'l1_ratio':0.0}),
-            (args.DT, "Decision Tree - Unoptimized", DecisionTreeRegressor, {}),
-            (args.DT, "Decision Tree - Optimized", DecisionTreeRegressor, {'criterion':'poisson', 'max_depth':5, 'max_features':0.5}),
-            (args.RFR, "Random Forest Regression", RandomForestRegressor, {'error':True}),
-            (args.LRFR, "Random Forest Regression - Lolopy", lolopy.learners.RandomForestRegressor, {}),
-            (args.KNN, "KNeighbors - Unoptimized", KNeighborsRegressor, {}),
-            (args.KNN, "KNeighbors - Optimized", KNeighborsRegressor, {'metric':'manhattan', 'n_jobs':-1, 'n_neighbors':8}),
-            (args.TREES, "Extra Trees - Unoptimized", ExtraTreesRegressor, {}),
-            (args.TREES, "Extra Trees - Optimized", ExtraTreesRegressor, {'min_samples_leaf':1.0, 'min_samples_split':0.1, 'n_estimators':250, 'n_jobs':-1}),
-            (args.SGD, "Stochastic Gradient Descent - Unoptimized", SGDRegressor, {}),
-            (args.SGD, "Stochastic Gradient Descent - Optimized", SGDRegressor, {'alpha':1000.0, 'loss':'epsilon_insensitive', 'max_iter':1500, 'penalty':'l1'}),
-            (args.BAYES, "Bayesian Regression - Unoptimized", BayesianRidge, {}),
-            (args.BAYES, "Bayesian Regression - Optimized", BayesianRidge, {'alpha_init':1.2, 'lambda_init':0.0001}),
-            (args.SUPER, "Superlearner", superlearner, {'X': sfn.train_data}))
+prefix = "Simulated " if "_sim" in args.filename else ""
+
+models = ((args.LR, f"{prefix}Linear Regression", LinearRegression, {}),
+            (args.SVR, f"{prefix}Support Vector Regression - Linear", SVR, {'kernel':'rbf', 'C':100, 'epsilon':0.1, 'gamma':0.1, 'degree':1}),
+            (args.ELASTIC, f"{prefix}Elastic Net - Unoptimized", ElasticNet, {}),
+            (args.ELASTIC, f"{prefix}Elastic Net - Optimized", ElasticNet, {'alpha':1e-05, 'l1_ratio':0.0}),
+            (args.DT, f"{prefix}Decision Tree - Unoptimized", DecisionTreeRegressor, {}),
+            (args.DT, f"{prefix}Decision Tree - Optimized", DecisionTreeRegressor, {'criterion':'poisson', 'max_depth':5, 'max_features':0.5}),
+            (args.RFR, f"{prefix}Random Forest Regression", RandomForestRegressor, {}),
+            (args.LRFR, f"{prefix}Random Forest Regression - Lolopy", lolopy.learners.RandomForestRegressor, {}),
+            (args.KNN, f"{prefix}KNeighbors - Unoptimized", KNeighborsRegressor, {}),
+            (args.KNN, f"{prefix}KNeighbors - Optimized", KNeighborsRegressor, {'metric':'manhattan', 'n_jobs':-1, 'n_neighbors':8}),
+            (args.TREES, f"{prefix}Extra Trees - Unoptimized", ExtraTreesRegressor, {}),
+            (args.TREES, f"{prefix}Extra Trees - Optimized", ExtraTreesRegressor, {'min_samples_leaf':1.0, 'min_samples_split':0.1, 'n_estimators':250, 'n_jobs':-1}),
+            (args.SGD, f"{prefix}Stochastic Gradient Descent - Unoptimized", SGDRegressor, {}),
+            (args.SGD, f"{prefix}Stochastic Gradient Descent - Optimized", SGDRegressor, {'alpha':1000.0, 'loss':'epsilon_insensitive', 'max_iter':1500, 'penalty':'l1'}),
+            (args.BAYES, f"{prefix}Bayesian Regression - Unoptimized", BayesianRidge, {}),
+            (args.BAYES, f"{prefix}Bayesian Regression - Optimized", BayesianRidge, {'alpha_init':1.2, 'lambda_init':0.0001}),
+            (args.SUPER, f"{prefix}Superlearner", superlearner, {'X': sfn.train_data}))
 
 # %%
 ######################################################
