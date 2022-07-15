@@ -73,7 +73,7 @@ def evaluate_one(model_name, model, parameters, error=True, method="plus", fores
                 mapie_regressor.fit(train_data.values, train_target.values) #fit the model
             else:
                 mapie_regressor.fit(train_data, train_target) #fit the model
-                model_pred, model_pis = mapie_regressor.predict(test_data, alpha=0.05) #make predictions on test data
+            model_pred, model_pis = mapie_regressor.predict(test_data, alpha=0.05) #make predictions on test data
         else: #no need for error calculations during training, use sklearn
             if model_name in ("Superlearner", "Random Forest Regression - Lolopy"): #need to get values for these models
                 regressor.fit(train_data.values, train_target.values) #fit the model
