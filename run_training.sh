@@ -1,13 +1,13 @@
 #!/bin/bash
 #
-##############################################
-##### Superconductivity Optimizer Script #####
-##############################################
-# This bash script runs the superconductivy model training in ./training_single.py on the Cornell CLASSE compute farm
+#############################################
+##### Superconductivity Training Script #####
+#############################################
+# This bash script runs the superconductivy model training in ./code/training_bulk.py on the Cornell CLASSE compute farm
 # and emails kvk23@cornell.edu when completed
 #
 # Author: Kirk Kleinsasser
-##############################################
+#############################################
 #
 # Passes variable to set the run time name of the job
 #$ -N train.results
@@ -34,7 +34,7 @@ echo "In directory: "`pwd`
 # Run the python script
 source /opt/rh/rh-python38/enable
 export PYTHONPATH=/home/kvk23/.local/lib/python3.8/site-packages #use local python packages, installed with pip3 install --user <package>
-python3 ./code/training_single.py $@ # pass inputs to python (limits and enabled types)
+python3 ./code/training_bulk.py $@ # pass inputs to python (limits and enabled types)
 
 # Documentation:
 # https://wiki.classe.cornell.edu/Computing/GridEngine - CLASSE wiki
