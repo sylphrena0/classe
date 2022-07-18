@@ -201,7 +201,7 @@ Documents daily work in the REU program, including events, meetings, and broad d
 ---
 
 ## Monday, July 18th, 2022
-* **All jobs failed over the weekend due to lack of memory - try again**
+* **All lolopy jobs failed over the weekend due to lack of memory - try again with [higher java memory allocation](https://github.com/CitrineInformatics/lolo/tree/main/python#use)**
 * **Continue to document work in latex report**
 * **Attended weekly meeting and accelerator physics talk, toured Newman facilities**
 * **Got SVR results with error! Still waiting on superlearner results**
