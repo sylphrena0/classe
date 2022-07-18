@@ -205,6 +205,7 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Continue to document work in latex report**
 * **Attended weekly meeting and accelerator physics talk, toured Newman facilities**
 * **Got SVR results with error! Still waiting on superlearner results**
+* **Tried some basic feature selection (dropped low correlated data >0.05)**
 
 </details>
 <br>
