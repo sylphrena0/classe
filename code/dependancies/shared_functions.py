@@ -37,7 +37,7 @@ def syncdir():
 ############ Define Import Function ############
 ################################################
 #imports the data from get_featurizers. Function because some models we may want infinity:
-def import_data(filename="supercon_features.csv", replace_inf=False):
+def import_data(filename="supercon_features.csv", replace_inf=False, drop=None):
     global data, target, train_data, test_data, train_target, test_target #variables that we want to define globally (outside of this funtion)
     data = pd.DataFrame(pd.read_csv(f'../data/{filename}')) #loads data produced in get_featurizer.ipynb
     target = data.pop('Tc') #remove target (critical temp) from data
@@ -47,6 +47,8 @@ def import_data(filename="supercon_features.csv", replace_inf=False):
 
     #TODO: debug feaurizers - NaN is entered when there is an error in the featurizer
     data.drop(['name','Unnamed: 0', 'composition'], axis=1, inplace=True) #drop columns irrelevant to training
+    if drop is not None:
+        data.drop(drop, axis=1, inplace=True) #drop columns, if specified
     data = data[data.columns[data.notnull().any()]] #drop columns that are entirely NaN (12 columns) 
 
     for col in data: #replaces NaN with zeros
