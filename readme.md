@@ -17,4 +17,3 @@ This program uses [matminer](https://hackingmaterials.lbl.gov/matminer/) to extr
  - [scikit-learn](https://pypi.org/project/scikit-learn/)
  - [scikit-optimize](https://pypi.org/project/scikit-optimize/)
  - [mlens](https://pypi.org/project/mlens/)
- - [xgboost](https://pypi.org/project/xgboost/)
