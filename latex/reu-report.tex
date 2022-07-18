@@ -86,7 +86,9 @@ Our evaluation functions can produce uncertainty calculations using forestci, ma
 
 Forestci is python implementation of an algorithm from \cite{Wager2014} that predicts confidence intervals for random forest models. It is the fastest of the uncertainty methods listed. 
 
-Mapie is 
+The Model Agnostic Prediction Interval Estimator (MAPIE) python library is more recent implementation of jackknife based on \cite{Foygel2020}. MAPIE uses various resampling methods. Most methods require the use of MAPIE's own MapieRegressor, which accepts an Scikit-Learn regressor and keeps track of uncertainty as the model is trained. MAPIE also has a prefit method, but it is difficult to extract uncertainty bars for individual points from this data - it splits a celebration set off the test set to generate uncertainty, so it can't be easily added to our plot of test set predictions. Thus, we will only compare the normal MAPIE methods with the other libraries. MAPIE trains much slower than other models, particularly on our superlearner, but it is still considerably faster than our final uncertainty model, lolopy.
+
+Lolo is a Scala random forest machine learning library and is not a native python implementation. Lolopy is a python wrapper for lolo, but [IS SLOWER???]
 
 \section{Results}
 
