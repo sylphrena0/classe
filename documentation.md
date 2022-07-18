@@ -204,6 +204,7 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **All jobs failed over the weekend due to lack of memory - try again**
 * **Continue to document work in latex report**
 * **Attended weekly meeting and accelerator physics talk, toured Newman facilities**
+* **Got SVR results with error! Still waiting on superlearner results**
 
 </details>
 <br>
