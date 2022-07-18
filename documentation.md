@@ -194,3 +194,15 @@ Documents daily work in the REU program, including events, meetings, and broad d
 
 </details>
 <br>
+
+<details>
+<summary><font size=5>Week 7</font></summary>
+
+---
+
+## Monday, July 18th, 2022
+* **All jobs failed over the weekend due to lack of memory - try again**
+* **Continue to document work in latex report**
+
+</details>
+<br>
