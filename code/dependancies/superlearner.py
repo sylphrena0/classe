@@ -39,7 +39,7 @@ def get_models():
 	return models
 
 def get_superlearner(X, scorer=r2_score, folds=10, shuffle=True):
-	ensemble = SuperLearner(scorer=scorer, folds=folds, shuffle=shuffle, sample_size=len(X))
+	ensemble = SuperLearner(scorer=scorer, folds=folds, shuffle=shuffle, sample_size=len(X), n_jobs=-1)
 	ensemble.add(get_models()) #add base models
 	ensemble.add_meta(LinearRegression()) #add meta model
 
