@@ -203,6 +203,7 @@ Documents daily work in the REU program, including events, meetings, and broad d
 ## Monday, July 18th, 2022
 * **All jobs failed over the weekend due to lack of memory - try again**
 * **Continue to document work in latex report**
+* **Attended weekly meeting and accelerator physics talk, toured Newman facilities**
 
 </details>
 <br>
