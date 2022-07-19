@@ -28,12 +28,11 @@
 #$ -pe sge_pe 32
 # Print some environment information - for reporting diagnostics only.
 echo "Job ${JOBNAME} Starting at: "`date`
-echo "Running on host: "`hostname`
-echo "In directory: "`pwd`
+echo "Running with arguments \""$@"\" on host: "`hostname`
 #
 # Run the python script
 source /opt/rh/rh-python38/enable
-export PYTHONPATH=/home/kvk23/.local/lib/python3.8/site-packages #use local python packages, installed with pip3 install --user <package>
+export PYTHONPATH=/nfs/opt/python3.8/packages.sl7/lib/python3.8/site-packages:/nfs/opt/python3.8/packages.sl7:/home/kvk23/.local/lib/python3.8/site-packages #use local python packages, installed with pip3 install --user <package>
 python3 ./code/training_bulk.py $@ # pass inputs to python (limits and enabled types)
 
 # Documentation:
