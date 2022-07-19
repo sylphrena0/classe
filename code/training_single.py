@@ -94,4 +94,4 @@ for [enabled, model_name, regressor, parameters] in models: #optimize enabled mo
         print("Starting training on {}".format(model_name))
         sfn.evaluate_one(model_name, regressor, parameters, export=True)
     else:
-        print(f"Skipping {model_name} as it not enabled.")
+        print(f"Skipping {model_name} as it is not enabled.")
