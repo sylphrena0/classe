@@ -28,8 +28,7 @@
 #$ -pe sge_pe 32
 # Print some environment information - for reporting diagnostics only.
 echo "Job ${JOBNAME} Starting at: "`date`
-echo "Running on host: "`hostname`
-echo "In directory: "`pwd`
+echo "Running with arguments \""$@"\" on host: "`hostname`
 #
 # Run the python script
 source /opt/rh/rh-python38/enable
