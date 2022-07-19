@@ -207,5 +207,9 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Got SVR results with error! Still waiting on superlearner results**
 * **Tried some basic feature selection (dropped low correlated data >0.05)**
 
+## Tuesday, July 19th, 2022
+* **Lolopy jobs are still not complete. Started unoptimized bulk training with error**
+* **Meeting/chat with Rick to discuss research and take photos**
+
 </details>
 <br>
