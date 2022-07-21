@@ -218,6 +218,8 @@ Documents daily work in the REU program, including events, meetings, and broad d
 
 ## Thursday, July 21th, 2022
 * **Workshop on Scientific Presentation Skills**
+* **Fixed bug in bulk training for unoptimized models**
+* **Updated scripts to output to a single file**
 
 </details>
 <br>
