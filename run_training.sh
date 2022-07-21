@@ -26,6 +26,10 @@
 #
 # Set thread requirements
 #$ -pe sge_pe 32
+#
+# Combine error and output files into single file
+#$ -j y
+#
 # Print some environment information - for reporting diagnostics only.
 echo "Job ${JOBNAME} Starting at: "`date`
 echo "Running with arguments \""$@"\" on host: "`hostname`
