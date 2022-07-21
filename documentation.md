@@ -210,6 +210,14 @@ Documents daily work in the REU program, including events, meetings, and broad d
 ## Tuesday, July 19th, 2022
 * **Lolopy jobs are still not complete. Started unoptimized bulk training with error**
 * **Meeting/chat with Rick to discuss research and take photos**
+* **Everything is working except the simulated superlearner**
+
+## Wednesday, July 20th, 2022
+* **Tour of Wilson Lab with Susan Newman**
+* **Medical Appointment**
+
+## Thursday, July 21th, 2022
+* **Workshop on Scientific Presentation Skills**
 
 </details>
 <br>
