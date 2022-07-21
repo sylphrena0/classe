@@ -69,6 +69,10 @@ The code is split into multiple python files so processes could be completed in 
 
 Since we used multiple files, we chose to create shared dependencies files where we defined functions to import data, train models, and generate our graphs. These files are then imported in all the relevant scripts to reduce redundancy.
 
+\subsection{Datasets}
+
+INFO ON HOW/WHY WE SELECTED DATASETS
+
 \subsection{Running the Code}
 
 First, the featurizer script imports the dataset, extracts features from the material compositions, and exports the csv data. This script is one of the most computationally expensive and takes several hours to run on the CLASSE compute farm with 64 dedicated cores.
@@ -92,17 +96,17 @@ Lolo is a Scala random forest machine learning library and is not a native pytho
 
 \section{Results}
 
-\subsection{Fonts}
-It is preferable to avoid the older \TeX\ and \LaTeX\ 2.09 macros for
-controlling fonts such as \m{rm}, \m{it}, \textit{etc.} Rather, it is
-better to use the macros introduced in \LaTeXe.  If the older font
-commands are used (they really should be avoided!), be sure to use
-curly braces to properly limit the extent of the font
-change. \verb+{\bf ...}+ is the correct method.
-Commands for controlling text and math font changes are summarized in
-Table~\ref{tab:fonts}.
+\subsection{Initial Results}
+Our intial
 
-
+\onecolumngrid
+\begin{figure}[!htb]
+   \centering
+   \includegraphics[scale=0.38]{../data/results_optimized.png}
+   \caption{Flowchart illustrating our matminer usage, modified from official matminer graphic \cite{WARD201860}.}
+   \label{fig:results}
+\end{figure}
+\twocolumngrid
 
 \bibliographystyle{apsrev4-2}
 \bibliography{reu-report}
