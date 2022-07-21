@@ -220,6 +220,7 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Workshop on Scientific Presentation Skills**
 * **Fixed bug in bulk training for unoptimized models**
 * **Updated scripts to output to a single file**
+* **Did feature selection on best models**
 
 </details>
 <br>
