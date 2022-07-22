@@ -13,6 +13,7 @@
 ###############################################
 import warnings #to suppress grid search warnings
 import os
+import re #regex
 import numpy as np 
 import pandas as pd
 import lolopy.learners #allows easy uncertainty
@@ -70,7 +71,7 @@ def evaluate_one(model_name, model, parameters, error=True, method="plus", fores
     with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'}):
         plt.title(f"{model_name} - Prediction vs. Actual Value (CV)", color='white')
         regressor = model(**parameters)
-        save_name = model_name.replace(" - ", "_").replace(" ", "_").lower()
+        save_name = re.sub(" - | ", "_", re.sub("\(|\)", "", modelname)).lower() #first removes paranthesis, then replaces " - " or " " with underscores to make a nice savename
 
         if error and not forestci and method != "prefit": #error calculations need magie training if not forestci/prefit mapie
             mapie_regressor = MapieRegressor(estimator=regressor, method=method) #unpacks model and params
