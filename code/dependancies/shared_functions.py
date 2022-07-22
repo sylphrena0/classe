@@ -60,14 +60,17 @@ def import_data(filename="supercon_features.csv", replace_inf=False, drop=None):
 ###############################################
 ######### Define Evaluation Functions #########
 ###############################################
-def evaluate_one(model_name, model, parameters, error=True, method="plus", forestci=False, export=False):
-    #define function that trains a model to predict critical temp and plots with metrics and optional error 
-    #error and forestci arguments override method specifications. forestci is much faster than mapie and is only applicable to random forest models
+def evaluate_one(model_name, model, parameters, error=True, method="plus", forestci=False, export_feat_importance=False, export=False, show=True):
+    """
+    define function that trains a model to predict critical temp and plots with metrics and optional error 
+    error and forestci arguments override method specifications. forestci is much faster than mapie and is only applicable to random forest models
+    """
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
+    warnings.filterwarnings("ignore", category=FutureWarning)
     with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'}):
-        warnings.filterwarnings("ignore")
         plt.title(f"{model_name} - Prediction vs. Actual Value (CV)", color='white')
         regressor = model(**parameters)
+        save_name = model_name.replace(" - ", "_").replace(" ", "_").lower()
 
         if error and not forestci and method != "prefit": #error calculations need magie training if not forestci/prefit mapie
             mapie_regressor = MapieRegressor(estimator=regressor, method=method) #unpacks model and params
@@ -82,6 +85,16 @@ def evaluate_one(model_name, model, parameters, error=True, method="plus", fores
             else:
                 regressor.fit(train_data, train_target) #fit the model
             model_pred = regressor.predict(test_data) #make predictions on test data
+        
+        if export_feat_importance and hasattr(regressor, 'feature_importances_'): #if we are exporting feature importance and model has attribute "feature_importances_"
+            feat_columns = data.columns.tolist()
+            feat_importance = pd.DataFrame(feat_columns, columns=('Feature',)) #get feature importances from model
+            feat_importance['Importance'] = regressor.feature_importances_.astype(float)
+            feat_importance = feat_importance.sort_values('Importance', ascending=False)
+            feat_importance.to_csv(f'../data/importance/{save_name}_importance.csv', index=False) #save csv
+        elif export_feat_importance:
+            warnings.warn("Cannot calculate feature importance, this model might not have feature_importances_, or you may be trying to run with error calculations, which is not supported.", category=Warning)
+            
 
         mse = round(mean_squared_error(test_target, model_pred),3) #find mean square error
         mae = round(mean_absolute_error(test_target, model_pred),3) #find mean square error
@@ -118,13 +131,14 @@ def evaluate_one(model_name, model, parameters, error=True, method="plus", fores
         plt.legend()
         plt.colorbar().set_label(label="Difference from Actual (K)", color='white') #using .set_label() as colorbar() does accept color arguments
         if export:
-            plt.savefig(f'../data/indvidual_results/{model_name}.png', bbox_inches='tight')
-        plt.show()
+            plt.savefig(f'../data/indvidual_results/{save_name}.png', bbox_inches='tight')
+        if show:
+            plt.show()
         plt.clf()
 
 def evaluate(models, title, filename='results.png', method="plus", forestci=False, export=True): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
-    with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':(1, 1, 1, 0),'text.color':'white','legend.labelcolor':'black'}):
+    with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'}): #use (1, 1, 1, 0) for figure.facecolor for transparent bg
         warnings.filterwarnings("ignore")
         fig, ax = plt.subplots(2, 4, sharey='row', figsize=(28,10))
         fig.subplots_adjust(hspace=0.35)
@@ -170,7 +184,7 @@ def evaluate(models, title, filename='results.png', method="plus", forestci=Fals
                     else:
                         #model_pis contains absolute points for upper/lower bounds. We need absolute error, like (3, 3) for ± 3:
                         yerror = np.abs(model_pis[:,:,0].transpose() - np.tile(model_pred, (2, 1))) #error must be in shape (n, 2) for errorbars
-                    ax[x, y].errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1, label="Prediction Intervals")
+                    ax[x, y].errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1) #removed ", label="Prediction Intervals", as it is covers other data for bulk plots 
 
                 ax[x, y].set_title(model_name, c='white')
                 ax[x, y].set_ylabel('Prediction', c='white')
