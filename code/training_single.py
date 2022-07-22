@@ -44,6 +44,7 @@ from dependancies.superlearner import get_superlearner as superlearner
 parser = argparse.ArgumentParser(description="A program that trains regression models for predicting superconductor critical temperatures.")
 parser.add_argument('-fn', '--filename', action='store', default="supercon_features.csv", dest='filename', help='Select file to train models from /data/. Default is supercon_features.csv.')
 parser.add_argument('-fi', '--featureimportance', action='store_true', dest='LR', help='Boolean option to enable the Linear Regression model.')
+parser.add_argument('-a', '--all', action='store_true', dest='LR', help='Boolean option to enable all regression models. Overrides individual toggles.')
 parser.add_argument('-l', '--lr', action='store_true', dest='LR', help='Boolean option to enable the Linear Regression model.')
 parser.add_argument('-s', '--svr', action='store_true', dest='SVR', help='Boolean option to enable the Support Vector Machines (Poly) model.')
 parser.add_argument('-el', '--elastic', action='store_true', dest='ELASTIC', help='Boolean option to enable the Elastic Net Regression model.')
@@ -92,7 +93,7 @@ models = ((args.LR, "Linear Regression", LinearRegression, {}),
 warnings.filterwarnings('ignore') #got tired of non-converging errors
 for [enabled, model_name, regressor, parameters] in models: #optimize enabled models
     model_name += suffix
-    if enabled is True:
+    if enabled is True or arg.all is True: #if model is enabled or all models are enabled
         print("Starting training on {}".format(model_name))
         sfn.evaluate_one(model_name, regressor, parameters, export=True)
     else:
