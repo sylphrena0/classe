@@ -1,0 +1,54 @@
+Feature,Importance
+mean abs simul. packing efficiency,0.15621427928385329
+MagpieData mean NUnfilled,0.07714873406803269
+0-norm,0.06672080614741133
+MagpieData mean NfUnfilled,0.03249861889832039
+MagpieData mean NdUnfilled,0.03248801263573889
+MagpieData mean SpaceGroupNumber,0.030161027031241777
+MagpieData mean Electronegativity,0.0295290048448468
+2-norm,0.02791133596841633
+MagpieData mean MeltingT,0.026951394976496044
+frac p valence electrons,0.02412463389681976
+MagpieData mean NsUnfilled,0.023356791482144878
+3-norm,0.02231605081296814
+mean simul. packing efficiency,0.0206224060315698
+frac d valence electrons,0.02001008182794156
+MagpieData mean NsValence,0.017713787537135588
+MagpieData mean NdValence,0.01750754274526896
+MagpieData mean Row,0.017386822993726334
+avg p valence electrons,0.01719376073458029
+avg s valence electrons,0.016835536002312745
+5-norm,0.01627529857728186
+MagpieData mean NpValence,0.01613425458117806
+7-norm,0.0159241125063607
+avg d valence electrons,0.015872567607998687
+10-norm,0.015247923723141722
+MagpieData mean CovalentRadius,0.015070364469365228
+MagpieData mean Number,0.014824133355185298
+MagpieData mean AtomicWeight,0.014817583163578276
+band center,0.014542084504594106
+transition metal fraction,0.014228481803416345
+MagpieData mean GSvolume_pa,0.0132879363200949
+MagpieData mean GSmagmom,0.01320816864441382
+dist from 1 clusters |APE| < 0.010,0.012690576322161848
+frac s valence electrons,0.012636865561878308
+MagpieData mean NpUnfilled,0.012598538717852095
+dist from 5 clusters |APE| < 0.010,0.012515738265788922
+MagpieData mean MendeleevNumber,0.012130597578572828
+dist from 3 clusters |APE| < 0.010,0.011453010787127493
+MagpieData mean NValence,0.010558440072599902
+frac f valence electrons,0.010285201724002156
+MagpieData mean Column,0.00965191622833616
+MagpieData mean NfValence,0.009089894255415353
+avg f valence electrons,0.008883221041922216
+MagpieData mean GSbandgap,0.006582538815059193
+HOMO_energy,0.004050796127236428
+LUMO_energy,0.0034226829530968994
+max ionic char,0.0030160337413446354
+avg ionic char,0.002764786255953323
+compound possible,0.0010680551796032952
+gap_AO,0.0004775691966144532
+LUMO_element,0.0
+HOMO_character,0.0
+HOMO_element,0.0
+LUMO_character,0.0
