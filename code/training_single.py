@@ -93,7 +93,7 @@ models = ((args.LR, "Linear Regression", LinearRegression, {}),
 warnings.filterwarnings('ignore') #got tired of non-converging errors
 for [enabled, model_name, regressor, parameters] in models: #optimize enabled models
     model_name += suffix
-    if enabled is True or arg.all is True: #if model is enabled or all models are enabled
+    if enabled is True or args.all is True: #if model is enabled or all models are enabled
         print("Starting training on {}".format(model_name))
         sfn.evaluate_one(model_name, regressor, parameters, export=True)
     else:
