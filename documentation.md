@@ -222,5 +222,11 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Updated scripts to output to a single file**
 * **Did feature selection on best models**
 
+## Friday, July 21th, 2022
+* **Workshop on Scientific Paper Skills**
+* **Fixed incorrect name for dataset w/o outliers (simulated --> outliers)**
+* **Started rerun of outlier dataset with correct labels.**
+* **Added option to run all models in single script**
+
 </details>
 <br>
