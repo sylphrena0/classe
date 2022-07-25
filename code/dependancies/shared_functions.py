@@ -78,7 +78,7 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
 
         if uncertainty and not forestci and method != "prefit": #uncertainty calculations need magie training if not forestci/prefit mapie
             mapie_regressor = MapieRegressor(estimator=regressor, method=method) #unpacks model and params
-            if model_name in ("Superlearner", "Random Forest Regression - Lolopy"): #need to get values for these models
+            if model_name.startswith(("Superlearner", "Random Forest Regression - Lolopy")): #need to get values for these models
                 mapie_regressor.fit(train_data.values, train_target.values) #fit the model
             else:
                 mapie_regressor.fit(train_data, train_target) #fit the model
