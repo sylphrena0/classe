@@ -230,3 +230,16 @@ Documents daily work in the REU program, including events, meetings, and broad d
 
 </details>
 <br>
+
+<details>
+<summary><font size=5>Week 8</font></summary>
+
+---
+
+## Monday, July 25th, 2022
+* **Worked on feature anaylsis, produced histogram of target**
+* **Added ability to drop data above/below certain temps from data import**
+* **Trained random forest models with cutoff critical temps.**
+
+</details>
+<br>
