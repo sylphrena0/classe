@@ -32,7 +32,7 @@
 #
 # Print some environment information - for reporting diagnostics only.
 echo "Job ${JOBNAME} Starting at: "`date`
-echo "Running with arguments \""$@"\" on host: "`hostname`
+echo "Running with command \"compute run_training.sh "$@"\" on host: "`hostname`
 #
 # Run the python script
 source /opt/rh/rh-python38/enable

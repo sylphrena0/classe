@@ -34,7 +34,7 @@
 #
 # Print some environment information - for reporting diagnostics only.
 echo "Job ${JOBNAME} Starting at: "`date`
-echo "Running with arguments \""$@"\" on host: "`hostname`
+echo "Running with command \"run_featurizer "$@"\" on host: "`hostname`
 #
 # Run the python script
 source /opt/rh/rh-python38/enable
