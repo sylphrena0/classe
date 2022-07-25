@@ -37,11 +37,12 @@ def syncdir():
 ################################################
 ############ Define Import Function ############
 ################################################
-#imports the data from get_featurizers. Function because some models we may want infinity:
-def import_data(filename="supercon_features.csv", replace_inf=False, drop=None):
+def import_data(filename="supercon_features.csv", replace_inf=False, drop=None, droptc=False):
+    '''
+    Imports the data from get_featurizers. Drop argument can be a list of columns to drop or a string like
+    '''
     global data, target, train_data, test_data, train_target, test_target #variables that we want to define globally (outside of this funtion)
     data = pd.DataFrame(pd.read_csv(f'../data/{filename}')) #loads data produced in get_featurizer.ipynb
-    target = data.pop('Tc') #remove target (critical temp) from data
 
     if replace_inf: #replaces values of infinity with NaN if replace_inf is True
         data.replace([np.inf, -np.inf], np.nan, inplace=True) 
@@ -55,32 +56,34 @@ def import_data(filename="supercon_features.csv", replace_inf=False, drop=None):
     for col in data: #replaces NaN with zeros
         data[col] = pd.to_numeric(data[col], errors ='coerce').fillna(0).astype('float')
 
-    #creates a test train split, with shuffle and random state for reproducibility 
-    train_data, test_data, train_target, test_target = train_test_split(data, target, test_size=0.15, random_state=43, shuffle=True)
+    if not droptc: #this is for our feature anaylsis notebook. to drop data based on Tc without a mess of operator if-elif statements, we need to not pop Tc or split our data yet
+        target = data.pop('Tc') #remove target (critical temp) from data
+        train_data, test_data, train_target, test_target = train_test_split(data, target, test_size=0.15, random_state=43, shuffle=True) #creates a test train split, with shuffle and random state for reproducibility 
 
 ###############################################
 ######### Define Evaluation Functions #########
 ###############################################
-def evaluate_one(model_name, model, parameters, error=True, method="plus", forestci=False, export_feat_importance=False, export=False, show=True):
+def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus", forestci=False, export_feat_importance=False, export=False, show=True, maxexpected=135):
     """
-    define function that trains a model to predict critical temp and plots with metrics and optional error 
-    error and forestci arguments override method specifications. forestci is much faster than mapie and is only applicable to random forest models
+    Defines function that trains a model to predict critical temp and plots with metrics and optional uncertainty 
+    Uncertainty and forestci arguments override method specifications. forestci is much faster than mapie and is only applicable to random forest models
+    maxexpected argument is to change the length of the expected value dotted line.
     """
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
     warnings.filterwarnings("ignore", category=FutureWarning)
     with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'}):
         plt.title(f"{model_name} - Prediction vs. Actual Value (CV)", color='white')
         regressor = model(**parameters)
-        save_name = re.sub(" - | ", "_", re.sub("\(|\)", "", modelname)).lower() #first removes paranthesis, then replaces " - " or " " with underscores to make a nice savename
+        save_name = re.sub(" - | ", "_", re.sub("\(|\)", "", model_name)).lower() #first removes paranthesis, then replaces " - " or " " with underscores to make a nice savename
 
-        if error and not forestci and method != "prefit": #error calculations need magie training if not forestci/prefit mapie
+        if uncertainty and not forestci and method != "prefit": #uncertainty calculations need magie training if not forestci/prefit mapie
             mapie_regressor = MapieRegressor(estimator=regressor, method=method) #unpacks model and params
             if model_name in ("Superlearner", "Random Forest Regression - Lolopy"): #need to get values for these models
                 mapie_regressor.fit(train_data.values, train_target.values) #fit the model
             else:
                 mapie_regressor.fit(train_data, train_target) #fit the model
             model_pred, model_pis = mapie_regressor.predict(test_data, alpha=0.05) #make predictions on test data
-        else: #no need for error calculations during training, use sklearn
+        else: #no need for uncertainty calculations during training, use sklearn
             if model_name in ("Superlearner", "Random Forest Regression - Lolopy"): #need to get values for these models
                 regressor.fit(train_data.values, train_target.values) #fit the model
             else:
@@ -94,7 +97,7 @@ def evaluate_one(model_name, model, parameters, error=True, method="plus", fores
             feat_importance = feat_importance.sort_values('Importance', ascending=False)
             feat_importance.to_csv(f'../data/importance/{save_name}_importance.csv', index=False) #save csv
         elif export_feat_importance:
-            warnings.warn("Cannot calculate feature importance, this model might not have feature_importances_, or you may be trying to run with error calculations, which is not supported.", category=Warning)
+            warnings.warn("Cannot calculate feature importance, this model might not have feature_importances_, or you may be trying to run with uncertainty calculations, which is not supported.", category=Warning)
             
 
         mse = round(mean_squared_error(test_target, model_pred),3) #find mean square error
@@ -105,8 +108,8 @@ def evaluate_one(model_name, model, parameters, error=True, method="plus", fores
         #make our plot - with plt.rc_context sets theme to look good in dark mode
         difference = np.abs(test_target - model_pred) #function that finds the absolute difference between predicted and actual value
         im = plt.scatter(test_target, model_pred, cmap='plasma_r', norm=plt.Normalize(0, 120), c=difference, label="Critical Temperature (K)", zorder=2) #create scatter plot of data 
-        plt.plot((0,135), (0,135), 'k--', alpha=0.75, zorder=3) #add expected line. Values must be changed with different data to look good
-        if error: #plot error bars
+        plt.plot((0,maxexpected), (0,maxexpected), 'k--', alpha=0.75, zorder=3) #add expected line. Values must be changed with different data to look good
+        if uncertainty: #plot error bars
             if forestci and model is not RandomForestRegressor:
                 raise NameError("RandomForestRegressor must be selected to use forestci")
             elif forestci:
