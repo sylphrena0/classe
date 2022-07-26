@@ -26,6 +26,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error, max_error
 from sklearn.ensemble import RandomForestRegressor
 from mapie.regression import MapieRegressor
+from mapie.metrics import regression_mean_width_score as regression_mws
 
 ################################################
 ############# Define Sync Function #############
@@ -63,11 +64,11 @@ def import_data(filename="supercon_features.csv", replace_inf=False, drop=None, 
 ###############################################
 ######### Define Evaluation Functions #########
 ###############################################
-def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus", forestci=False, export_feat_importance=False, export=False, show=True, maxexpected=135):
+def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus", forestci=False, export_feat_importance=False, image=False, csv=False, show=True, maxexpected=135):
     """
-    Defines function that trains a model to predict critical temp and plots with metrics and optional uncertainty 
-    Uncertainty and forestci arguments override method specifications. forestci is much faster than mapie and is only applicable to random forest models
-    maxexpected argument is to change the length of the expected value dotted line.
+    Defines function that trains a model to predict critical temp and plots with metrics and optional uncertainty.
+    Uncertainty and forestci arguments override method specifications. forestci is much faster than mapie and is only applicable to random forest models.
+    Maxexpected argument is to change the length of the expected value dotted line. Can also export feature importance, unlike evaluate().
     """
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
     warnings.filterwarnings("ignore", category=FutureWarning)
@@ -75,6 +76,7 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
         plt.title(f"{model_name} - Prediction vs. Actual Value (CV)", color='white')
         regressor = model(**parameters)
         save_name = re.sub(" - | ", "_", re.sub("\(|\)", "", model_name)).lower() #first removes paranthesis, then replaces " - " or " " with underscores to make a nice savename
+        results = pd.DataFrame(columns=("model","mean_squared_error","mean_absolute_error","max_error","r2_score","mapie_eff_mean_width"))
 
         if uncertainty and not forestci and method != "prefit": #uncertainty calculations need magie training if not forestci/prefit mapie
             mapie_regressor = MapieRegressor(estimator=regressor, method=method) #unpacks model and params
@@ -99,11 +101,11 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
         elif export_feat_importance:
             warnings.warn("Cannot calculate feature importance, this model might not have feature_importances_, or you may be trying to run with uncertainty calculations, which is not supported.", category=Warning)
             
-
+    
         mse = round(mean_squared_error(test_target, model_pred),3) #find mean square error
-        mae = round(mean_absolute_error(test_target, model_pred),3) #find mean square error
         mxe = round(max_error(test_target, model_pred),3)
-        r_squared = round(r2_score(test_target, model_pred),3) #find r2 score
+        mae = round(mean_absolute_error(test_target, model_pred),3) #find mean square error
+        r2 = round(r2_score(test_target, model_pred),3) #find r2 score
 
         #make our plot - with plt.rc_context sets theme to look good in dark mode
         difference = np.abs(test_target - model_pred) #function that finds the absolute difference between predicted and actual value
@@ -124,29 +126,36 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
             else:
                 #model_pis contains absolute points for upper/lower bounds. We need absolute error, like (3, 3) for ± 3:
                 yerror = np.abs(model_pis[:,:,0].transpose() - np.tile(model_pred, (2, 1))) #error must be in shape (n, 2) for errorbars
+                mws = round(regression_mws(model_pis[:,:,0][:,0],model_pis[:,:,0][:,1]),3) #generate mean width score metric from mapie data
             plt.errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1, label="Prediction Intervals")
+
+        results.loc[len(results.index)] = (model_name,mse,mae,mxe,r2,mws)
+        
         plt.title(model_name, c='white')
         plt.xlabel('Actual Value', c='white')
         plt.ylabel('Prediction', c='white')
-        plt.annotate(f'R2: {r_squared}', xy = (0, -0.15), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
-        plt.annotate(f'MXE: {mxe}', xy = (0, -0.20), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
+        plt.annotate(f'R2: {r2}', xy = (0, -0.15), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
+        plt.annotate(f'MWS: {mws}' if mws else f'MXE: {mxe}', xy = (0, -0.20), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
         plt.annotate(f'MAE: {mae}', xy = (1.0, -0.20), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MAE
         plt.annotate(f'MSE: {mse}', xy = (1.0, -0.15), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MSE
         plt.legend()
         plt.colorbar().set_label(label="Difference from Actual (K)", color='white') #using .set_label() as colorbar() does accept color arguments
-        if export:
+        if image:
             plt.savefig(f'../data/indvidual_results/{save_name}.png', bbox_inches='tight')
+        if csv:
+            results.to_csv(f'../data/indvidual_results/{save_name}.csv', index=False)
         if show:
             plt.show()
         plt.clf()
 
-def evaluate(models, title, filename='results.png', method="plus", forestci=False, export=True): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
+def evaluate(models, title, filename='results.png', method="plus", forestci=False, image=True, csv=True): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
     with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'}): #use (1, 1, 1, 0) for figure.facecolor for transparent bg
         warnings.filterwarnings("ignore")
         fig, ax = plt.subplots(2, 4, sharey='row', figsize=(28,10))
         fig.subplots_adjust(hspace=0.35)
         fig.suptitle(title, color='white', size=16)
+        results = pd.DataFrame(columns=("model","mean_squared_error","mean_absolute_error","max_error","r2_score","mapie_eff_mean_width"))
 
         for y, col in enumerate(models):
             for x, [model_name, model, parameters, uncert] in enumerate(col):
@@ -164,12 +173,13 @@ def evaluate(models, title, filename='results.png', method="plus", forestci=Fals
                     else:
                         regressor.fit(train_data, train_target) #fit the model
                     model_pred = regressor.predict(test_data) #make predictions on test data
-                        
 
+                mws = None #set mean width score as null until mapie if statement
                 mse = round(mean_squared_error(test_target, model_pred),3) #find mean square error
                 mae = round(mean_absolute_error(test_target, model_pred),3) #find mean square error
                 mxe = round(max_error(test_target, model_pred),3)
-                r_squared = round(r2_score(test_target, model_pred),3) #find r2 score
+                r2 = round(r2_score(test_target, model_pred),3) #find r2 score 
+
 
                 #make our plot - with plt.rc_context sets theme to look good in dark mode
                 difference = np.abs(test_target - model_pred) #function that finds the absolute difference between predicted and actual value
@@ -188,13 +198,16 @@ def evaluate(models, title, filename='results.png', method="plus", forestci=Fals
                     else:
                         #model_pis contains absolute points for upper/lower bounds. We need absolute error, like (3, 3) for ± 3:
                         yerror = np.abs(model_pis[:,:,0].transpose() - np.tile(model_pred, (2, 1))) #error must be in shape (n, 2) for errorbars
+                        mws = round(regression_mws(model_pis[:,:,0][:,0],model_pis[:,:,0][:,1]),3) #generate mean width score metric from mapie data
                     ax[x, y].errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1) #removed ", label="Prediction Intervals", as it is covers other data for bulk plots 
+
+                results.loc[len(results.index)] = (model_name,mse,mae,mxe,r2,mws)
 
                 ax[x, y].set_title(model_name, c='white')
                 ax[x, y].set_ylabel('Prediction', c='white')
                 ax[x, y].set_xlabel('Actual Value', c='white')
-                ax[x, y].annotate(f'R2: {r_squared}', xy = (0, -0.15), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
-                ax[x, y].annotate(f'MXE: {mxe}', xy = (0, -0.20), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
+                ax[x, y].annotate(f'R2: {r2}', xy = (0, -0.15), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
+                ax[x, y].annotate(f'MWS: {mws}' if mws else f'MXE: {mxe}', xy = (0, -0.20), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
                 ax[x, y].annotate(f'MAE: {mae}', xy = (1.0, -0.20), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MAE
                 ax[x, y].annotate(f'MSE: {mse}', xy = (1.0, -0.15), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MSE
 
@@ -202,6 +215,8 @@ def evaluate(models, title, filename='results.png', method="plus", forestci=Fals
         fig.legend(handles=handles,loc='lower center')
 
         fig.colorbar(im, ax=ax.ravel().tolist()).set_label(label="Difference from Actual (K)", color='white') #using .set_label() as colorbar() does accept color arguments
-        if export:
-            plt.savefig(f'../data/{filename}', bbox_inches='tight')
+        if image:
+            plt.savefig(f'../data/{filename}.png', bbox_inches='tight')
+        if csv:
+            results.to_csv(f'../data/{filename}.csv', index=False)
         plt.show()
