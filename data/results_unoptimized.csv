@@ -1,0 +1,9 @@
+model,mean_squared_error,mean_absolute_error,max_error,r2_score,mapie_eff_mean_width
+Elastic Net Regression,488.242,15.603,97.795,0.328,97.938
+Decision Tree Regression,258.945,6.886,124.6,0.644,76.715
+Bayesian Regression,441.925,14.52,90.623,0.392,90.7
+Random Forest Regression,140.482,5.791,88.73,0.807,53.135
+Support Vector Machines,666.16,15.511,115.977,0.084,134.628
+Extra Trees Regression,132.395,5.214,90.1,0.818,48.153
+Linear Regression,442.163,14.506,93.208,0.392,90.705
+KNeighbors Regression,257.108,8.563,96.8,0.646,75.612
