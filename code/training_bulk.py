@@ -92,5 +92,5 @@ else:
 
 warnings.filterwarnings('ignore') #got tired of non-converging errors
 print("Starting training!")
-sfn.evaluate(models, title=f'{prefix}Prediction vs. Actual Value (CV) - {optimized}', filename=f'{prefix}results_{optimized}', forestci=args.forestci, method=args.method)
+sfn.evaluate(models, title=f'{prefix}Prediction vs. Actual Value (CV) - {optimized}', filename=f'{prefix}results_{optimized.lower()}', forestci=args.forestci, method=args.method)
 # %%
