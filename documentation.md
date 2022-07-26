@@ -241,5 +241,11 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Added ability to drop data above/below certain temps from data import**
 * **Trained random forest models with cutoff critical temps.**
 
+## Tuesday, July 26th, 2022
+* **Attended machine learning conference**
+* **Added option to export csv with result metrics to both evalation functions to easily make tables later this week**
+* **Added mean width score from mapie for mapie trained models**
+* **Reran bulk training on compute farm to get updated data**
+
 </details>
 <br>
