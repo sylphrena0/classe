@@ -148,7 +148,7 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
             plt.show()
         plt.clf()
 
-def evaluate(models, title, filename='results.png', method="plus", forestci=False, image=True, csv=True): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
+def evaluate(models, title, filename='results', method="plus", forestci=False, image=True, csv=True): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
     with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'}): #use (1, 1, 1, 0) for figure.facecolor for transparent bg
         warnings.filterwarnings("ignore")
