@@ -47,6 +47,7 @@ sfn.syncdir() #ensures working directory is inside code on compute farm
 
 parser = argparse.ArgumentParser(description="A program that optimizes regression models for predicting superconductor critical temperatures.")
 parser.add_argument('-s', '--samplesize', action='store', dest='limit', default=1000, help='Limit the GridSearch Data Sample Size. Value must be \'all\' or a number between 0 and 16414')
+parser.add_argument('-a', '--all', action='store_true', dest='all', help='Boolean option to enable all regression models. Overrides individual toggles.')
 parser.add_argument('-sv', '--svr', action='store_true', dest='SVR', help='Boolean option to enable the Support Vector Machines (Linear) model.')
 parser.add_argument('-svp', '--svrpoly', action='store_true', dest='SVR_POLY', help='Boolean option to enable the Support Vector Machines (Poly) model.')
 parser.add_argument('-el', '--elastic', action='store_true', dest='ELASTIC', help='Boolean option to enable the Elastic Net Regression model.')
@@ -59,30 +60,31 @@ parser.add_argument('-by', '--bayes', action='store_true', dest='BAYES', help='B
 
 args = parser.parse_args()
 
-if 0 < int(args.limit) < 16414:
+limit = args.limit
+if 0 < int(limit) < 16414:
     pass
-elif str(args.limit) == 'all':
-    args.limit = 16414
+elif str(limit) == 'all':
+    limit = 16414
 else:
-      raise Exception("Invalid GridSearch Data Sample Size Limit. Value must be 'all' or a number between 0 and 16414.") #i am once again asking for a valid input :(
+    raise Exception("Invalid GridSearch Data Sample Size Limit. Value must be 'all' or a number between 0 and 16414.") #i am once again asking for a valid input :(
 
 #####################################################
 ########### Setup Models for GridSearchCV ###########
 #####################################################
 # %% 
 
-snf.import_data(replace_inf=False) #grab data
+sfn.import_data(replace_inf=False) #grab data
 
 #drop data that will not be used for optimization after shuffle, to limit defined in function
 limit = int(limit)
-train_data = snf.train_data.iloc[:limit]
-test_data = snf.test_data.iloc[:limit]
-train_target = snf.train_target.iloc[:limit]
-test_target = snf.test_target.iloc[:limit]
+train_data = sfn.train_data.iloc[:limit]
+test_data = sfn.test_data.iloc[:limit]
+train_target = sfn.train_target.iloc[:limit]
+test_target = sfn.test_target.iloc[:limit]
 
 #get number of rows and columns for use in parameters
-n_features = snf.data.shape[1]
-n_samples = snf.data.shape[0]
+n_features = sfn.data.shape[1]
+n_samples = sfn.data.shape[0]
 
 #define parameters that will be searched with GridSearchCV
 SVR_PARAMETERS = {"kernel": ["poly","rbf","sigmoid"], "degree": np.arange(1,10,2), "C": np.linspace(0,1000,5), "epsilon": np.logspace(-3, 3, 5),
@@ -102,15 +104,15 @@ SGD_PARAMETERS = {'loss': ['hinge', 'log_loss', 'log', 'modified_huber', 'square
                     'penalty': ['l1', 'l2', 'elasticnet'], "alpha": np.logspace(-4, 5, 5)}
 BAYES_PARAMETERS = {'alpha_init':[1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.9], 'lambda_init': [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-9]}
 
-models =   [[args.SVR, "Support Vector Machines (Linear)", SVR, SVR_PARAMETERS, {'max_iter': -1}],
-            [args.SVR_POLY, "Support Vector Machines (Poly)", SVR, SVR_POLY_PARAMETERS, {'max_iter': -1}],
-            [args.ELASTIC, "Elastic Net Regression", ElasticNet, ELASTIC_PARAMETERS, {'fit_intercept': True}],
-            [args.DT, "Decision Tree Regression", DecisionTreeRegressor, DT_PARAMETERS, {'random_state': 43}],
-            [args.RFR, "Random Forest Regression", RandomForestRegressor, RFR_PARAMETERS, {'bootstrap': True, 'n_jobs': -1}],
-            [args.KNN, "KNeighbors Regression", KNeighborsRegressor, KNN_PARAMETERS, {'n_jobs': -1}],
-            [args.TREES, "Extra Trees Regression", ExtraTreesRegressor, TREES_PARAMETERS, {'n_jobs': -1}],
-            [args.SGD, "Stochastic Gradient Descent", SGDRegressor, SGD_PARAMETERS, {'fit_intercept': True, 'max_iter': 1500}],
-            [args.BAYES, "Bayesian Regression", BayesianRidge, BAYES_PARAMETERS, {'fit_intercept': True}]]
+models =   [[(args.SVR, args.all), "Support Vector Machines (Linear)", SVR, SVR_PARAMETERS, {'max_iter': -1}],
+            [(args.SVR_POLY, args.all), "Support Vector Machines (Poly)", SVR, SVR_POLY_PARAMETERS, {'max_iter': -1}],
+            [(args.ELASTIC, args.all), "Elastic Net Regression", ElasticNet, ELASTIC_PARAMETERS, {'fit_intercept': True}],
+            [(args.DT, args.all), "Decision Tree Regression", DecisionTreeRegressor, DT_PARAMETERS, {'random_state': 43}],
+            [(args.RFR, args.all), "Random Forest Regression", RandomForestRegressor, RFR_PARAMETERS, {'bootstrap': True, 'n_jobs': -1}],
+            [(args.KNN, args.all), "KNeighbors Regression", KNeighborsRegressor, KNN_PARAMETERS, {'n_jobs': -1}],
+            [(args.TREES, args.all), "Extra Trees Regression", ExtraTreesRegressor, TREES_PARAMETERS, {'n_jobs': -1}],
+            [(args.SGD, args.all), "Stochastic Gradient Descent", SGDRegressor, SGD_PARAMETERS, {'fit_intercept': True, 'max_iter': 1500}],
+            [(args.BAYES, args.all), "Bayesian Regression", BayesianRidge, BAYES_PARAMETERS, {'fit_intercept': True}]]
 
 def optimize_model(model_name, regressor, parameters, fixed_params): #performs grid search on a given model with specified search and fixed model parameters and saves results to csv
     global results #variables that we want to define globally (outside of this funtion)
@@ -120,7 +122,7 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
         #define model, do grid search
         search = GridSearchCV(regressor(**fixed_params), #model
                         param_grid = parameters, #hyperparameters
-                        scoring='r2', #metrics for scoring
+                        scoring = 'r2', #metrics for scoring
                         return_train_score = False, #we want test score
                         cv = 3, #number of folds
                         n_jobs = -1, #amount of threads to use
@@ -140,11 +142,11 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
 results = []
 warnings.filterwarnings('ignore') #got tired of non-converging errors
 for [enabled, model_name, regressor, parameters, fixed_params] in models: #optimize enabled models
-    if enabled is True:
+    if True in enabled:
         print("Starting GridSearchCV on {}".format(model_name))
         results.append(optimize_model(model_name, regressor, parameters, fixed_params))
     else:
         print(f"Skipping {model_name} as it is not enabled.")
 
 result_df = pd.DataFrame(results)
-result_df.to_csv('../data/optimize.results.csv') #saves data to './optimize_results.csv'
+result_df.to_csv('../data/optimize.results.csv', index=False) #saves data to './optimize_results.csv'
