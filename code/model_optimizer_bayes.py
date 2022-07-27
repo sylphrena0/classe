@@ -96,8 +96,9 @@ n_samples = sfn.data.shape[0]
                     # 'min_samples_split': [3, 2, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5], 
                     # 'min_samples_leaf':[1, 0.3, 0.5, n_samples//2, n_samples//3, n_samples//5]}
 RFR_PARAMETERS = [Integer(1, 20, name='max_features'), Integer(1,1000, name='n_estimators')]
-KNN_PARAMETERS = [Integer(1,1000, name='n_neighbors'), Categorical(['auto', 'ball_tree', 'kd_tree', 'brute'], name='algorithm'), 
-                    Categorical(['euclidean', 'manhattan'], name='metric')]
+KNN_PARAMETERS = [Integer(1,1000, name='n_neighbors'), Categorical(['auto', 'ball_tree', 'kd_tree', 'brute'], name='algorithm')#, 
+                    #Categorical(('minkowski', 'euclidean', 'manhattan'), name='metric') # disabling b/c we are getting this - TypeError: Argument 'metric' has incorrect type (expected str, got numpy.str_)
+                    ]
 TREES_PARAMETERS = [Integer(1,1000, name='n_estimators')]
 # SGD_PARAMETERS = {'loss': ['hinge', 'log_loss', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_error', 'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive'],
                     # 'penalty': ['l1', 'l2', 'elasticnet'], "alpha": np.logspace(-4, 5, 5)}
@@ -132,7 +133,6 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
                         random_state = 43, #number of folds
                         n_jobs = -1, #amount of threads to use
                         verbose = 1) #how much output to send while running
-        res_gp = gp_minimize(objective, space, n_calls=50, random_state=0)
 
         return (model_name, search.values(), "Time Elapsed: " + str(time.time() - start_time)) #record results
     except Exception as error: #catch any issues and record them
