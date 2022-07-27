@@ -239,7 +239,7 @@ Documents daily work in the REU program, including events, meetings, and broad d
 ## Monday, July 25th, 2022
 * **Worked on feature anaylsis, produced histogram of target**
 * **Added ability to drop data above/below certain temps from data import**
-* **Trained random forest models with cutoff critical temps.**
+* **Trained random forest models with cutoff critical temps. MAE is smaller on model using <10K (more data in that set)**
 
 ## Tuesday, July 26th, 2022
 * **Attended machine learning conference**
@@ -247,5 +247,9 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Added mean width score from mapie for mapie trained models**
 * **Reran bulk training on compute farm to get updated data**
 
+## Wednesday, July 27th, 2022
+* **Attended machine learning conference**
+* **Lolopy - ran multiple times, increasing memory limit up to 32GBs, still running out of memory. Could use lolo directly or downsize training size, but it might be worth skipping as both options would likely take significant time.**
+* **Started working on ./code/model_optimizer_bayes so we can optimize with acq fncts.**
 </details>
 <br>
