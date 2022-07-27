@@ -38,7 +38,7 @@ def syncdir():
 ################################################
 ############ Define Import Function ############
 ################################################
-def import_data(filename="supercon_features.csv", replace_inf=False, drop=None, droptc=False):
+def import_data(filename="supercon_features.csv", replace_inf=False, drop=None, split=True):
     '''
     Imports the data from get_featurizers. Drop argument can be a list of columns to drop or a string like
     '''
@@ -57,7 +57,7 @@ def import_data(filename="supercon_features.csv", replace_inf=False, drop=None, 
     for col in data: #replaces NaN with zeros
         data[col] = pd.to_numeric(data[col], errors ='coerce').fillna(0).astype('float')
 
-    if not droptc: #this is for our feature anaylsis notebook. to drop data based on Tc without a mess of operator if-elif statements, we need to not pop Tc or split our data yet
+    if split: #this is for our feature anaylsis notebook. to drop data based on Tc without a mess of operator if-elif statements, we need to not pop Tc or split our data yet
         target = data.pop('Tc') #remove target (critical temp) from data
         train_data, test_data, train_target, test_target = train_test_split(data, target, test_size=0.15, random_state=43, shuffle=True) #creates a test train split, with shuffle and random state for reproducibility 
 
