@@ -251,5 +251,10 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Attended machine learning conference**
 * **Lolopy - ran multiple times, increasing memory limit up to 32GBs, still running out of memory. Could use lolo directly or downsize training size, but it might be worth skipping as both options would likely take significant time.**
 * **Started working on ./code/model_optimizer_bayes so we can optimize with acq fncts.**
+
+## Thursday, July 28th, 2022
+* **Continued working on ./code/model_optimizer_bayes (fixing output).**
+* **Continued working on latex paper.**
+
 </details>
 <br>
