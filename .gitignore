@@ -10,6 +10,7 @@ latex/*.log
 latex/*.toc
 latex/*.xml
 latex/*.gz
+latex/*.fls
 latex/*Notes.bib
 !latex/reu-report.tex
 !latex/reu-report.bib
