@@ -1,0 +1,4 @@
+Name,"Best Paramaters (using gp_hedge, n_calls: 150)",Time Elapsed
+Random Forest Regression,"{'max_features': 9, 'n_estimators': 552}",748.67s
+KNeighbors Regression,"{'n_neighbors': 1, 'algorithm': 'kd_tree'}",152.4s
+Extra Trees Regression,"{'n_estimators': 708}",966.42s
