@@ -118,26 +118,23 @@ models =   [
 def optimize_model(model_name, regressor, parameters, fixed_params): #performs grid search on a given model with specified search and fixed model parameters and saves results to csv
     global results #variables that we want to define globally (outside of this funtion)
     #this function will allow us to use multiprocessing to do multiple grid searches at once.
-    try: #try-excepts handles errors without ending process and allows us to read the error later on
-        start_time = time.time() #sets start time for function so we can record processing time
-        #define model, do grid search
-        
-        @use_named_args(parameters)
-        def objective(**params):
-            model = regressor(**fixed_params, **params)
-            return -np.mean(cross_val_score(model, train_data, train_target, cv=5, n_jobs=-1, scoring="neg_mean_absolute_error"))
-        
-        search = gp_minimize(objective, #model and score
-                        dimensions = parameters, #hyperparameters
-                        acq_func = 'gp_hedge',
-                        random_state = 43, #number of folds
-                        n_jobs = -1, #amount of threads to use
-                        verbose = 1) #how much output to send while running
+    start_time = time.time() #sets start time for function so we can record processing time
+    #define model, do grid search
+    
+    @use_named_args(parameters)
+    def objective(**params):
+        model = regressor(**fixed_params, **params)
+        return -np.mean(cross_val_score(model, train_data, train_target, cv=5, n_jobs=-1, scoring="neg_mean_absolute_error"))
+    
+    search = gp_minimize(objective, #model and score
+                    dimensions = parameters, #hyperparameters
+                    acq_func = 'gp_hedge',
+                    n_calls = 150, #number of calls to make, default: 100, more gets better results at higher computational cost
+                    random_state = 43, #number of folds
+                    n_jobs = -1, #amount of threads to use
+                    verbose = 1) #how much output to send while running
 
-        return (model_name, search.values(), "Time Elapsed: " + str(time.time() - start_time)) #record results
-    except Exception as error: #catch any issues and record them
-        raise error
-        # return (model_name, "ERROR", "ERROR", error) #record errors
+    return (model_name, "Best Paramaters: " + str(dict(zip(search.space.dimension_names, search.x))), "Time Elapsed: " + str(time.time() - start_time)) #record results
 
 ####################################################
 #################### Run Search ####################
@@ -154,4 +151,4 @@ for [enabled, model_name, regressor, parameters, fixed_params] in models: #optim
         print(f"Skipping {model_name} as it is not enabled.")
 
 result_df = pd.DataFrame(results)
-result_df.to_csv('../data/optimize.results.csv', index=False) #saves data to './optimize_results.csv'
+result_df.to_csv('../data/optimizer_results.csv', index=False) #saves data to './optimize_results.csv'
