@@ -135,7 +135,7 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
 
     specs = search.specs['args']
 
-    return (model_name, "Best Paramaters: " + str(dict(zip(search.space.dimension_names, search.x))), "n_calls: " + str(specs['n_calls']), "acq_func: " + str(specs['acq_func']), "Time Elapsed: " + str(time.time() - start_time)) #record results
+    return (model_name, "Best Paramaters: " + str(dict(zip(search.space.dimension_names, search.x))), "n_calls: " + str(specs['n_calls']), "acq_func: " + str(specs['acq_func']), "Time Elapsed: " + str(round(time.time() - start_time, 2)) + "s") #record results
 
 ####################################################
 #################### Run Search ####################
