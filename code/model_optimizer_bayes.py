@@ -133,9 +133,7 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
                     n_jobs = -1, #amount of threads to use
                     verbose = 1) #how much output to send while running
 
-    specs = search.specs['args']
-
-    return (model_name, "Best Paramaters: " + str(dict(zip(search.space.dimension_names, search.x))), "n_calls: " + str(specs['n_calls']), "acq_func: " + str(specs['acq_func']), "Time Elapsed: " + str(round(time.time() - start_time, 2)) + "s") #record results
+    return (model_name, str(dict(zip(search.space.dimension_names, search.x))), str(round(time.time() - start_time, 2)) + "s") #record results
 
 ####################################################
 #################### Run Search ####################
@@ -152,4 +150,4 @@ for [enabled, model_name, regressor, parameters, fixed_params] in models: #optim
         print(f"Skipping {model_name} as it is not enabled.")
 
 result_df = pd.DataFrame(results)
-result_df.to_csv('../data/optimizer_results.csv', index=False) #saves data to './optimize_results.csv'
+result_df.to_csv(f'../data/optimizer_{args.acq_funct}.csv', index=False, columns=("Model",f"Best Parameters (using {args.acq_funct}, n_calls: {args.n_calls})", "Time Elapsed")) #saves data to './optimize_results.csv'
