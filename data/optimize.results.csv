@@ -1,2 +1,4 @@
 0,1,2
-KNeighbors Regression,"Best Paramaters: {'n_neighbors': 46, 'algorithm': 'brute'}",Time Elapsed: 2.46553111076355
+Random Forest Regression,"Best Paramaters: {'max_features': 6, 'n_estimators': 374}",Time Elapsed: 813.7306337356567
+KNeighbors Regression,"Best Paramaters: {'n_neighbors': 1, 'algorithm': 'kd_tree'}",Time Elapsed: 161.9503219127655
+Extra Trees Regression,Best Paramaters: {'n_estimators': 795},Time Elapsed: 1074.3013994693756
