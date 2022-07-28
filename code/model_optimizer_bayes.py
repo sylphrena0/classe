@@ -48,26 +48,25 @@ import dependancies.shared_functions as sfn
 sfn.syncdir() #ensures working directory is inside code on compute farm
 
 parser = argparse.ArgumentParser(description="A program that optimizes regression models for predicting superconductor critical temperatures.")
-parser.add_argument('-s', '--samplesize', action='store', dest='limit', default=1000, help='Limit the GridSearch Data Sample Size. Value must be \'all\' or a number between 0 and 16414')
+parser.add_argument('-s', '--samplesize', action='store', dest='limit', default=1000, help='Limit the GridSearch Data Sample Size. Value must be "all" or a number between 0 and 16414')
+parser.add_argument('-n', '--ncalls', action='store', dest='n_calls', default=100, help='Set the number of calls for the bayesian search. Must be a positive integer.')
+parser.add_argument('-af', '--acqfunction', action='store', dest='acq_funct', default="gp_hedge", help='Set the acquisition function for optimization. Must be a valid Skopt acqusition function in a string. Defaults to "gp_hedge".')
 parser.add_argument('-a', '--all', action='store_true', dest='all', help='Boolean option to enable all regression models. Overrides individual toggles.')
-parser.add_argument('-sv', '--svr', action='store_true', dest='SVR', help='Boolean option to enable the Support Vector Machines (Linear) model.')
-parser.add_argument('-el', '--elastic', action='store_true', dest='ELASTIC', help='Boolean option to enable the Elastic Net Regression model.')
-parser.add_argument('-dt', '--decisiontree', action='store_true', dest='DT', help='Boolean option to enable the Decision Tree Regression model.')
+# parser.add_argument('-sv', '--svr', action='store_true', dest='SVR', help='Boolean option to enable the Support Vector Machines (Linear) model.')
+# parser.add_argument('-el', '--elastic', action='store_true', dest='ELASTIC', help='Boolean option to enable the Elastic Net Regression model.')
+# parser.add_argument('-dt', '--decisiontree', action='store_true', dest='DT', help='Boolean option to enable the Decision Tree Regression model.')
 parser.add_argument('-rf', '--randomforest', action='store_true', dest='RFR', help='Boolean option to enable the Random Forest Regression model.')
 parser.add_argument('-knn', '--knn', action='store_true', dest='KNN', help='Boolean option to enable the KNeighbors Regression model.')
 parser.add_argument('-et', '--extratrees', action='store_true', dest='TREES', help='Boolean option to enable the Extra Trees Regression model.')
-parser.add_argument('-sgd', '--stochastic', action='store_true', dest='SGD', help='Boolean option to enable the Stochastic Gradient Descent model.')
-parser.add_argument('-by', '--bayes', action='store_true', dest='BAYES', help='Boolean option to enable the Bayesian Regression model.')
+# parser.add_argument('-sgd', '--stochastic', action='store_true', dest='SGD', help='Boolean option to enable the Stochastic Gradient Descent model.')
+# parser.add_argument('-by', '--bayes', action='store_true', dest='BAYES', help='Boolean option to enable the Bayesian Regression model.')
 
 args = parser.parse_args()
 
-limit = args.limit
-if 0 < int(limit) < 16414:
-    pass
-elif str(limit) == 'all':
-    limit = 16414
-else:
-    raise Exception("Invalid GridSearch Data Sample Size Limit. Value must be 'all' or a number between 0 and 16414.") #i am once again asking for a valid input :(
+limit = 16414 if args.limit == 'all' else int(args.limit)
+assert 0 < limit <= 16414, "Invalid GridSearch Data Sample Size Limit. Value must be 'all' or a number between 0 and 16414." #i am once again asking for a valid input :(
+assert args.n_calls.isdigit(), "n_calls must be an integer."
+assert isinstance(args.acq_funct, str), "Acquisition function must be specified as a string"
 
 #####################################################
 ########### Setup Models for GridSearchCV ###########
@@ -128,13 +127,15 @@ def optimize_model(model_name, regressor, parameters, fixed_params): #performs g
     
     search = gp_minimize(objective, #model and score
                     dimensions = parameters, #hyperparameters
-                    acq_func = 'gp_hedge',
-                    n_calls = 150, #number of calls to make, default: 100, more gets better results at higher computational cost
+                    acq_func = args.acq_funct, #defined in args
+                    n_calls = int(args.n_calls), #number of calls to make, default: 100, more gets better results at higher computational cost, defined in args
                     random_state = 43, #number of folds
                     n_jobs = -1, #amount of threads to use
                     verbose = 1) #how much output to send while running
 
-    return (model_name, "Best Paramaters: " + str(dict(zip(search.space.dimension_names, search.x))), "Time Elapsed: " + str(time.time() - start_time)) #record results
+    specs = search.specs['args']
+
+    return (model_name, "Best Paramaters: " + str(dict(zip(search.space.dimension_names, search.x))), "n_calls: " + str(specs['n_calls']), "acq_func: " + str(specs['acq_func']), "Time Elapsed: " + str(time.time() - start_time)) #record results
 
 ####################################################
 #################### Run Search ####################
@@ -145,7 +146,7 @@ results = []
 warnings.filterwarnings('ignore') #got tired of non-converging errors
 for [enabled, model_name, regressor, parameters, fixed_params] in models: #optimize enabled models
     if True in enabled:
-        print("Starting GridSearchCV on {}".format(model_name))
+        print("Starting Bayesian Optimization on {}".format(model_name))
         results.append(optimize_model(model_name, regressor, parameters, fixed_params))
     else:
         print(f"Skipping {model_name} as it is not enabled.")
