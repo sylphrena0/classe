@@ -4,6 +4,6 @@ alias rpip3="source /opt/rh/rh-python38/enable; export PYTHONPATH=/nfs/opt/pytho
 
 compute() { #starts a job
     cd /cdat/tem/kvk23/queue/
-    qsub $@
+    qsub run_script.sh $@
     qstat
 }
