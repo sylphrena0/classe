@@ -3,10 +3,11 @@
 ##### Bash Script to Submit Python Files to Qsub #####
 ######################################################
 # This bash script runs python scripts on the Cornell CLASSE compute farm
-# and accepts arguments for qsub and for the python script
+# and accepts arguments for qsub and for the python script [attempts to accept qsub args]
 #
 # Author: Kirk Kleinsasser
 ######################################################
+#TODO: Figure out why this won't run
 
 #read the options
 TEMP=`getopt -o pf:c::m::n::e:: --long pythonfile:,cores::,memory::,notify::,email:: -- "$@" command 2> /dev/null` #command 2> /dev/null suppresses unknown argument errors here
