@@ -42,7 +42,7 @@ while true ; do
     esac
 done
 
-exec "qsub" -N $file -q all.q -S /bin/bash -cwd -m $notify -M $email -pe sge_pe $cores -l mem_free=$memory -j y run.sh $@
+exec "qsub" -N $file -q all.q -S /bin/bash -cwd -m $notify -M $email -pe sge_pe $cores -l mem_free=$memory -j y compute_run.sh $@
 
 # Documentation:
 # https://wiki.classe.cornell.edu/Computing/GridEngine - CLASSE wiki
