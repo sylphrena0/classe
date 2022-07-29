@@ -58,9 +58,7 @@ parser.add_argument('-et', '--extratrees', action='store_true', dest='TREES', he
 parser.add_argument('-sgd', '--stochastic', action='store_true', dest='SGD', help='Boolean option to enable the Stochastic Gradient Descent model.')
 parser.add_argument('-by', '--bayes', action='store_true', dest='BAYES', help='Boolean option to enable the Bayesian Regression model.')
 
-args, unknown = parser.parse_known_args() #accepts unknown arguments
-if unknown:
-    warnings.warn(f"Unknown argument(s) ignored: {unknown}", category=Warning)
+args = parser.parse_args()
 
 limit = args.limit
 if 0 < int(limit) < 16414:

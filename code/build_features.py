@@ -28,9 +28,7 @@ sfn.syncdir() #ensures working directory is inside code on compute farm
 
 parser = argparse.ArgumentParser(description="A program that gets feature from composition of superconductor critical temperatures.")
 parser.add_argument('-f', '--file', action='store', default="supercon_dataset.csv", dest='filename', help='Specify filename to featurize. ')
-args, unknown = parser.parse_known_args() #accepts unknown arguments
-if unknown:
-    warnings.warn(f"Unknown argument(s) ignored: {unknown}", category=Warning)
+args = parser.parse_args()
 filename = args.filename
 
 #load supercon databse and metadata

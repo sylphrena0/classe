@@ -52,18 +52,16 @@ parser.add_argument('-s', '--samplesize', action='store', dest='limit', default=
 parser.add_argument('-nc', '--ncalls', action='store', dest='n_calls', default=100, help='Set the number of calls for the bayesian search. Must be a positive integer.')
 parser.add_argument('-af', '--acqfunction', action='store', dest='acq_funct', default="gp_hedge", help='Set the acquisition function for optimization. Must be a valid Skopt acqusition function in a string. Defaults to "gp_hedge".')
 parser.add_argument('-a', '--all', action='store_true', dest='all', help='Boolean option to enable all regression models. Overrides individual toggles.')
-# parser.add_argument('-sv', '--svr', action='store_true', dest='SVR', help='Boolean option to enable the Support Vector Machines (Linear) model.')
-# parser.add_argument('-el', '--elastic', action='store_true', dest='ELASTIC', help='Boolean option to enable the Elastic Net Regression model.')
-# parser.add_argument('-dt', '--decisiontree', action='store_true', dest='DT', help='Boolean option to enable the Decision Tree Regression model.')
 parser.add_argument('-rf', '--randomforest', action='store_true', dest='RFR', help='Boolean option to enable the Random Forest Regression model.')
 parser.add_argument('-knn', '--knn', action='store_true', dest='KNN', help='Boolean option to enable the KNeighbors Regression model.')
 parser.add_argument('-et', '--extratrees', action='store_true', dest='TREES', help='Boolean option to enable the Extra Trees Regression model.')
+# parser.add_argument('-sv', '--svr', action='store_true', dest='SVR', help='Boolean option to enable the Support Vector Machines (Linear) model.')
+# parser.add_argument('-el', '--elastic', action='store_true', dest='ELASTIC', help='Boolean option to enable the Elastic Net Regression model.')
+# parser.add_argument('-dt', '--decisiontree', action='store_true', dest='DT', help='Boolean option to enable the Decision Tree Regression model.')
 # parser.add_argument('-sgd', '--stochastic', action='store_true', dest='SGD', help='Boolean option to enable the Stochastic Gradient Descent model.')
 # parser.add_argument('-by', '--bayes', action='store_true', dest='BAYES', help='Boolean option to enable the Bayesian Regression model.')
 
-args, unknown = parser.parse_known_args() #accepts unknown arguments
-if unknown:
-    warnings.warn(f"Unknown argument(s) ignored: {unknown}", category=Warning)
+args = parser.parse_args()
 
 limit = 16414 if args.limit == 'all' else int(args.limit)
 assert 0 < limit <= 16414, "Invalid GridSearch Data Sample Size Limit. Value must be 'all' or a number between 0 and 16414." #i am once again asking for a valid input :(

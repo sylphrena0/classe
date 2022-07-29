@@ -57,9 +57,7 @@ parser.add_argument('-sgd', '--stochastic', action='store_true', dest='SGD', hel
 parser.add_argument('-by', '--bayes', action='store_true', dest='BAYES', help='Boolean option to enable the Bayesian Regression model.')
 parser.add_argument('-sp', '--super', action='store_true', dest='SUPER', help='Boolean option to enable the Superlearner model.')
 
-args, unknown = parser.parse_known_args() #accepts unknown arguments
-if unknown:
-    warnings.warn(f"Unknown argument(s) ignored: {unknown}", category=Warning)
+args = parser.parse_args()
 
 #################################################
 ########### Setup Models for Training ###########

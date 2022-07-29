@@ -48,9 +48,7 @@ parser.add_argument('-u', '--uncert', action='store_true', default=True, dest='u
 parser.add_argument('-um', '--uncertmethod', action='store', default="plus", dest='method', help='Select uncertainty method for mapie. Default is plus.')
 parser.add_argument('-ci', '--forestci', action='store_true', default=False, dest='forestci', help='Boolean option to enable forestci uncertainty for random forests. Overrides --uncertmethod.')
 
-args, unknown = parser.parse_known_args() #accepts unknown arguments
-if unknown:
-    warnings.warn(f"Unknown argument(s) ignored: {unknown}", category=Warning)
+args = parser.parse_args()
 #################################################
 ########### Setup Models for Training ###########
 #################################################
