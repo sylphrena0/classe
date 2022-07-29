@@ -256,5 +256,9 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Continued working on ./code/model_optimizer_bayes (fixing output).**
 * **Continued working on latex paper.**
 
+## Friday, July 29th, 2022
+* **Worked on generalizing bash scripts - I kept hitting roadblocks all day and unfortuntuly didn't get much else don't today. These updated scripts still don't really work, I will leave them be untill I have more time. I will finish the last coding things on Monday.**
+* **Met with a staff scientist to chat about career stuff!**
+
 </details>
 <br>
