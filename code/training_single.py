@@ -75,7 +75,7 @@ models = (((args.LR, args.all), "Linear Regression", LinearRegression, {}),
             ((args.DT, args.all), "Decision Tree - Unoptimized", DecisionTreeRegressor, {}),
             ((args.DT, args.all), "Decision Tree - Optimized", DecisionTreeRegressor, {'criterion':'poisson', 'max_depth':5, 'max_features':0.5}),
             ((args.RFR, args.all), "Random Forest Regression", RandomForestRegressor, {}),
-            ((args.LRFR,), "Random Forest Regression - Lolopy", lolopy.learners.RandomForestRegressor, {}), #note that the all argument does not enable lolopy 
+            ((args.LRFR,), "Random Forest - Lolopy", lolopy.learners.RandomForestRegressor, {}), #note that the all argument does not enable lolopy 
             ((args.KNN, args.all), "KNeighbors - Unoptimized", KNeighborsRegressor, {}),
             ((args.KNN, args.all), "KNeighbors - Optimized", KNeighborsRegressor, {'metric':'manhattan', 'n_jobs':-1, 'n_neighbors':8}),
             ((args.TREES, args.all), "Extra Trees - Unoptimized", ExtraTreesRegressor, {}),

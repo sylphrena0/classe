@@ -80,13 +80,13 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
 
         if uncertainty and not forestci and method != "prefit": #uncertainty calculations need magie training if not forestci/prefit mapie
             mapie_regressor = MapieRegressor(estimator=regressor, method=method) #unpacks model and params
-            if model_name.startswith(("Superlearner", "Random Forest Regression - Lolopy")): #need to get values for these models
+            if model_name.startswith(("Superlearner", "Random Forest - Lolopy")): #need to get values for these models
                 mapie_regressor.fit(train_data.values, train_target.values) #fit the model
             else:
                 mapie_regressor.fit(train_data, train_target) #fit the model
             model_pred, model_pis = mapie_regressor.predict(test_data, alpha=0.05) #make predictions on test data
         else: #no need for uncertainty calculations during training, use sklearn
-            if model_name in ("Superlearner", "Random Forest Regression - Lolopy"): #need to get values for these models
+            if model_name in ("Superlearner", "Random Forest - Lolopy"): #need to get values for these models
                 regressor.fit(train_data.values, train_target.values) #fit the model
             else:
                 regressor.fit(train_data, train_target) #fit the model
@@ -162,13 +162,13 @@ def evaluate(models, title, filename='results', method="plus", forestci=False, i
                 regressor = model(**parameters)
                 if uncert and not forestci and method != "prefit": #error calculations need magie training if not forestci/prefit mapie
                     mapie_regressor = MapieRegressor(estimator=regressor, method=method) #unpacks model and params
-                    if model_name in ("Superlearner", "Random Forest Regression - Lolopy"): #need to get values for these models
+                    if model_name in ("Superlearner", "Random Forest - Lolopy"): #need to get values for these models
                         mapie_regressor.fit(train_data.values, train_target.values) #fit the model
                     else:
                         mapie_regressor.fit(train_data, train_target) #fit the model
                         model_pred, model_pis = mapie_regressor.predict(test_data, alpha=0.05) #make predictions on test data
                 else: #no need for error calculations during training, use sklearn
-                    if model_name in ("Superlearner", "Random Forest Regression - Lolopy"): #need to get values for these models
+                    if model_name in ("Superlearner", "Random Forest - Lolopy"): #need to get values for these models
                         regressor.fit(train_data.values, train_target.values) #fit the model
                     else:
                         regressor.fit(train_data, train_target) #fit the model
