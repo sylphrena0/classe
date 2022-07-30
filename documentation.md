@@ -257,7 +257,10 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Continued working on latex paper.**
 
 ## Friday, July 29th, 2022
-* **Worked on generalizing bash scripts - I kept hitting roadblocks all day and unfortuntuly didn't get much else don't today. These updated scripts still don't really work, I will leave them be untill I have more time. I will finish the last coding things on Monday.**
+* **Worked on generalizing bash scripts - I kept hitting roadblocks. These updated scripts still don't really work, I will leave them be until I have more time.**
+* **I did get one version of a generalized bash script to work, it just doesn't accept arguments in bash (but it works well). Updated scripts to use that and kept the working file if I have time to improve more.**
+* **Ran more bayesian optimization, will examine results on monday (train models and maybe get new optimial model). Also need to do more models with selected features on monday.**
+* **Ran limited Tc models with no outliers.**
 * **Met with a staff scientist to chat about career stuff!**
 
 </details>
