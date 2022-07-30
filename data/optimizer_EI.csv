@@ -1,0 +1,4 @@
+Model,"Best Parameters (using EI, n_calls: 150)",Time Elapsed
+Random Forest Regression,"{'max_features': 8, 'n_estimators': 196}",404.91s
+KNeighbors Regression,"{'n_neighbors': 3, 'algorithm': 'auto'}",120.75s
+Extra Trees Regression,{'n_estimators': 62},358.52s
