@@ -265,3 +265,16 @@ Documents daily work in the REU program, including events, meetings, and broad d
 
 </details>
 <br>
+
+<details>
+<summary><font size=5>Week 9</font></summary>
+
+---
+
+## Monday, July 25th, 2022
+* **REU Weekly Meeting**
+* **Trained models based on bayesian optimization (in [code/training.ipynb](code/training.ipynb))**
+* **Worked on presentation and paper**
+
+</details>
+<br>
