@@ -275,6 +275,7 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **REU Weekly Meeting**
 * **Trained models based on bayesian optimization (in [code/training.ipynb](code/training.ipynb))**
 * **Worked on presentation and paper**
+* **Restructed code (moved results to seperate folder, renamed some files)**
 
 </details>
 <br>
