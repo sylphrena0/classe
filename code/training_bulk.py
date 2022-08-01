@@ -65,17 +65,17 @@ if args.optimized:
     ELASTIC_ARGS = {'alpha':1e-05, 'l1_ratio':0.0}
     BAYES_ARGS = {}
     SVR_ARGS = {'C':1, 'epsilon':10, 'gamma':'auto', 'kernel':'linear'}
-    RFR_ARGS = {'max_features': 'auto', 'n_estimators': 300}
+    RFR_ARGS = {'max_features': 10, 'n_estimators': 904}
     SP_ARGS = {'X': sfn.train_data}
     KNN_ARGS = {'metric':'manhattan', 'n_jobs':-1, 'n_neighbors':5}
     DT_ARGS = {'criterion':'poisson', 'max_features':0.5, 'random_state':43}
-    TREES_ARGS = {}
+    TREES_ARGS = {'n_estimators': 708}
 
     #defines the models in a list of pairs of lists. The first item in a pair is the top graph in a column, the second is the bottom. The last item of a model is to enable uncert calc
     models  =  ((("Elastic Net Regression", ElasticNet, ELASTIC_ARGS, args.uncert),   ("Decision Tree Regression", DecisionTreeRegressor, DT_ARGS, args.uncert)),
                 (("Bayesian Regression", BayesianRidge, BAYES_ARGS, args.uncert),     ("Random Forest Regression", RandomForestRegressor, RFR_ARGS, args.uncert)),
                 (("Support Vector Machines", SVR, SVR_ARGS, args.uncert),             ("Extra Trees Regression", ExtraTreesRegressor, TREES_ARGS, args.uncert)),
-                (("Superlearner", Superlearner, SP_ARGS, args.uncert),                ("KNeighbors Regression", KNeighborsRegressor, KNN_ARGS, args.uncert)))
+                (("Linear Regression", LinearRegression, {}, args.uncert),                ("KNeighbors Regression", KNeighborsRegressor, KNN_ARGS, args.uncert)))
 else:
     optimized = "Unoptimized"
 
