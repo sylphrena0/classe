@@ -150,4 +150,4 @@ for [enabled, model_name, regressor, parameters, fixed_params] in models: #optim
         print(f"Skipping {model_name} as it is not enabled.")
 
 result_df = pd.DataFrame(results, columns=("Model",f"Best Parameters (using {args.acq_funct}, n_calls: {args.n_calls})", "Time Elapsed"))
-result_df.to_csv(f'../data/optimizer_{args.acq_funct}.csv', index=False) #saves data to './optimize_results.csv'
+result_df.to_csv(f'../results/optimization/optimizer_{args.acq_funct}.csv', index=False) #saves data to './optimize_results.csv'

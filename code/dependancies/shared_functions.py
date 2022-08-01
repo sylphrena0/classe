@@ -38,7 +38,7 @@ def syncdir():
 ################################################
 ############ Define Import Function ############
 ################################################
-def import_data(filename="supercon_features.csv", replace_inf=False, drop=None, split=True):
+def import_data(filename="features.csv", replace_inf=False, drop=None, split=True):
     '''
     Imports the data from get_featurizers. Drop argument can be a list of columns to drop or a string like
     '''
@@ -141,9 +141,9 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
         plt.legend()
         plt.colorbar().set_label(label="Difference from Actual (K)", color='white') #using .set_label() as colorbar() does accept color arguments
         if image:
-            plt.savefig(f'../data/indvidual_results/{save_name}.png', bbox_inches='tight')
+            plt.savefig(f'../results/indvidual/{save_name}.png', bbox_inches='tight')
         if csv:
-            results.to_csv(f'../data/indvidual_results/{save_name}.csv', index=False)
+            results.to_csv(f'../results/indvidual/{save_name}.csv', index=False)
         if show:
             plt.show()
         plt.clf()
@@ -216,7 +216,7 @@ def evaluate(models, title, filename='results', method="plus", forestci=False, i
 
         fig.colorbar(im, ax=ax.ravel().tolist()).set_label(label="Difference from Actual (K)", color='white') #using .set_label() as colorbar() does accept color arguments
         if image:
-            plt.savefig(f'../data/{filename}.png', bbox_inches='tight')
+            plt.savefig(f'../results/{filename}.png', bbox_inches='tight')
         if csv:
-            results.to_csv(f'../data/{filename}.csv', index=False)
+            results.to_csv(f'../results/{filename}.csv', index=False)
         plt.show()

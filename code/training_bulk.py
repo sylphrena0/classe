@@ -2,7 +2,7 @@
 ##### Superconductivity Regression Notebook #####
 #################################################
 # Trains models to predict critical temperatures based on features found with "*../code/get_featurizers.ipynb*". 
-# Imports data from "*../data/supercon_feat.csv*", which is produced in *get_featurizers.ipynb*. 
+# Imports data from "*../data/features.csv*", which is produced in *get_featurizers.ipynb*. 
 # The orginal data is from the supercon database. This notebook is for testing single models.
 # Compute-Farm version
 # Author: Kirk Kleinsasser
@@ -42,7 +42,7 @@ from dependancies.superlearner import get_superlearner as Superlearner
 ###################################################
 # %% 
 parser = argparse.ArgumentParser(description="A program that trains regression models for predicting superconductor critical temperatures.")
-parser.add_argument('-fn', '--filename', action='store', default="supercon_features.csv", dest='filename', help='Select file to train models from /data/. Default is supercon_features.csv.')
+parser.add_argument('-fn', '--filename', action='store', default="features.csv", dest='filename', help='Select file to train models from /data/. Default is supercon_features.csv.')
 parser.add_argument('-o', '--optimized', action='store_true', default=False, dest='optimized', help='Boolean to enable/disable using optimized models. Defaults to True')
 parser.add_argument('-u', '--uncert', action='store_true', default=True, dest='uncert', help='Enbable/disable uncertainty. Default is enabled.')
 parser.add_argument('-um', '--uncertmethod', action='store', default="plus", dest='method', help='Select uncertainty method for mapie. Default is plus.')

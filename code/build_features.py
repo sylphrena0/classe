@@ -1,8 +1,8 @@
 #################################################
 ##### Superconductivity Featurizer Notebook #####
 #################################################
-# This python file imports superconductivity compositions (stored in ../data/supercon.csv) and uses matminer to extract features  
-# and data from the composition. This data is then exported to ../data/supercon_features.csv, after which machine learning models 
+# This python file imports superconductivity compositions and uses matminer to extract features  
+# and data from the composition. This data is then exported to ../data/features.csv, after which machine learning models 
 # can be trained to predict the Tc of superconductors based on composition.
 #
 # Author: Kirk Kleinsasser
@@ -27,7 +27,7 @@ import dependancies.shared_functions as sfn
 sfn.syncdir() #ensures working directory is inside code on compute farm
 
 parser = argparse.ArgumentParser(description="A program that gets feature from composition of superconductor critical temperatures.")
-parser.add_argument('-f', '--file', action='store', default="supercon_dataset.csv", dest='filename', help='Specify filename to featurize. ')
+parser.add_argument('-f', '--file', action='store', default="dataset.csv", dest='filename', help='Specify filename to featurize. ')
 args = parser.parse_args()
 filename = args.filename
 
@@ -112,7 +112,7 @@ cohesive_en_mp_data = cohesive_en_mp.featurize_dataframe(composition, 'compositi
 all_feat = ea_aff_data
 for featurizer in [el_prop_data, met_frac_data, stoich_data, band_center_data, ox_states_data, ion_prop_data, en_diff_data, atom_orbitals_data, val_orbitals_data, atom_pack_eff_data, cohesive_en_data, cohesive_en_mp_data]:
     all_feat = pd.merge(all_feat, featurizer, how="left") #merges each featurizer with the main set, but drops any duplicate columns (otherwise we'd have many Tc and name columns)
-all_feat.to_csv('../data/supercon_features.csv') #export features for use in juypter
+all_feat.to_csv('../data/features.csv') #export features for use in juypter
 
 # dill.dump_session('../data/latest-run.db') #dump python session for external use
 
