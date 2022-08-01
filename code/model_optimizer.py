@@ -149,4 +149,4 @@ for [enabled, model_name, regressor, parameters, fixed_params] in models: #optim
         print(f"Skipping {model_name} as it is not enabled.")
 
 result_df = pd.DataFrame(results)
-result_df.to_csv('../data/optimize.results.csv', index=False) #saves data to './optimize_results.csv'
+result_df.to_csv('../data/optimize_gridsearch.csv', index=False) #saves data to './optimize_results.csv'
