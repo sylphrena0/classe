@@ -141,9 +141,9 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
         plt.legend()
         plt.colorbar().set_label(label="Difference from Actual (K)", color='white') #using .set_label() as colorbar() does accept color arguments
         if image:
-            plt.savefig(f'../results/indvidual/{save_name}.png', bbox_inches='tight')
+            plt.savefig(f'../results/individual/{save_name}.png', bbox_inches='tight')
         if csv:
-            results.to_csv(f'../results/indvidual/{save_name}.csv', index=False)
+            results.to_csv(f'../results/individual/{save_name}.csv', index=False)
         if show:
             plt.show()
         plt.clf()
