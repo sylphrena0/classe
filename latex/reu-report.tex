@@ -60,6 +60,12 @@ Finally, we tried multiple ensemble models - Random Forest Regression (RFR), Ext
 
 
 \section{Methodology}
+\subsection{Datasets}
+
+We chose to use one of the most popular experimental datasets, the supercon database from Japan's National Institute for Materials Science. This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. Unfortunately, the database is not currently available on their website for unspecified reasons, so we obtained the dataset from a github repository that used this data \cite{vstanev1_2018}. 
+
+In this dataset, there are 10,154 samples with a critical temperature below 10K and 6,210 samples above 10K. There are 159 samples with temperatures above 100K and 0 samples above 260K.
+
 \subsection{Code Structure} %MENTION PANDAS/NUMPY/ETC
 The source code used for this paper is available publicly on github at \url{https://github.com/sylphrena0/classe2022}. This repository also includes the source files for this latex paper, data files, images, and documentation files.
 
@@ -67,15 +73,9 @@ Our research uses numpy and pandas throughout our code to handle arrays and tabu
 
 The code is split into multiple python files so processes could be completed in stages and to maintain readability in the code. Most of our testing and final training was completed in juypter notebooks, but some computations were highly computationally expensive and needed to be run remotely. For these jobs, we created simple python files and made bash scripts to run them on Cornell's CLASSE compute farm. We also made several bash aliases and functions to simplify the compute farm workflow, which are also available on the github repository. 
 
-Since we used multiple files, we chose to create shared dependencies files where we defined functions to import data, train models, and generate our graphs. These files are then imported in all the relevant scripts to reduce redundancy.
+Since we used multiple files, we chose to create shared dependencies files where we defined functions to import data, train models, and generate our graphs. These files are then imported in all the relevant scripts to reduce redundancy. More detailed explainations of the purpose of each file is available in the github readme file and documentation within the files.
 
-\subsection{Datasets}
-
-We chose to use one of the most popular experimental datasets, the supercon database from Japan's National Institute for Materials Science. This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. Unfortunately, the database is not currently available on their website for unspecified reasons, so we obtained the dataset from a github repository that used this data \cite{vstanev1_2018}. 
-
-In this dataset, there are 10,154 samples with a critical temperature below 10K and 6,210 samples above 10K. There are 159 samples with temperatures above 100K and 0 samples above 260K.
-
-\subsection{Running the Code}
+\subsection{Code Evaluation}
 
 First, the featurizer script imports the dataset, extracts features from the material compositions, and exports the csv data. This script is one of the most computationally expensive and takes several hours to run on the CLASSE compute farm with 64 dedicated cores.
 
@@ -104,7 +104,7 @@ Our intial
 \onecolumngrid
 \begin{figure}[!htb]
    \centering
-   \includegraphics[scale=0.18]{../data/results_optimized.png}
+   \includegraphics[scale=0.18]{../results/results_optimized.png}
    \caption{Flowchart illustrating our matminer usage, modified from official matminer graphic \cite{WARD201860}.}
    \label{fig:results}
 \end{figure}
