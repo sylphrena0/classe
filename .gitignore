@@ -12,6 +12,7 @@ latex/*.xml
 latex/*.gz
 latex/*.fls
 latex/*Notes.bib
+latex/*.fdb_latexmk
 !latex/reu-report.tex
 !latex/reu-report.bib
 !latex/reu-report.pdf
