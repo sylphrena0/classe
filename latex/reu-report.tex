@@ -38,25 +38,30 @@ Unconventional superconductors are still not well understood and remain an open 
 
 
 \subsection{Matminer}
-Most superconducter databases do not include enough information to train an effective machine learning model, but such data can be extracted from the data they do provide. We use matminer to produce our features from the provided material data. Matminer is a python library that generates data from various measured properties of a material. Matminer collects existing calculations into a machine learning friendly python package. Our matminer workflow is shown in Figure~\ref{fig:matminer-flowchart}.
+Most superconducter databases do not include enough information to train an effective machine learning model, but such data can be extracted from the data they do provide. We use matminer to produce our features from the provided material data. Matminer is a python library that generates data from various measured properties of a material \cite{WARD201860}. Matminer collects existing calculations into a machine learning friendly python package. %Our matminer workflow is shown in Figure~\ref{fig:matminer-flowchart}.
 
-\begin{figure}[!htb]
-   \centering
-   \includegraphics[scale=0.25]{flowchart.png}
-   \caption{Flowchart illustrating our matminer usage, modified from official matminer graphic \cite{WARD201860}.}
-   \label{fig:matminer-flowchart}
-\end{figure}
+% \begin{figure}[!htb]
+%    \centering
+%    \includegraphics[scale=0.25]{flowchart.png}
+%    \caption{Flowchart illustrating our matminer usage, modified from official matminer graphic \cite{WARD201860}.}
+%    \label{fig:matminer-flowchart}
+% \end{figure}
 
 Our database only provides the superconductor composition data. Matminer's featurizers can generate 53 features from the composition of a material. If we had band structure or other data, we could produce more information that we could use in our model.
 
 \subsection{Machine Learning}
-Previous papers have used random forest models to predict critical temperature [citation needed], but this paper will examine eight models before settling on two for further investigation. All models are implemented with Scikit-Learn, with the notable exception of a mlens superlearner \cite{scikit-learn, flennerhag:2017mlens}. We will also use MAPIE models for uncertainty, discussed in Section~\ref{sec:uncertainty}. These models are described below. Each model's hyperparameters\footnote{Hyperparameters are machine learning parameters that change how a model is trained.} was optimized with Scikit-Learn's GridSearchCV, which tests combinations from a grid of hyperparameters and returns the best performing model based on a specified metric. 
+Previous papers have used random forest models to predict critical temperature [citation needed], but this paper will examine eight models before settling on two for further investigation. All models are implemented with Scikit-Learn, with the notable exception of a mlens superlearner \cite{scikit-learn, flennerhag:2017mlens}. We will also use MAPIE models for uncertainty, discussed in Section~\ref{sec:uncertainty}.
 
 We started our model search with some linear models. Besides the base Linear Regression model, we used linear (and polynomial) Support Vector Regression (SVR) models. SVR uses decision boundaries, which are lines parallel to the regression line. The model aims to maximize the amount of data within the decision boundaries and has hyperparamters to modify sensitivity to prevent overfitting.\footnote{Overfitting occurs when a model is trained to be too specific to a particular dataset and is not generalizable.} We also trialed Elastic Net and Bayesian Ridge models. Elastic Net uses L1 and L2 penalties to stabilize the model, and Bayesian Ridge uses probability distributors instead of point estimates.
 
 Additionally, we trialed Decision Tree and KNeighbors (KNN) models. Decision trees are very interpretable - they break predictions into nodes of the tree, eventually leading to a prediction value. These trees can be represented graphically and show how they produce results, unlike most machine learning models. KNN models are a little different, they store all the data and predict values based on a similarity measure. The model looks at a specified number of similar neighbors to produce a prediction.
 
 Finally, we tried multiple ensemble models - Random Forest Regression (RFR), Extra Trees, and a superlearner. RFR models use numerous decision trees and subsamples the data with replacement. This means that the model replace data after using it in a subset. Extra Trees is like RFR, but it does not replace the data after use in a subset. The final ensemble model we tested is a superlearner, a model that can combine multiple high-scoring Scikit-Learn model predictions and sometimes improve the performance from the individual models.
+
+\subsection{Model Optimization}
+Each model's hyperparameters\footnote{Hyperparameters are machine learning parameters that change how a model is trained.} were optimized with various optimization methods. To start, we used Scikit-Learn's GridSearchCV, which tests combinations from a grid of hyperparameters and returns the best performing model based on a specified metric. 
+
+We also implemented Bayesian optimization using Gaussian Processes methods from the Scikit-Optimize library \cite{head_tim_2021_5565057}. Bayesian optimization attempts to optimize models intelligently, instead of randomly testing specified hyperparameters. We provide a range of hyperparamters values for Bayesian optimization to test, and the algorithm uses acquisition functions to decide which specific values to use within the sepcified range. This is different from GridSearchCV, which is simplier but can take much longer to find optimial hyperparameters.
 
 
 \section{Methodology}
@@ -98,19 +103,24 @@ Lolo is a Scala random forest machine learning library and is not a native pytho
 
 \section{Results}
 
-\subsection{Initial Results}
+\subsection{Base Models}
 Our intial
 
-\onecolumngrid
-\begin{figure}[!htb]
-   \centering
-   \includegraphics[scale=0.18]{../results/results_optimized.png}
-   \caption{Flowchart illustrating our matminer usage, modified from official matminer graphic \cite{WARD201860}.}
-   \label{fig:results}
-\end{figure}
-\twocolumngrid
+\subsection{Cleaned Models}
+Our intial
+
+\subsection{Error Comparison}
+Our intial
+
+% \onecolumngrid
+% \begin{figure}[!htb]
+%    \centering
+%    \includegraphics[scale=0.35]{../results/results_optimized.png}
+%    \caption{Flowchart illustrating our matminer usage, modified from official matminer graphic \cite{WARD201860}.}
+%    \label{fig:results}
+% \end{figure}
+% \twocolumngrid
 
 \bibliographystyle{apsrev4-2}
 \bibliography{reu-report}
 \end{document}
-

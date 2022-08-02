@@ -1,19 +1,18 @@
 # Fdb version 3
-["bibtex reu-report"] 1659455625 "reu-report.aux" "reu-report.bbl" "reu-report" 1659455662
+["bibtex reu-report"] 1659456834 "reu-report.aux" "reu-report.bbl" "reu-report" 1659456835
   "/usr/share/texmf-dist/bibtex/bst/revtex/apsrev4-2.bst" 1650181511 69609 e9dea59f0e753ccda3ddc8f5806d846d ""
-  "reu-report.aux" 1659455662 4028 66ca8a0aad760cd5d966af12feb7ff20 "pdflatex"
-  "reu-report.bib" 1659455393 10477 c72b370e3d32e5182cc0f36d0e03489d ""
+  "reu-report.aux" 1659456834 3924 6369e164a963c557a6315e4d7b98e983 "pdflatex"
+  "reu-report.bib" 1659456306 10948 ca8323c04579541003f1d4c50670b5e4 ""
   "reu-reportNotes.bib" 0 -1 0 "pdflatex"
   (generated)
   "reu-report.bbl"
   "reu-report.blg"
-["pdflatex"] 1659455661 "/mnt/sda1/Documents/College/2022-23/0. Cornell/classe2022/latex/reu-report.tex" "reu-report.pdf" "reu-report" 1659455662
-  "../results/results_optimized.png" 1659389806 469428 48d8a3fd7b7b27b1613dff512b4861c0 ""
+["pdflatex"] 1659456834 "/mnt/sda1/Documents/College/2022-23/0. Cornell/classe2022/latex/reu-report.tex" "reu-report.pdf" "reu-report" 1659456835
   "/home/sylphrena/texmf/tex/latex/revtex-tds/tex/latex/revtex/aps10pt4-2.rtx" 1601852746 4720 0c32750dc3747430d8ac8496b3e78efb ""
   "/home/sylphrena/texmf/tex/latex/revtex-tds/tex/latex/revtex/aps4-2.rtx" 1601852746 16394 70d763ac62ae39970cd00e2bd57d0404 ""
   "/home/sylphrena/texmf/tex/latex/revtex-tds/tex/latex/revtex/revsymb4-2.sty" 1601852746 5568 c1023e561e6863a1ddb7cd695a7eb4ce ""
   "/home/sylphrena/texmf/tex/latex/revtex-tds/tex/latex/revtex/revtex4-2.cls" 1601852746 202588 252d8ad05b878c573f3e2adfc38ce076 ""
-  "/mnt/sda1/Documents/College/2022-23/0. Cornell/classe2022/latex/reu-report.tex" 1659455661 11215 8234fc4f89b2db4be35726157a6c15a3 ""
+  "/mnt/sda1/Documents/College/2022-23/0. Cornell/classe2022/latex/reu-report.tex" 1659456833 11950 96f253662e41b3aa2fad11fa537d4d0c ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1650183167 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1650183167 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1650183167 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -72,11 +71,10 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1650183167 39911 2da6c67557ec033436fe5418a70a8a61 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1657137279 4278762 af3ac1370db81a450c1118eabf1fe718 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1657137226 2927660 e2851ef43a749dc212a899eaf48a9c58 ""
-  "flowchart.png" 1657817309 100579 3d869c13ccb803d9a680cffe9d335875 ""
-  "reu-report.aux" 1659455662 4028 66ca8a0aad760cd5d966af12feb7ff20 "pdflatex"
-  "reu-report.bbl" 1659455625 14027 49ebae5382efc9a340cc0c8960bb16c6 "bibtex reu-report"
-  "reu-report.tex" 1659455661 11215 8234fc4f89b2db4be35726157a6c15a3 ""
-  "reu-report.toc" 1659455662 941 cb8dbba90e331652f4fc253c95f89bce "pdflatex"
+  "reu-report.aux" 1659456834 3924 6369e164a963c557a6315e4d7b98e983 "pdflatex"
+  "reu-report.bbl" 1659456834 14764 4fd6bd0453da8bf7e8208ef509e68921 "bibtex reu-report"
+  "reu-report.tex" 1659456833 11950 96f253662e41b3aa2fad11fa537d4d0c ""
+  "reu-report.toc" 1659456834 1142 00062f9ebdbc34c18e7820974f236d33 "pdflatex"
   (generated)
   "reu-report.aux"
   "reu-report.log"
