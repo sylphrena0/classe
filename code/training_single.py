@@ -74,7 +74,7 @@ models = (((args.LR, args.all), "Linear Regression", LinearRegression, {}),
             ((args.ELASTIC, args.all), "Elastic Net - Optimized", ElasticNet, {'alpha':1e-05, 'l1_ratio':0.0}),
             ((args.DT, args.all), "Decision Tree - Unoptimized", DecisionTreeRegressor, {}),
             ((args.DT, args.all), "Decision Tree - Optimized", DecisionTreeRegressor, {'criterion':'poisson', 'max_depth':5, 'max_features':0.5}),
-            ((args.RFR, args.all), "Random Forest Regression", RandomForestRegressor, {}),
+            ((args.RFR, args.all), "Random Forest", RandomForestRegressor, {}),
             ((args.LRFR,), "Random Forest - Lolopy", lolopy.learners.RandomForestRegressor, {}), #note that the all argument does not enable lolopy 
             ((args.KNN, args.all), "KNeighbors - Unoptimized", KNeighborsRegressor, {}),
             ((args.KNN, args.all), "KNeighbors - Optimized", KNeighborsRegressor, {'metric':'manhattan', 'n_jobs':-1, 'n_neighbors':8}),
