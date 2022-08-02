@@ -44,7 +44,7 @@ def import_data(filename="features.csv", replace_inf=False, drop=None, split=Tru
     '''
     global data, target, train_data, test_data, train_target, test_target #variables that we want to define globally (outside of this funtion)
     data = pd.DataFrame(pd.read_csv(f'../data/{filename}')) #loads data produced in get_featurizer.ipynb
-
+    np.random.seed(43)
     if replace_inf: #replaces values of infinity with NaN if replace_inf is True
         data.replace([np.inf, -np.inf], np.nan, inplace=True) 
 
@@ -72,6 +72,7 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
     """
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
     warnings.filterwarnings("ignore", category=FutureWarning)
+    np.random.seed(43)
     with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'}):
         plt.title(f"{model_name} - Prediction vs. Actual Value (CV)", color='white')
         regressor = model(**parameters)
@@ -150,6 +151,7 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
 
 def evaluate(models, title, filename='results', method="plus", forestci=False, image=True, csv=True): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
+    np.random.seed(43)
     with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'}): #use (1, 1, 1, 0) for figure.facecolor for transparent bg
         warnings.filterwarnings("ignore")
         fig, ax = plt.subplots(2, 4, sharey='row', figsize=(28,10))
