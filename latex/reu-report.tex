@@ -9,6 +9,8 @@
 %%
 \documentclass[twocolumn, nofootinbib, secnumarabic, amssymb, nobibnotes, aps, prd]{revtex4-2}
 \usepackage{graphicx}
+\usepackage{multirow}
+\usepackage[table,xcdraw]{xcolor}
 %\usepackage{acrofont}%NOTE: Comment out this line for the release version!
 \newcommand{\revtex}{REV\TeX\ }
 \newcommand{\classoption}[1]{\texttt{#1}}
@@ -59,10 +61,38 @@ Additionally, we trialed Decision Tree and KNeighbors (KNN) models. Decision tre
 Finally, we tried multiple ensemble models - Random Forest Regression (RFR), Extra Trees, and a superlearner. RFR models use numerous decision trees and subsamples the data with replacement. This means that the model replace data after using it in a subset. Extra Trees is like RFR, but it does not replace the data after use in a subset. The final ensemble model we tested is a superlearner, a model that can combine multiple high-scoring Scikit-Learn model predictions and sometimes improve the performance from the individual models.
 
 \subsection{Model Optimization}
-Each model's hyperparameters\footnote{Hyperparameters are machine learning parameters that change how a model is trained.} were optimized with various optimization methods. To start, we used Scikit-Learn's GridSearchCV, which tests combinations from a grid of hyperparameters and returns the best performing model based on a specified metric. 
+Each model's hyperparameters\footnote{Hyperparameters are machine learning parameters that change how a model is trained.} were optimized with various optimization methods. Optimization can be computationally expensive, so we chose to optimize on a randomly selected subset of 2,000 materials, using a numpy random state for reproducibility. To start, we used Scikit-Learn's GridSearchCV, which tests combinations from a grid of hyperparameters and returns the best performing model based on a specified metric. 
 
 We also implemented Bayesian optimization using Gaussian Processes methods from the Scikit-Optimize library \cite{head_tim_2021_5565057}. Bayesian optimization attempts to optimize models intelligently, instead of randomly testing specified hyperparameters. We provide a range of hyperparamters values for Bayesian optimization to test, and the algorithm uses acquisition functions to decide which specific values to use within the sepcified range. This is different from GridSearchCV, which is simplier but can take much longer to find optimial hyperparameters.
 
+\begin{table}[!ht]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{crcccc}
+\hline
+\multicolumn{1}{l}{\textbf{Model}}           & \multicolumn{1}{r}{\textbf{Optimizer}} & \textbf{R2}                   & \textbf{MSE}                    & \textbf{MAE}                  & \textbf{MWS}                   \\ \hline
+                               & Base Model                             & \cellcolor[HTML]{F4CCCC}0.807 & \cellcolor[HTML]{F4CCCC}140.482 & \cellcolor[HTML]{F4CCCC}5.791 & \cellcolor[HTML]{F4CCCC}53.135 \\
+                               & GridSearchCv                           & \cellcolor[HTML]{F4CCCC}0.804 & \cellcolor[HTML]{F4CCCC}142.524 & \cellcolor[HTML]{F4CCCC}5.816 & \cellcolor[HTML]{F4CCCC}52.416 \\
+                               & \textbf{Bayesian – PI}                 & \cellcolor[HTML]{D9EAD3}0.815 & \cellcolor[HTML]{D9EAD3}134.509 & \cellcolor[HTML]{D9EAD3}5.72  & \cellcolor[HTML]{D9EAD3}50.985 \\
+                               & Bayesian – EI                          & \cellcolor[HTML]{FCE5CD}0.814 & \cellcolor[HTML]{FCE5CD}135.267 & \cellcolor[HTML]{FCE5CD}5.763 & \cellcolor[HTML]{FCE5CD}51.533 \\
+\multirow{-5}{*}{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering Random Forest}}}} & Bayesian – gp\_hedge                   & \cellcolor[HTML]{D9EAD3}0.815 & \cellcolor[HTML]{D9EAD3}134.785 & \cellcolor[HTML]{D9EAD3}5.747 & \cellcolor[HTML]{D9EAD3}51.021 \\ \hline
+                               & Base Model                             & \cellcolor[HTML]{FCE5CD}0.818 & \cellcolor[HTML]{FCE5CD}132.395 & \cellcolor[HTML]{FCE5CD}5.214 & \cellcolor[HTML]{FCE5CD}48.153 \\
+                               & GridSearchCv                           & \cellcolor[HTML]{FCE5CD}0.818 & \cellcolor[HTML]{FCE5CD}132.374 & \cellcolor[HTML]{FCE5CD}5.215 & \cellcolor[HTML]{FCE5CD}48.231 \\
+                               & Bayesian – PI                          & \cellcolor[HTML]{FCE5CD}0.818 & \cellcolor[HTML]{FCE5CD}132.104 & \cellcolor[HTML]{FCE5CD}5.225 & \cellcolor[HTML]{FCE5CD}48.154 \\
+                               & Bayesian – EI                          & \cellcolor[HTML]{F4CCCC}0.816 & \cellcolor[HTML]{F4CCCC}133.5   & \cellcolor[HTML]{F4CCCC}5.257 & \cellcolor[HTML]{F4CCCC}48.757 \\
+\multirow{-5}{*}{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{1cm}{\centering Extra Trees}}}}  & \textbf{Bayesian – gp\_hedge}          & \cellcolor[HTML]{D9EAD3}0.819 & \cellcolor[HTML]{D9EAD3}131.783 & \cellcolor[HTML]{D9EAD3}5.202 & \cellcolor[HTML]{D9EAD3}47.732 \\ \hline
+                               & Base Model                             & \cellcolor[HTML]{FCE5CD}0.646 & \cellcolor[HTML]{FCE5CD}257.108 & \cellcolor[HTML]{F4CCCC}8.563 & \cellcolor[HTML]{FCE5CD}75.612 \\
+                               & \textbf{GridSearchCv}                  & \cellcolor[HTML]{D9EAD3}0.691 & \cellcolor[HTML]{D9EAD3}224.482 & \cellcolor[HTML]{D9EAD3}7.996 & \multicolumn{1}{l}{}           \\
+                               & Bayesian – PI                          & \cellcolor[HTML]{D9EAD3}0.652 & \cellcolor[HTML]{FCE5CD}253.137 & \cellcolor[HTML]{FCE5CD}8.201 & \cellcolor[HTML]{D9EAD3}74.177 \\
+                               & Bayesian – EI                          & \cellcolor[HTML]{D9EAD3}0.652 & \cellcolor[HTML]{FCE5CD}253.137 & \cellcolor[HTML]{FCE5CD}8.201 & \cellcolor[HTML]{D9EAD3}74.177 \\
+\multirow{-5}{*}{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering KNN}}}} & Bayesian – gp\_hedge                   & \cellcolor[HTML]{F4CCCC}0.566 & \cellcolor[HTML]{F4CCCC}315.238 & \cellcolor[HTML]{FCE5CD}8.159 & \cellcolor[HTML]{F4CCCC}84.546 \\ \hline
+\end{tabular}%
+}
+\caption{Comparison of optimization methods by model.}
+\label{tab:optimizers}
+\end{table}
+
+The performance of each optimizer on selected high performance models is show in Table~\ref{tab:optimizers}. Note that the optimial method for each model (shown in bold), was found with a different method each time. The Bayesian optimization was much less computationally expensive than GridSearchCV, however, and is the recommended method for large datasets.
 
 \section{Methodology}
 \subsection{Datasets}
@@ -120,6 +150,10 @@ Our intial
 %    \label{fig:results}
 % \end{figure}
 % \twocolumngrid
+
+\section{Conclusion}
+\subsection{Future Work}
+
 
 \bibliographystyle{apsrev4-2}
 \bibliography{reu-report}
