@@ -65,7 +65,15 @@ Finally, we tried multiple ensemble models - Random Forest Regression (RFR), Ext
 \subsection{Datasets}
 We chose to use one of the most popular experimental datasets, the supercon database from Japan's National Institute for Materials Science. This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. Unfortunately, the database is not currently available on their website for unspecified reasons, so we obtained the dataset from a github repository that used this data \cite{vstanev1_2018}. 
 
-In this dataset, there are 10,154 samples with a critical temperature below 10K and 6,210 samples above 10K. There are 159 samples with temperatures above 100K and 0 samples above 260K.
+In this dataset, there are 10,154 samples with a critical temperature below 10K and 6,210 samples above 10K. There are 159 samples with temperatures above 100K and 0 samples above 260K. A histogram represents this information graphically in Figure~\ref{fig:data-histogram}.
+
+ \begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\columnwidth]{dataset_histogram.png}
+    \caption{Critical temperature histogram of the dataset.}
+    \label{fig:data-histogram}
+ \end{figure}
+
 
 \subsection{Code Structure} %MENTION PANDAS/NUMPY/ETC
 The source code used for this paper is available publicly on github at \url{https://github.com/sylphrena0/classe2022}. This repository also includes the source files for this latex paper, data files, images, and documentation files.
@@ -132,6 +140,15 @@ The performance of each optimizer on selected high performance models is show in
 \label{tab:optimizers}
 \end{table}
 
+ \onecolumngrid
+ \begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.35]{../results/results_optimized.png}
+    \caption{Graph of optimized model predictions versus actual critical temperatures for each base model.}
+    \label{fig:results}
+ \end{figure}
+ \twocolumngrid
+
 \subsection{Base Models}
 Our numerical results are shown in Table~\ref{tab:results}.
 
@@ -174,15 +191,6 @@ Our intial
 
 \subsection{Feature Importance}
 Our intial
-
-% \onecolumngrid
-% \begin{figure}[!htb]
-%    \centering
-%    \includegraphics[scale=0.35]{../results/results_optimized.png}
-%    \caption{Flowchart illustrating our matminer usage, modified from official matminer graphic \cite{WARD201860}.}
-%    \label{fig:results}
-% \end{figure}
-% \twocolumngrid
 
 \section{Conclusion}
 \subsection{Future Work}
