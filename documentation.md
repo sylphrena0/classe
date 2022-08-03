@@ -282,5 +282,9 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Further work on presentation and powerpoint (mainly discussion of optimization)**
 * **Fixed random state to normalize results, reran training**
 
+## Tuesday, July 26th, 2022
+* **Further work on presentation and powerpoint (mainly intial results)**
+* **Added option to generate result plots without background (for the paper)**
+
 </details>
 <br>
