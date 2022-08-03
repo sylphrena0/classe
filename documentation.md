@@ -278,7 +278,7 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Restructed code (moved results to seperate folder, renamed some files)**
 * **Added explaination of filestructure and purpose of all files**
 
-## Monday, July 25th, 2022
+## Tuesday, July 26th, 2022
 * **Further work on presentation and powerpoint (mainly discussion of optimization)**
 * **Fixed random state to normalize results, reran training**
 
