@@ -21,17 +21,27 @@
 
 \begin{document}
 
-\title{Predicting Superconducting Critical Temperatures with Supervised Machine Learning}\thanks{This work is supported by the U.S. National Science Foundation under award number NSF PHY-2150125, REU Site: Accelerator Physics and Synchrotron Radiation Science.}
+%show just eight optimized models w/o error
+%comparison of base model, then cleaned - extra trees
+%
+
+\begin{abstract} % abstract, send to suchi to revise
+Abstract will be added here.
+\end{abstract}
+
+
+\title{Predicting Superconducting Critical Temperatures with Uncertainty Quantification using Supervised Machine Learning}
 
 \author{K. Kleinasser, Cornell University, Ithaca, NY}
 \altaffiliation{Lycoming College, Williamsport, PA}
 \email{klekirk@lycoming.edu}
 
 \maketitle
-\tableofcontents
+%\tableofcontents
 
 \section{Introduction}
-\subsection{Superconductors}
+\subsection{Superconductors} %get rid of subsections, bulletpoint types of models, incl. references
+%model discussions after dataset
 Superconductors are materials that lose all electrical resistance at low temperatures. These materials have a critical temperature ($T_C$) at which they lose their resistance. Most have very low critical temperatures, but “unconventional superconductors” can have critical temperatures as high as room temperature under non-atmospheric conditions. 
 
 Electrons in superconductors form Cooper Pairs below their critical temperature. These pairs of electrons are held together with phonouns, which are atomic-level collective excitations. Phonouns are similar to photons in that they also have particle-like properties \cite{rohlf_1994}.
@@ -68,9 +78,9 @@ We chose to use one of the most popular experimental datasets, the supercon data
 In this dataset, there are 10,154 samples with a critical temperature below 10K and 6,210 samples above 10K. There are 159 samples with temperatures above 100K and 0 samples above 260K. A histogram represents this information graphically in Figure~\ref{fig:data-histogram}.
 
  \begin{figure}[!htb]
-    \centering
+    \centering % add numbers to columns
     \includegraphics[width=\columnwidth]{dataset_histogram.png}
-    \caption{Critical temperature histogram of the dataset.}
+    \caption{Critical temperature histogram of the dataset.} %more info in caption
     \label{fig:data-histogram}
  \end{figure}
 
@@ -109,12 +119,12 @@ Lolo is a Scala random forest machine learning library and is not a native pytho
 \subsection{Model Optimization}
 Each model's hyperparameters\footnote{Hyperparameters are machine learning parameters that change how a model is trained.} were optimized with various optimization methods. Optimization can be computationally expensive, so we chose to optimize on a randomly selected subset of 2,000 materials, using a numpy random state for reproducibility. To start, we used Scikit-Learn's GridSearchCV, which tests combinations from a grid of hyperparameters and returns the best performing model based on a specified metric. 
 
-We also implemented Bayesian optimization using Gaussian Processes methods from the Scikit-Optimize library \cite{head_tim_2021_5565057}. Bayesian optimization attempts to optimize models intelligently, instead of randomly testing specified hyperparameters. We provide a range of hyperparamters values for Bayesian optimization to test, and the algorithm uses acquisition functions to decide which specific values to use within the sepcified range. This is different from GridSearchCV, which is simplier but can take much longer to find optimial hyperparameters. We only implemented Bayesian optimization on our top models.
+We also implemented Bayesian optimization using Gaussian Processes methods from the Scikit-Optimize library \cite{head_tim_2021_5565057}. Bayesian optimization attempts to optimize models intelligently, instead of randomly testing specified hyperparameters. We provide a range of hyperparamters values for Bayesian optimization to test, and the algorithm uses acquisition functions to decide which specific values to use within the specified range. This is different from GridSearchCV, which is simpler but can take much longer to find optimial hyperparameters. We only implemented Bayesian optimization on our top models.
 
-The performance of each optimizer on selected high performance models is show in Table~\ref{tab:optimizers}. Note that the optimial method for each model (shown in bold), was found with a different method each time. The Bayesian optimization was much less computationally expensive than GridSearchCV, however, and is the recommended method for large datasets.
+The performance of each optimizer on selected high performance models is shown in Table~\ref{tab:optimizers}. Note that the optimal method for each model (shown in bold), was found with a different method each time. The Bayesian optimization was much less computationally expensive than GridSearchCV, however, and is the recommended method for large datasets.
 
-\begin{table}[!ht]
-\centering
+\begin{table}[!htb] %remove red and orange
+\centering 
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{crcccc}
 \hline
@@ -143,14 +153,14 @@ The performance of each optimizer on selected high performance models is show in
  \onecolumngrid
  \begin{figure}[!htb]
     \centering
-    \includegraphics[scale=0.35]{../results/results_optimized.png}
+    \includegraphics[scale=0.35]{results_optimized.png}
     \caption{Graph of optimized model predictions versus actual critical temperatures for each base model.}
     \label{fig:results}
  \end{figure}
  \twocolumngrid
 
 \subsection{Base Models}
-Our numerical results are shown in Table~\ref{tab:results}.
+Our base models provided good results and the top two models, Random Forest and Extra Trees, only improved their scores marginally with optimization. Our numerical results of the optimized and optimized models are shown in Table~\ref{tab:results}.
 
 % Please add the following required packages to your document preamble:
 % \usepackage{multirow}
@@ -195,7 +205,13 @@ Our intial
 \section{Conclusion}
 \subsection{Future Work}
 
+\begin{acknowledgments}
+I would like to thank my mentor, Suchismita Sarker, for her guidance and support with this project. This work is supported by the U.S. National Science Foundation under award number NSF PHY-2150125, REU Site: Accelerator Physics and Synchrotron Radiation Science.
+\end{acknowledgments}
 
 \bibliographystyle{apsrev4-2}
 \bibliography{reu-report}
+
+
+
 \end{document}
