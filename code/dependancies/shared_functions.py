@@ -76,7 +76,7 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
     with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'}):
         plt.title(f"{model_name} - Prediction vs. Actual Value (CV)", color='white')
         regressor = model(**parameters)
-        save_name = re.sub(" - | ", "_", re.sub("\(|\)", "", model_name)).lower() #first removes paranthesis, then replaces " - " or " " with underscores to make a nice savename
+        save_name = re.sub(" - | ", "_", re.sub("\(|\)", "", re.sub("$T_C$", "tc", model_name))).lower() #first removes paranthesis and redoes latex, then replaces " - " or " " with underscores to make a nice savename
         results = pd.DataFrame(columns=("model","mean_squared_error","mean_absolute_error","max_error","r2_score","mapie_eff_mean_width"))
 
         if uncertainty and not forestci and method != "prefit": #uncertainty calculations need magie training if not forestci/prefit mapie
