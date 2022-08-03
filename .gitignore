@@ -13,6 +13,7 @@ latex/*.gz
 latex/*.fls
 latex/*Notes.bib
 latex/*.fdb_latexmk
+latex/*.fuse*
 !latex/reu-report.tex
 !latex/reu-report.bib
 !latex/reu-report.pdf
