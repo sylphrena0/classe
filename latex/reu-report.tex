@@ -11,7 +11,7 @@
 \usepackage{graphicx}
 \usepackage{multirow}
 \usepackage[table,xcdraw]{xcolor}
-%\usepackage{acrofont}%NOTE: Comment out this line for the release version!
+
 \newcommand{\revtex}{REV\TeX\ }
 \newcommand{\classoption}[1]{\texttt{#1}}
 \newcommand{\macro}[1]{\texttt{\textbackslash#1}}
@@ -63,7 +63,6 @@ Finally, we tried multiple ensemble models - Random Forest Regression (RFR), Ext
 
 \section{Methodology}
 \subsection{Datasets}
-
 We chose to use one of the most popular experimental datasets, the supercon database from Japan's National Institute for Materials Science. This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. Unfortunately, the database is not currently available on their website for unspecified reasons, so we obtained the dataset from a github repository that used this data \cite{vstanev1_2018}. 
 
 In this dataset, there are 10,154 samples with a critical temperature below 10K and 6,210 samples above 10K. There are 159 samples with temperatures above 100K and 0 samples above 260K.
@@ -87,7 +86,7 @@ Next, the training\_single jupyter notebook or script can train individual model
 
 The optimizer script then uses a grid of manually defined hyperparameters to optimize models based on R2 score. This allowed significant improvements to baseline models. After optimization, the optimized models can be plotted in our single training notebook. After confirmation that the model is better than the baseline, the models can then be plotted together in a single graph using our bulk training notebook. 
 
-We evaluated our models using several metrics - R2 scores for regression evaluation, Mean Squared Error (MSE) and Mean Absolute Error (MAE) for error evaluation, and prediction intervals for uncertainty evaluation.
+We evaluated our models using several metrics - R2 scores (R2) for regression evaluation, Mean Squared Error (MSE) and Mean Absolute Error (MAE) for error evaluation, and MAPIE Effective Mean Widths (MWS) for uncertainty evaluation.
 
 \subsection{Uncertainty}\label{sec:uncertainty}
 Our evaluation functions can produce uncertainty calculations using forestci, mapie, or lolopy \cite{Polimis2017, Taquet2022, Hutchinson2022}. 
@@ -102,7 +101,7 @@ Lolo is a Scala random forest machine learning library and is not a native pytho
 \subsection{Model Optimization}
 Each model's hyperparameters\footnote{Hyperparameters are machine learning parameters that change how a model is trained.} were optimized with various optimization methods. Optimization can be computationally expensive, so we chose to optimize on a randomly selected subset of 2,000 materials, using a numpy random state for reproducibility. To start, we used Scikit-Learn's GridSearchCV, which tests combinations from a grid of hyperparameters and returns the best performing model based on a specified metric. 
 
-We also implemented Bayesian optimization using Gaussian Processes methods from the Scikit-Optimize library \cite{head_tim_2021_5565057}. Bayesian optimization attempts to optimize models intelligently, instead of randomly testing specified hyperparameters. We provide a range of hyperparamters values for Bayesian optimization to test, and the algorithm uses acquisition functions to decide which specific values to use within the sepcified range. This is different from GridSearchCV, which is simplier but can take much longer to find optimial hyperparameters.
+We also implemented Bayesian optimization using Gaussian Processes methods from the Scikit-Optimize library \cite{head_tim_2021_5565057}. Bayesian optimization attempts to optimize models intelligently, instead of randomly testing specified hyperparameters. We provide a range of hyperparamters values for Bayesian optimization to test, and the algorithm uses acquisition functions to decide which specific values to use within the sepcified range. This is different from GridSearchCV, which is simplier but can take much longer to find optimial hyperparameters. We only implemented Bayesian optimization on our top models.
 
 The performance of each optimizer on selected high performance models is show in Table~\ref{tab:optimizers}. Note that the optimial method for each model (shown in bold), was found with a different method each time. The Bayesian optimization was much less computationally expensive than GridSearchCV, however, and is the recommended method for large datasets.
 
@@ -123,7 +122,7 @@ The performance of each optimizer on selected high performance models is show in
                                & Bayesian – EI                          & \cellcolor[HTML]{F4CCCC}0.816 & \cellcolor[HTML]{F4CCCC}133.5   & \cellcolor[HTML]{F4CCCC}5.257 & \cellcolor[HTML]{F4CCCC}48.757 \\
 \multirow{-5}{*}{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{1cm}{\centering Extra Trees}}}}  & \textbf{Bayesian – gp\_hedge}          & \cellcolor[HTML]{D9EAD3}0.819 & \cellcolor[HTML]{D9EAD3}131.783 & \cellcolor[HTML]{D9EAD3}5.202 & \cellcolor[HTML]{D9EAD3}47.732 \\ \hline
                                & Base Model                             & \cellcolor[HTML]{FCE5CD}0.646 & \cellcolor[HTML]{FCE5CD}257.108 & \cellcolor[HTML]{F4CCCC}8.563 & \cellcolor[HTML]{FCE5CD}75.612 \\
-                               & \textbf{GridSearchCv}                  & \cellcolor[HTML]{D9EAD3}0.691 & \cellcolor[HTML]{D9EAD3}224.482 & \cellcolor[HTML]{D9EAD3}7.996 & \multicolumn{1}{l}{}           \\
+                               & \textbf{GridSearchCv}                  & \cellcolor[HTML]{D9EAD3}0.703 & \cellcolor[HTML]{D9EAD3}216.186 & \cellcolor[HTML]{D9EAD3}7.515 & \cellcolor[HTML]{D9EAD3}69.758 \\
                                & Bayesian – PI                          & \cellcolor[HTML]{D9EAD3}0.652 & \cellcolor[HTML]{FCE5CD}253.137 & \cellcolor[HTML]{FCE5CD}8.201 & \cellcolor[HTML]{D9EAD3}74.177 \\
                                & Bayesian – EI                          & \cellcolor[HTML]{D9EAD3}0.652 & \cellcolor[HTML]{FCE5CD}253.137 & \cellcolor[HTML]{FCE5CD}8.201 & \cellcolor[HTML]{D9EAD3}74.177 \\
 \multirow{-5}{*}{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering KNN}}}} & Bayesian – gp\_hedge                   & \cellcolor[HTML]{F4CCCC}0.566 & \cellcolor[HTML]{F4CCCC}315.238 & \cellcolor[HTML]{FCE5CD}8.159 & \cellcolor[HTML]{F4CCCC}84.546 \\ \hline
@@ -133,14 +132,47 @@ The performance of each optimizer on selected high performance models is show in
 \label{tab:optimizers}
 \end{table}
 
-
 \subsection{Base Models}
-Our intial
+Our numerical results are shown in Table~\ref{tab:results}.
+
+% Please add the following required packages to your document preamble:
+% \usepackage{multirow}
+% \usepackage{graphicx}
+\begin{table}[!hbt]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{clcccc}
+\hline
+\multicolumn{1}{l}{}                                                                                 & \textbf{Model}                    & \multicolumn{1}{l}{\textbf{R2}} & \multicolumn{1}{l}{\textbf{MSE}} & \multicolumn{1}{l}{\textbf{MAE}} & \multicolumn{1}{l}{\textbf{MWS}} \\ \hline
+\multirow{8}{*}{\textbf{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering Unoptimized}}}}} & \textbf{Extra Trees Regression}   & 0.818                           & 132.395                          & 5.214                            & 48.153                           \\
+                                                                                                     & \textbf{Random Forest Regression} & 0.807                           & 140.482                          & 5.791                            & 53.135                           \\
+                                                                                                     & \textbf{KNeighbors Regression}    & 0.646                           & 257.108                          & 8.563                            & 75.612                           \\
+                                                                                                     & \textbf{Decision Tree Regression} & 0.644                           & 258.945                          & 6.886                            & 76.715                           \\
+                                                                                                     & \textbf{Bayesian Regression}      & 0.392                           & 441.925                          & 14.52                            & 90.7                             \\
+                                                                                                     & \textbf{Linear Regression}        & 0.392                           & 442.163                          & 14.506                           & 90.705                           \\
+                                                                                                     & \textbf{Elastic Net Regression}   & 0.328                           & 488.242                          & 15.603                           & 97.938                           \\
+                                                                                                     & \textbf{Support Vector Machines}  & 0.084                           & 666.16                           & 15.511                           & 134.628                          \\ \hline
+\multirow{8}{*}{\textbf{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering Optimized}}}}}   & \textbf{Extra Trees Regression}   & 0.819                           & 131.624                          & 5.205                            & 48.088                           \\
+                                                                                                     & \textbf{Random Forest Regression} & 0.816                           & 133.87                           & 5.714                            & 50.759                           \\
+                                                                                                     & \textbf{KNeighbors Regression}    & 0.703                           & 216.186                          & 7.515                            & 69.758                           \\
+                                                                                                     & \textbf{Decision Tree Regression} & 0.664                           & 244.095                          & 7.152                            & 74.834                           \\
+                                                                                                     & \textbf{Elastic Net Regression}   & 0.392                           & 442.133                          & 14.487                           & 90.713                           \\
+                                                                                                     & \textbf{Bayesian Regression}      & 0.392                           & 441.925                          & 14.52                            & 90.7                             \\
+                                                                                                     & \textbf{Linear Regression}        & 0.392                           & 442.163                          & 14.506                           & 90.705                           \\
+                                                                                                     & \textbf{Support Vector Machines}  & 0.325                           & 490.661                          & 14.186                           & 106.946                          \\ \hline
+\end{tabular}%
+}
+\caption{CV scores of the models using all features and data, comparing optimized and base hyperparameters.}
+\label{tab:results}
+\end{table}
 
 \subsection{Cleaned Models}
 Our intial
 
 \subsection{Error Comparison}
+Our intial
+
+\subsection{Feature Importance}
 Our intial
 
 % \onecolumngrid
