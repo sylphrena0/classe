@@ -20,7 +20,7 @@ This program uses [matminer](https://hackingmaterials.lbl.gov/matminer/) to extr
  - [juypter-notebook](https://jupyter.org/)
 
 <details open>
-<summary><font size=4>Project Filestructure:</font></summary>
+<summary><font size=4>Project Filestructure:</font></summary> <!-- using template from https://stackoverflow.com/questions/19699059/representing-directory-file-structure-in-markdown-syntax -->
 
  ```
 root
