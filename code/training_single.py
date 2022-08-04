@@ -44,6 +44,7 @@ from dependancies.superlearner import get_superlearner as superlearner
 parser = argparse.ArgumentParser(description="A program that trains regression models for predicting superconductor critical temperatures.")
 parser.add_argument('-fn', '--filename', action='store', default="features.csv", dest='filename', help='Select file to train models from /data/. Default is supercon_features.csv.')
 parser.add_argument('-fi', '--featureimportance', action='store_true', dest='fi', help='Boolean option to enable exporting feature importance.')
+parser.add_argument('-c', '--csv', action='store_true', default=False, dest='csv', help='Boolean to enable/disable exporting csv with results. Defaults to False')
 parser.add_argument('-a', '--all', action='store_true', dest='all', help='Boolean option to enable all regression models. Overrides individual toggles. Does not include lolopy model.')
 parser.add_argument('-l', '--lr', action='store_true', dest='LR', help='Boolean option to enable the Linear Regression model.')
 parser.add_argument('-s', '--svr', action='store_true', dest='SVR', help='Boolean option to enable the Support Vector Machines (Poly) model.')
@@ -96,6 +97,6 @@ for [enabled, model_name, regressor, parameters] in models: #optimize enabled mo
     model_name += suffix
     if True in enabled: #if model is enabled or all models are enabled
         print(f'Starting training on {model_name}')
-        sfn.evaluate_one(model_name, regressor, parameters, image=True, export_feat_importance=args.fi)
+        sfn.evaluate_one(model_name, regressor, parameters, image=True, csv=args.csv, export_feat_importance=args.fi)
     else:
         print(f"Skipping {model_name} as it is not enabled.")
