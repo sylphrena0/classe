@@ -1,53 +1,53 @@
 Feature,Importance
-mean abs simul. packing efficiency,0.3273093089323711
-MagpieData mean NUnfilled,0.11527402089949774
-frac d valence electrons,0.037995976506100045
-0-norm,0.03656228052282724
-MagpieData mean MeltingT,0.026840437122775035
-MagpieData mean GSvolume_pa,0.02515294721879321
-2-norm,0.02439312528608957
-10-norm,0.021171576657565618
-MagpieData mean CovalentRadius,0.02051289530614895
-MagpieData mean NfUnfilled,0.020009237251606516
-MagpieData mean NpUnfilled,0.01978723185776698
-MagpieData mean NdUnfilled,0.01563823452589304
-MagpieData mean NdValence,0.01509696217461902
-mean simul. packing efficiency,0.01416181492838566
-dist from 1 clusters |APE| < 0.010,0.014066114391903896
-dist from 5 clusters |APE| < 0.010,0.01405138492585826
-avg d valence electrons,0.013817572611491863
-MagpieData mean AtomicWeight,0.013742240670205961
-frac s valence electrons,0.01310948933943622
-MagpieData mean Electronegativity,0.012815402807496589
-MagpieData mean SpaceGroupNumber,0.012433378879769846
-MagpieData mean NValence,0.012011661184427706
-band center,0.011758798587550669
-dist from 3 clusters |APE| < 0.010,0.01156002674829306
-MagpieData mean MendeleevNumber,0.011353129196550843
-MagpieData mean GSmagmom,0.011120115586166332
-3-norm,0.01068677596025987
-7-norm,0.01049977511087045
-MagpieData mean Row,0.009937429738705964
-MagpieData mean NsUnfilled,0.009816341588226583
-transition metal fraction,0.009802449444471898
-MagpieData mean Column,0.009665123049027051
-frac p valence electrons,0.008838454859630739
-MagpieData mean Number,0.007751093795661184
-MagpieData mean GSbandgap,0.007358716062091566
-MagpieData mean NsValence,0.006133851942153923
-5-norm,0.005656466227553278
-avg s valence electrons,0.005635875364745537
-avg p valence electrons,0.005072755614897025
-MagpieData mean NpValence,0.004839759999750121
-frac f valence electrons,0.003784230378179311
-HOMO_energy,0.002450489540231245
-MagpieData mean NfValence,0.0024358611487256985
-avg ionic char,0.0024299865328590233
-avg f valence electrons,0.002279516678107726
-LUMO_energy,0.001407549010864071
-max ionic char,0.0013485247002220225
-gap_AO,0.0002541152020598392
-compound possible,0.00016949393111505333
+mean abs simul. packing efficiency,0.32682091092572263
+MagpieData mean NUnfilled,0.11078815808765143
+0-norm,0.03672568844732911
+frac d valence electrons,0.03614582305064697
+MagpieData mean GSvolume_pa,0.026648413145285276
+MagpieData mean MeltingT,0.025963784805105836
+10-norm,0.024763895917784738
+2-norm,0.024095178324126543
+MagpieData mean CovalentRadius,0.02179316013643912
+MagpieData mean NfUnfilled,0.02022646209125173
+MagpieData mean NpUnfilled,0.019273091760381358
+MagpieData mean NdUnfilled,0.015518961375110798
+dist from 5 clusters |APE| < 0.010,0.014661056887880584
+mean simul. packing efficiency,0.014612953967471021
+MagpieData mean NdValence,0.014321215449743876
+dist from 1 clusters |APE| < 0.010,0.014045076948565098
+avg d valence electrons,0.013600461040899146
+MagpieData mean AtomicWeight,0.013520867502974527
+MagpieData mean SpaceGroupNumber,0.01289921522176648
+frac s valence electrons,0.012705958523401612
+MagpieData mean Electronegativity,0.012472846772012183
+band center,0.012387252983457017
+dist from 3 clusters |APE| < 0.010,0.011489425663571034
+7-norm,0.011442364074200713
+MagpieData mean NValence,0.011411585400071256
+MagpieData mean MendeleevNumber,0.011051905851199247
+3-norm,0.011037942265156123
+MagpieData mean GSmagmom,0.01092123276527075
+MagpieData mean Row,0.010048513576223696
+MagpieData mean NsUnfilled,0.00997686085602148
+transition metal fraction,0.009964708005853851
+MagpieData mean Column,0.009847346287134821
+frac p valence electrons,0.009047054624644788
+MagpieData mean Number,0.00789167786556809
+MagpieData mean GSbandgap,0.007532500951482307
+MagpieData mean NsValence,0.005974070777771066
+5-norm,0.005953671292328906
+avg s valence electrons,0.005754194352321407
+MagpieData mean NpValence,0.005406071998762205
+avg p valence electrons,0.00520945418141821
+frac f valence electrons,0.003742535254950202
+avg ionic char,0.0025484839380621386
+HOMO_energy,0.002444985901790914
+MagpieData mean NfValence,0.0021496664565697553
+avg f valence electrons,0.0020510240444786233
+max ionic char,0.0013999251350008063
+LUMO_energy,0.0013954371563482623
+gap_AO,0.00018819328253566464
+compound possible,0.00012873467625670903
 HOMO_character,0.0
 LUMO_element,0.0
 LUMO_character,0.0

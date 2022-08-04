@@ -1,0 +1,54 @@
+Feature,Importance
+mean abs simul. packing efficiency,0.32993929307254033
+MagpieData mean NUnfilled,0.11923575950853345
+frac d valence electrons,0.04544655290048827
+0-norm,0.03396714145910914
+MagpieData mean MeltingT,0.03261378689202658
+MagpieData mean NdValence,0.030728122438521223
+2-norm,0.02899211698734354
+MagpieData mean GSvolume_pa,0.02869803602654677
+MagpieData mean CovalentRadius,0.02801184473914126
+MagpieData mean NfUnfilled,0.02057661857304307
+MagpieData mean NpUnfilled,0.020431218733912914
+MagpieData mean AtomicWeight,0.016628873121513125
+MagpieData mean MendeleevNumber,0.016140010081036844
+frac p valence electrons,0.014210047998379133
+MagpieData mean GSmagmom,0.014164512241389635
+dist from 1 clusters |APE| < 0.010,0.013963641993296907
+MagpieData mean NValence,0.013358288888457342
+frac s valence electrons,0.01244476758489498
+3-norm,0.011950832290835949
+MagpieData mean NdUnfilled,0.011215297927605488
+transition metal fraction,0.010543216861747794
+mean simul. packing efficiency,0.010312774426487233
+MagpieData mean SpaceGroupNumber,0.010181734470827333
+avg d valence electrons,0.009998750964117314
+MagpieData mean GSbandgap,0.009529265562620777
+MagpieData mean NsValence,0.008528241646671578
+MagpieData mean NsUnfilled,0.008253387877481488
+10-norm,0.008114396904627879
+avg s valence electrons,0.007464349022451243
+MagpieData mean Row,0.007279987616182503
+MagpieData mean Electronegativity,0.006976784641097552
+dist from 5 clusters |APE| < 0.010,0.006932799318268227
+5-norm,0.006837410965554589
+dist from 3 clusters |APE| < 0.010,0.005805618876148549
+MagpieData mean Number,0.004871680944063901
+band center,0.004693612989466543
+MagpieData mean Column,0.004645866836094004
+avg p valence electrons,0.004231802300704144
+LUMO_energy,0.0037939527247920503
+frac f valence electrons,0.003513707641463725
+avg ionic char,0.003178860075343237
+7-norm,0.003051705718977274
+HOMO_energy,0.002521675061612948
+MagpieData mean NpValence,0.0018847439127536235
+MagpieData mean NfValence,0.001730767527278904
+max ionic char,0.0016460419675041879
+gap_AO,0.0005138787061055322
+avg f valence electrons,0.0002418853287837908
+compound possible,4.3356521560731594e-06
+HOMO_element,0.0
+LUMO_element,0.0
+LUMO_character,0.0
+HOMO_character,0.0
