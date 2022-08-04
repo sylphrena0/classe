@@ -106,7 +106,7 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
         elif export_feat_importance:
             warnings.warn("Cannot calculate feature importance, this model might not have feature_importances_, or you may be trying to run with uncertainty calculations, which is not supported.", category=Warning)
             
-    
+        mws = None #needed if uncertainty disabled
         mse = round(mean_squared_error(test_target, model_pred),3) #find mean square error
         mxe = round(max_error(test_target, model_pred),3)
         mae = round(mean_absolute_error(test_target, model_pred),3) #find mean square error
