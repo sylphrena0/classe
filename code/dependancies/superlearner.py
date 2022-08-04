@@ -27,12 +27,12 @@ from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error, m
 # create a list of base-models
 def get_models():
 	models = list()
-	models.append(SVR())
+	# models.append(SVR())
 	models.append(ElasticNet(alpha=1e-05, l1_ratio=0.0))
-	models.append(DecisionTreeRegressor())
+	# models.append(DecisionTreeRegressor())
 	models.append(RandomForestRegressor())
 	models.append(KNeighborsRegressor(metric='manhattan', n_jobs=-1, n_neighbors=8))
-	# models.append(ExtraTreesRegressor())
+	models.append(ExtraTreesRegressor())
 	# models.append(SGDRegressor(alpha=1000.0, loss='epsilon_insensitive', max_iter=1500, penalty='l1'))
 	# models.append(BayesianRidge(alpha_init=1.2, lambda_init=0.0001))
 
