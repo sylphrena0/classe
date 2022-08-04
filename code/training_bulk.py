@@ -44,6 +44,7 @@ from dependancies.superlearner import get_superlearner as Superlearner
 parser = argparse.ArgumentParser(description="A program that trains regression models for predicting superconductor critical temperatures.")
 parser.add_argument('-fn', '--filename', action='store', default="features.csv", dest='filename', help='Select file to train models from /data/. Default is supercon_features.csv.')
 parser.add_argument('-bc', '--background', action='store', default='#1e1e1e', dest='background', help='Set background color using matplotlib colors.')
+parser.add_argument('-db', '--database', action='store_true', default=False, dest='db', help='Boolean to enable/disable exporting database with results for graph manipluation, etc. Defaults to False')
 parser.add_argument('-o', '--optimized', action='store_true', default=False, dest='optimized', help='Boolean to enable/disable using optimized models. Defaults to True')
 parser.add_argument('-u', '--uncert', action='store_true', default=True, dest='uncert', help='Enbable/disable uncertainty. Default is enabled.')
 parser.add_argument('-um', '--uncertmethod', action='store', default="plus", dest='method', help='Select uncertainty method for mapie. Default is plus.')

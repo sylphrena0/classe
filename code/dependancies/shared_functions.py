@@ -14,6 +14,7 @@
 import warnings #to suppress grid search warnings
 import os
 import re #regex
+import dill
 import numpy as np 
 import pandas as pd
 import lolopy.learners #allows easy uncertainty
@@ -64,7 +65,7 @@ def import_data(filename="features.csv", replace_inf=False, drop=None, split=Tru
 ###############################################
 ######### Define Evaluation Functions #########
 ###############################################
-def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus", forestci=False, export_feat_importance=False, image=False, csv=False, show=True, maxexpected=135):
+def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus", forestci=False, export_feat_importance=False, image=False, background=True, csv=False, show=True, maxexpected=135):
     """
     Defines function that trains a model to predict critical temp and plots with metrics and optional uncertainty.
     Uncertainty and forestci arguments override method specifications. forestci is much faster than mapie and is only applicable to random forest models.
@@ -73,8 +74,10 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
     warnings.filterwarnings("ignore", category=FutureWarning)
     np.random.seed(43)
-    with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'}):
-        plt.title(f"{model_name} - Prediction vs. Actual Value (CV)", color='white')
+    rc_context_dict = {'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'} if background else {} #define rc_context dictionary
+    title_color = 'white' if background else 'black' #define color for text in graph
+    with plt.rc_context(rc_context_dict):
+        plt.title(f"{model_name} - Prediction vs. Actual Value (CV)", color=title_color)
         regressor = model(**parameters)
         save_name = re.sub(" - | ", "_", re.sub("\(|\)", "", re.sub("$T_C$", "tc", model_name))).lower() #first removes paranthesis and redoes latex, then replaces " - " or " " with underscores to make a nice savename
         results = pd.DataFrame(columns=("model","mean_squared_error","mean_absolute_error","max_error","r2_score","mapie_eff_mean_width"))
@@ -132,15 +135,15 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
 
         results.loc[len(results.index)] = (model_name,mse,mae,mxe,r2,mws)
         
-        plt.title(model_name, c='white')
-        plt.xlabel('Actual Value', c='white')
-        plt.ylabel('Prediction', c='white')
+        plt.title(model_name, c=title_color)
+        plt.xlabel('Actual Value', c=title_color)
+        plt.ylabel('Prediction', c=title_color)
         plt.annotate(f'R2: {r2}', xy = (0, -0.15), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
         plt.annotate(f'MWS: {mws}' if mws else f'MXE: {mxe}', xy = (0, -0.20), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
         plt.annotate(f'MAE: {mae}', xy = (1.0, -0.20), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MAE
         plt.annotate(f'MSE: {mse}', xy = (1.0, -0.15), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MSE
         plt.legend()
-        plt.colorbar().set_label(label="Difference from Actual (K)", color='white') #using .set_label() as colorbar() does accept color arguments
+        plt.colorbar().set_label(label="Difference from Actual (K)", color=title_color) #using .set_label() as colorbar() does accept color arguments
         if image:
             plt.savefig(f'../results/individual/{save_name}.png', bbox_inches='tight')
         if csv:
@@ -149,14 +152,16 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
             plt.show()
         plt.clf()
 
-def evaluate(models, title, filename='results', method="plus", forestci=False, image=True, csv=True): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
+def evaluate(models, title, filename='results', method="plus", forestci=False, image=True, background=True, csv=True, dumpdb=False): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
     np.random.seed(43)
-    with plt.rc_context({'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'}): #use (1, 1, 1, 0) for figure.facecolor for transparent bg
+    rc_context_dict = {'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'} if background else {} #define rc_context dictionary
+    title_color = 'white' if background else 'black' #define color for text in graph
+    with plt.rc_context(rc_context_dict):
         warnings.filterwarnings("ignore")
         fig, ax = plt.subplots(2, 4, sharey='row', figsize=(28,10))
         fig.subplots_adjust(hspace=0.35)
-        fig.suptitle(title, color='white', size=16)
+        fig.suptitle(title, color=title_color, size=16)
         results = pd.DataFrame(columns=("model","mean_squared_error","mean_absolute_error","max_error","r2_score","mapie_eff_mean_width"))
 
         for y, col in enumerate(models):
@@ -203,11 +208,14 @@ def evaluate(models, title, filename='results', method="plus", forestci=False, i
                         mws = round(regression_mws(model_pis[:,:,0][:,0],model_pis[:,:,0][:,1]),3) #generate mean width score metric from mapie data
                     ax[x, y].errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1) #removed ", label="Prediction Intervals", as it is covers other data for bulk plots 
 
+                if dumpdb:
+                    dill.dump_session(f'../results/bulk_{filename}.db') #dump python session for external use
+
                 results.loc[len(results.index)] = (model_name,mse,mae,mxe,r2,mws)
 
-                ax[x, y].set_title(model_name, c='white')
-                ax[x, y].set_ylabel('Prediction', c='white')
-                ax[x, y].set_xlabel('Actual Value', c='white')
+                ax[x, y].set_title(model_name, c=title_color)
+                ax[x, y].set_ylabel('Prediction', c=title_color)
+                ax[x, y].set_xlabel('Actual Value', c=title_color)
                 ax[x, y].annotate(f'R2: {r2}', xy = (0, -0.15), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
                 ax[x, y].annotate(f'MWS: {mws}' if mws else f'MXE: {mxe}', xy = (0, -0.20), xycoords='axes fraction', ha='left', va="center", fontsize=10) #add footnote with R2 
                 ax[x, y].annotate(f'MAE: {mae}', xy = (1.0, -0.20), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MAE
@@ -216,7 +224,7 @@ def evaluate(models, title, filename='results', method="plus", forestci=False, i
         handles, labels = ax[0,0].get_legend_handles_labels()
         fig.legend(handles=handles,loc='lower center')
 
-        fig.colorbar(im, ax=ax.ravel().tolist()).set_label(label="Difference from Actual (K)", color='white') #using .set_label() as colorbar() does accept color arguments
+        fig.colorbar(im, ax=ax.ravel().tolist()).set_label(label="Difference from Actual (K)", color=title_color) #using .set_label() as colorbar() does accept color arguments
         if image:
             plt.savefig(f'../results/{filename}.png', bbox_inches='tight')
         if csv:
