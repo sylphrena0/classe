@@ -65,7 +65,7 @@ def import_data(filename="features.csv", replace_inf=False, drop=None, split=Tru
 ###############################################
 ######### Define Evaluation Functions #########
 ###############################################
-def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus", forestci=False, export_feat_importance=False, image=False, background=True, csv=False, show=True, maxexpected=135):
+def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus", forestci=False, export_feat_importance=False, image=False, background=True, csv=False, show=True, verbose=True, dumpdb=False, maxexpected=135):
     """
     Defines function that trains a model to predict critical temp and plots with metrics and optional uncertainty.
     Uncertainty and forestci arguments override method specifications. forestci is much faster than mapie and is only applicable to random forest models.
@@ -78,6 +78,7 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
     title_color = 'white' if background else 'black' #define color for text in graph
     with plt.rc_context(rc_context_dict):
         plt.title(f"{model_name} - Prediction vs. Actual Value (CV)", color=title_color)
+        if verbose: print(f'Starting training on {model_name}') #print model name if verbose training enabled
         regressor = model(**parameters)
         save_name = re.sub(" - | ", "_", re.sub("\(|\)", "", re.sub("$T_C$", "tc", model_name))).lower() #first removes paranthesis and redoes latex, then replaces " - " or " " with underscores to make a nice savename
         results = pd.DataFrame(columns=("model","mean_squared_error","mean_absolute_error","max_error","r2_score","mapie_eff_mean_width"))
@@ -133,8 +134,12 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
                 mws = round(regression_mws(model_pis[:,:,0][:,0],model_pis[:,:,0][:,1]),3) #generate mean width score metric from mapie data
             plt.errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1, label="Prediction Intervals")
 
-        results.loc[len(results.index)] = (model_name,mse,mae,mxe,r2,mws)
-        
+        if dumpdb: dill.dump_session(f'../results/bulk_{filename}.db') #dump python session for external use
+
+        results_tuple = (model_name,mse,mae,mxe,r2,mws)
+        results.loc[len(results.index)] = results_tuple
+        if verbose: print(results_tuple) #print results if verbose enabled
+
         plt.title(model_name, c=title_color)
         plt.xlabel('Actual Value', c=title_color)
         plt.ylabel('Prediction', c=title_color)
@@ -144,15 +149,12 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
         plt.annotate(f'MSE: {mse}', xy = (1.0, -0.15), xycoords='axes fraction', ha='right', va="center", fontsize=10) #add footnote with MSE
         plt.legend()
         plt.colorbar().set_label(label="Difference from Actual (K)", color=title_color) #using .set_label() as colorbar() does accept color arguments
-        if image:
-            plt.savefig(f'../results/individual/{save_name}.png', bbox_inches='tight')
-        if csv:
-            results.to_csv(f'../results/individual/{save_name}.csv', index=False)
-        if show:
-            plt.show()
-        plt.clf()
+        if image: plt.savefig(f'../results/individual/{save_name}.png', bbox_inches='tight') #export image if enabled
+        if csv: results.to_csv(f'../results/individual/{save_name}.csv', index=False) #export csv if enabled
+        if show: plt.show() #show plot if enabled
+        plt.clf() #clear plot (added after some wierd script glitching)
 
-def evaluate(models, title, filename='results', method="plus", forestci=False, image=True, background=True, csv=True, dumpdb=False): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
+def evaluate(models, title, filename='results', method="plus", forestci=False, image=True, background=True, csv=True, dumpdb=False, verbose=True): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
     np.random.seed(43)
     rc_context_dict = {'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'} if background else {} #define rc_context dictionary
@@ -166,6 +168,7 @@ def evaluate(models, title, filename='results', method="plus", forestci=False, i
 
         for y, col in enumerate(models):
             for x, [model_name, model, parameters, uncert] in enumerate(col):
+                if verbose: print(f'Starting training on {model_name}') #print model name if verbose training enabled
                 regressor = model(**parameters)
                 if uncert and not forestci and method != "prefit": #error calculations need magie training if not forestci/prefit mapie
                     mapie_regressor = MapieRegressor(estimator=regressor, method=method) #unpacks model and params
@@ -208,10 +211,11 @@ def evaluate(models, title, filename='results', method="plus", forestci=False, i
                         mws = round(regression_mws(model_pis[:,:,0][:,0],model_pis[:,:,0][:,1]),3) #generate mean width score metric from mapie data
                     ax[x, y].errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1) #removed ", label="Prediction Intervals", as it is covers other data for bulk plots 
 
-                if dumpdb:
-                    dill.dump_session(f'../results/bulk_{filename}.db') #dump python session for external use
+                if dumpdb: dill.dump_session(f'../results/bulk_{filename}.db') #dump python session for external use
 
-                results.loc[len(results.index)] = (model_name,mse,mae,mxe,r2,mws)
+                results_tuple = (model_name,mse,mae,mxe,r2,mws)
+                results.loc[len(results.index)] = results_tuple
+                if verbose: print(results_tuple) #print results if verbose enabled
 
                 ax[x, y].set_title(model_name, c=title_color)
                 ax[x, y].set_ylabel('Prediction', c=title_color)
@@ -225,8 +229,6 @@ def evaluate(models, title, filename='results', method="plus", forestci=False, i
         fig.legend(handles=handles,loc='lower center')
 
         fig.colorbar(im, ax=ax.ravel().tolist()).set_label(label="Difference from Actual (K)", color=title_color) #using .set_label() as colorbar() does accept color arguments
-        if image:
-            plt.savefig(f'../results/{filename}.png', bbox_inches='tight')
-        if csv:
-            results.to_csv(f'../results/{filename}.csv', index=False)
-        plt.show()
+        if image: plt.savefig(f'../results/{filename}.png', bbox_inches='tight') #export image if enabled
+        if csv: results.to_csv(f'../results/{filename}.csv', index=False) #export csv if enabled
+        plt.show() #show plot
