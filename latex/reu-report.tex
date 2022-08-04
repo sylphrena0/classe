@@ -40,7 +40,7 @@ Abstract will be added here.
 %\tableofcontents
 
 \section{Introduction}
-\subsection{Superconductors} %get rid of subsections, bulletpoint types of models, incl. references
+%get rid of subsections, bulletpoint types of models, incl. references
 %model discussions after dataset
 Superconductors are materials that lose all electrical resistance at low temperatures. These materials have a critical temperature ($T_C$) at which they lose their resistance. Most have very low critical temperatures, but “unconventional superconductors” can have critical temperatures as high as room temperature under non-atmospheric conditions. 
 
@@ -49,8 +49,21 @@ Electrons in superconductors form Cooper Pairs below their critical temperature.
 Unconventional superconductors are still not well understood and remain an open question in Physics. Understanding them could lead to the discovery of superconducting materials stable at room temperature under atmospheric conditions. Such a material would have large implications, such as super efficient electricity transfer and vast efficiency improvements for applications like particle accelerators and power lines.
 
 
-\subsection{Matminer}
-Most superconducter databases do not include enough information to train an effective machine learning model, but such data can be extracted from the data they do provide. We use matminer to produce our features from the provided material data. Matminer is a python library that generates data from various measured properties of a material \cite{WARD201860}. Matminer collects existing calculations into a machine learning friendly python package. %Our matminer workflow is shown in Figure~\ref{fig:matminer-flowchart}.
+
+\section{Methodology}
+\subsection{Database}
+We chose to use one of the most popular experimental datasets, the supercon database from Japan's National Institute for Materials Science. This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. Unfortunately, the database is not currently available on their website for unspecified reasons, so we obtained the dataset from a github repository that used this data \cite{vstanev1_2018}. 
+
+In this dataset, there are 10,154 samples with a critical temperature below 10K and 6,210 samples above 10K. There are 159 samples with temperatures above 100K and 0 samples above 260K. A histogram represents this information graphically in Figure~\ref{fig:data-histogram}. Since most of this data is at low temperatures, we can expect less accuracy in our models for higher critical temperature superconductors.
+
+ \begin{figure}[!htb]
+    \centering % add numbers to columns
+    \includegraphics[width=\columnwidth]{dataset_histogram.png}
+    \caption{A histogram of critical temperatures in the dataset. Most superconductors are found at low temperatures and this dataset is representative of that.} %more info in caption
+    \label{fig:data-histogram}
+ \end{figure}
+
+Most superconductor databases do not include enough information to train an effective machine learning model, but such data can be extracted from the data they do provide. We use matminer to produce our features from the provided material data. Matminer is a python library that generates data from various measured properties of a material \cite{WARD201860}. Matminer collects existing calculations into a machine learning friendly python package. %Our matminer workflow is shown in Figure~\ref{fig:matminer-flowchart}.
 
 % \begin{figure}[!htb]
 %    \centering
@@ -62,28 +75,52 @@ Most superconducter databases do not include enough information to train an effe
 Our database only provides the superconductor composition data. Matminer's featurizers can generate 53 features from the composition of a material. If we had band structure or other data, we could produce more information that we could use in our model.
 
 \subsection{Machine Learning}
+
 Previous papers have used random forest models to predict critical temperature [citation needed], but this paper will examine eight models before settling on two for further investigation. All models are implemented with Scikit-Learn, with the notable exception of a mlens superlearner \cite{scikit-learn, flennerhag:2017mlens}. We will also use MAPIE models for uncertainty, discussed in Section~\ref{sec:uncertainty}.
 
-We started our model search with some linear models. Besides the base Linear Regression model, we used linear (and polynomial) Support Vector Regression (SVR) models. SVR uses decision boundaries, which are lines parallel to the regression line. The model aims to maximize the amount of data within the decision boundaries and has hyperparamters to modify sensitivity to prevent overfitting.\footnote{Overfitting occurs when a model is trained to be too specific to a particular dataset and is not generalizable.} We also trialed Elastic Net and Bayesian Ridge models. Elastic Net uses L1 and L2 penalties to stabilize the model, and Bayesian Ridge uses probability distributors instead of point estimates.
+We decided to test a variety of machine learning models to ensure we would find an optimal model. These models are listed below:
 
-Additionally, we trialed Decision Tree and KNeighbors (KNN) models. Decision trees are very interpretable - they break predictions into nodes of the tree, eventually leading to a prediction value. These trees can be represented graphically and show how they produce results, unlike most machine learning models. KNN models are a little different, they store all the data and predict values based on a similarity measure. The model looks at a specified number of similar neighbors to produce a prediction.
+\begin{itemize}
+  \item Linear Regression
+  \item Support Vector Regression (SVR)
+  \begin{itemize}
+  		\item  SVR makes predictions with decision boundaries, which are lines parallel to the regression line or curve. The model aims to maximize the amount of data within the decision boundaries and has hyperparameters to modify sensitivity to prevent overfitting.\footnote{Overfitting occurs when a model is trained to be too specific to a particular dataset and is not generalizable.}
+  \end{itemize}
+  \item Elastic Net
+  \begin{itemize}
+  		\item Elastic Net uses L1 and L2 penalties to stabilize a linear model.
+  \end{itemize}
+  \item Bayesian Ridge
+  \begin{itemize}
+  		\item Bayesian Ridge uses probability distributors instead of point estimates for a linear model.
+  \end{itemize}
+  \item Decision Tree
+  \begin{itemize}
+  		\item Decision trees are very interpretable - they break predictions into nodes of the tree, eventually leading to a prediction value. These trees can be represented graphically and show how they produce results, unlike most machine learning models.
+  \end{itemize}
+  \item KNeighbors (KNN)
+  \begin{itemize}
+  		\item KNN models are a little different, they store all the data and predict values based on a similarity measure. The model looks at a specified number of similar neighbors to produce a prediction.
+  \end{itemize}
+  \item Random Forest Regression (RFR)
+  \begin{itemize}
+  		\item RFR is an ensemble method that uses numerous decision trees and subsamples the data with replacement. This means that the model replace data after using it in a subset.
+  \end{itemize}
+  \item Extra Trees
+  \begin{itemize}
+  		\item Extra Trees is like RFR, but it does not replace the data after use in a subset.
+  \end{itemize}
+  \item Superlearner
+  \begin{itemize}
+  		\item Our superlearner is a mlens model that can combine multiple high-scoring Scikit-Learn model predictions and sometimes improve the performance from the individual models.
+  \end{itemize}
+\end{itemize}
 
-Finally, we tried multiple ensemble models - Random Forest Regression (RFR), Extra Trees, and a superlearner. RFR models use numerous decision trees and subsamples the data with replacement. This means that the model replace data after using it in a subset. Extra Trees is like RFR, but it does not replace the data after use in a subset. The final ensemble model we tested is a superlearner, a model that can combine multiple high-scoring Scikit-Learn model predictions and sometimes improve the performance from the individual models.
+%We started our model search with some linear models. Besides the base Linear Regression model, we used linear (and polynomial) Support Vector Regression (SVR) models. We also trialed Elastic Net and Bayesian Ridge models. , and Bayesian Ridge uses probability distributors instead of point estimates.
 
+%Additionally, we trialed Decision Tree and KNeighbors (KNN) models. Decision trees are very interpretable - they break predictions into nodes of the tree, eventually leading to a prediction value. These trees can be represented graphically and show how they produce results, unlike most machine learning models. KNN models are a little different, they store all the data and predict values based on a similarity measure. The model looks at a specified number of similar neighbors to produce a prediction.
 
-\section{Methodology}
-\subsection{Datasets}
-We chose to use one of the most popular experimental datasets, the supercon database from Japan's National Institute for Materials Science. This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. Unfortunately, the database is not currently available on their website for unspecified reasons, so we obtained the dataset from a github repository that used this data \cite{vstanev1_2018}. 
-
-In this dataset, there are 10,154 samples with a critical temperature below 10K and 6,210 samples above 10K. There are 159 samples with temperatures above 100K and 0 samples above 260K. A histogram represents this information graphically in Figure~\ref{fig:data-histogram}.
-
- \begin{figure}[!htb]
-    \centering % add numbers to columns
-    \includegraphics[width=\columnwidth]{dataset_histogram.png}
-    \caption{Critical temperature histogram of the dataset.} %more info in caption
-    \label{fig:data-histogram}
- \end{figure}
-
+%Finally, we tried multiple ensemble models - Random Forest Regression (RFR), Extra Trees, and a superlearner. RFR models use numerous decision trees and subsamples the data with replacement. This means that the model replace data after using it in a subset. Extra Trees is like RFR, but it does not replace the data after use in a subset. The final ensemble model we tested is a superlearner, a model that can combine multiple high-scoring Scikit-Learn model predictions and sometimes improve the performance from the individual models.
 
 \subsection{Code Structure} %MENTION PANDAS/NUMPY/ETC
 The source code used for this paper is available publicly on github at \url{https://github.com/sylphrena0/classe2022}. This repository also includes the source files for this latex paper, data files, images, and documentation files.
@@ -150,14 +187,14 @@ The performance of each optimizer on selected high performance models is shown i
 \label{tab:optimizers}
 \end{table}
 
- \onecolumngrid
- \begin{figure}[!htb]
+
+ \begin{figure*}[!htb] %star makes figure and caption span both columns
     \centering
-    \includegraphics[scale=0.35]{results_optimized.png}
+    \includegraphics[width=\textwidth]{results_optimized.png}
     \caption{Graph of optimized model predictions versus actual critical temperatures for each base model.}
     \label{fig:results}
- \end{figure}
- \twocolumngrid
+ \end{figure*}
+
 
 \subsection{Base Models}
 Our base models provided good results and the top two models, Random Forest and Extra Trees, only improved their scores marginally with optimization. Our numerical results of the optimized and optimized models are shown in Table~\ref{tab:results}.
