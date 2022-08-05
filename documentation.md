@@ -279,12 +279,19 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **Added explaination of filestructure and purpose of all files**
 
 ## Tuesday, July 26th, 2022
-* **Further work on presentation and powerpoint (mainly discussion of optimization)**
+* **Further work on presentation and paper (mainly discussion of optimization)**
 * **Fixed random state to normalize results, reran training**
 
-## Tuesday, July 26th, 2022
-* **Further work on presentation and powerpoint (mainly intial results)**
+## Wednesday, July 27th, 2022
+* **Further work on presentation and paper (mainly intial results)**
 * **Added option to generate result plots without background (for the paper)**
+
+## Thursday, July 28th, 2022
+* **Further work on presentation and paper**
+
+## Friday, July 29th, 2022
+* **Further work on presentation and paper**
+* **Generated new plots without background for paper**
 
 </details>
 <br>
