@@ -91,6 +91,7 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
                 mapie_regressor.fit(train_data, train_target) #fit the model
             model_pred, model_pis = mapie_regressor.predict(test_data, alpha=0.05) #make predictions on test data
         else: #no need for uncertainty calculations during training, use sklearn
+            warnings.filterwarnings("ignore", message="X has feature names, but DecisionTreeRegressor was fitted without feature names")
             if model_name in ("Superlearner", "Random Forest - Lolopy"): #need to get values for these models
                 regressor.fit(train_data.values, train_target.values) #fit the model
             else:
@@ -121,7 +122,7 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
                 raise NameError("RandomForestRegressor must be selected to use forestci")
             elif forestci:
                 model_unbiased = fci.random_forest_error(regressor, train_data, test_data, calibrate=False) #NOTE: forestci calibration is disabled as there is a bug in the code (they use a too small datatype)
-                yerror = np.sqrt(model_unbiased)
+                yerror = np.sqrt(np.abs(model_unbiased))
                 print(yerror.shape)
             elif method == "prefit":
                 raise NameError("Prefit method is not implemented in this program as our current implementation have error bars that do not align with the test data")
