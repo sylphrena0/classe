@@ -1,7 +1,5 @@
 code/dependancies/__pycache__
-latex/APS
-latex/jacow
-latex/mk
+latex/template
 latex/*.blg
 latex/*.bbl
 latex/*.aux

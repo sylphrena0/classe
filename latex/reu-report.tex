@@ -48,7 +48,7 @@ Electrons in superconductors form Cooper Pairs below their critical temperature.
 
 Unconventional superconductors are still not well understood and remain an open question in Physics. Understanding them could lead to the discovery of superconducting materials stable at room temperature under atmospheric conditions. Such a material would have large implications, such as super efficient electricity transfer and vast efficiency improvements for applications like particle accelerators and power lines.
 
-
+Introduce ML/uncertainty
 
 \section{Methodology}
 \subsection{Database}
@@ -58,7 +58,7 @@ In this dataset, there are 10,154 samples with a critical temperature below 10K 
 
  \begin{figure}[!htb]
     \centering % add numbers to columns
-    \includegraphics[width=\columnwidth]{dataset_histogram.png}
+    \includegraphics[width=\columnwidth]{images/dataset_histogram.png}
     \caption{A histogram of critical temperatures in the dataset. Most superconductors are found at low temperatures and this dataset is representative of that.} %more info in caption
     \label{fig:data-histogram}
  \end{figure}
@@ -156,7 +156,7 @@ Lolo is a Scala random forest machine learning library and is not a native pytho
 \subsection{Model Optimization}
 Each model's hyperparameters\footnote{Hyperparameters are machine learning parameters that change how a model is trained.} were optimized with various optimization methods. Optimization can be computationally expensive, so we chose to optimize on a randomly selected subset of 2,000 materials, using a numpy random state for reproducibility. To start, we used Scikit-Learn's GridSearchCV, which tests combinations from a grid of hyperparameters and returns the best performing model based on a specified metric. 
 
-We also implemented Bayesian optimization using Gaussian Processes methods from the Scikit-Optimize library \cite{head_tim_2021_5565057}. Bayesian optimization attempts to optimize models intelligently, instead of randomly testing specified hyperparameters. We provide a range of hyperparamters values for Bayesian optimization to test, and the algorithm uses acquisition functions to decide which specific values to use within the specified range. This is different from GridSearchCV, which is simpler but can take much longer to find optimial hyperparameters. We only implemented Bayesian optimization on our top models.
+We also implemented Bayesian optimization using Gaussian Processes methods from the Scikit-Optimize library \cite{head_tim_2021_5565057}. Bayesian optimization attempts to optimize models intelligently, instead of randomly testing specified hyperparameters. We provide a range of hyperparamters values for Bayesian optimization to test, and the algorithm uses acquisition functions to decide which specific values to use within the specified range. This is different from GridSearchCV, which is simpler but can take much longer to find optimal hyperparameters. We only implemented Bayesian optimization on our top models.
 
 The performance of each optimizer on selected high performance models is shown in Table~\ref{tab:optimizers}. Note that the optimal method for each model (shown in bold), was found with a different method each time. The Bayesian optimization was much less computationally expensive than GridSearchCV, however, and is the recommended method for large datasets.
 
@@ -187,16 +187,7 @@ The performance of each optimizer on selected high performance models is shown i
 \label{tab:optimizers}
 \end{table}
 
-
- \begin{figure*}[!htb] %star makes figure and caption span both columns
-    \centering
-    \includegraphics[width=\textwidth]{results_optimized.png}
-    \caption{Graph of optimized model predictions versus actual critical temperatures for each base model.}
-    \label{fig:results}
- \end{figure*}
-
-
-\subsection{Base Models}
+\subsection{Optimized Models}
 Our base models provided good results and the top two models, Random Forest and Extra Trees, only improved their scores marginally with optimization. Our numerical results of the optimized and optimized models are shown in Table~\ref{tab:results}.
 
 % Please add the following required packages to your document preamble:
@@ -230,14 +221,29 @@ Our base models provided good results and the top two models, Random Forest and 
 \label{tab:results}
 \end{table}
 
-\subsection{Cleaned Models}
-Our intial
+Our linear models performed poorly, with none of these models exceeding an R2 value of 0.4, and with MAE above 14K. Additionally, uncertainty is quite high for these models, with the confidence interval widths (MWS) exceeding 90K. The decision tree and KNeighbors models perform a little better, with R2 values around 0.65 and MAE around 7K. Our ensemble models stole the show—the extra trees model consistently performed the best, with an R2 value of 0.819, MAE around 5K, and confidence intervals around 50K. Random Forest had marginally worse R2 and MAE scores. These results are shown graphically in Figure~\ref{fig:results}.
 
-\subsection{Error Comparison}
-Our intial
+ \begin{figure*}[!htb] %star makes figure and caption span both columns
+    \centering
+    \includegraphics[width=\textwidth]{images/results_optimized.png}
+    \caption{Graph of optimized model predictions versus actual critical temperatures for each base model. The dotted line represents the optimal prediction for any given critical temperature.}
+    \label{fig:results}
+ \end{figure*}
+
+ \newpage
+As shown in Figure~\ref{fig:results}, the linear models do not make good predictions at high critical temperatures. All the linear models make very similar predictions - the ensemble methods and KNeighbors have better predictions and are less uniform.
+
+\subsection{Uncertainty Quantification}
+As discussed in Section~\ref{sec:uncertainty}, we quantified uncertainty for our predictions, mainly using MAPIE.
+
+\subsection{Uncertainty Models}
+As discussed in Section~\ref{sec:uncertainty}, we quantified uncertainty for our predictions, mainly using MAPIE.
+
+\subsection{Cleaned Models} %IMPORTANT - TODO: describe how data was cleaned / where the source is from
+Introduction/Description of how we cleaned data
 
 \subsection{Feature Importance}
-Our intial
+Our 
 
 \section{Conclusion}
 \subsection{Future Work}
