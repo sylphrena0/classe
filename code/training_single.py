@@ -58,6 +58,9 @@ parser.add_argument('-et', '--extratrees', action='store_true', dest='TREES', he
 parser.add_argument('-sgd', '--stochastic', action='store_true', dest='SGD', help='Boolean option to enable the Stochastic Gradient Descent model.')
 parser.add_argument('-by', '--bayes', action='store_true', dest='BAYES', help='Boolean option to enable the Bayesian Regression model.')
 parser.add_argument('-sp', '--super', action='store_true', dest='SUPER', help='Boolean option to enable the Superlearner model.')
+parser.add_argument('-u', '--uncert', action='store_false', default=True, dest='uncert', help='Disable uncertainty. Default is enabled.')
+parser.add_argument('-um', '--uncertmethod', action='store', default="plus", dest='method', help='Select uncertainty method for mapie. Default is plus.')
+parser.add_argument('-ci', '--forestci', action='store_true', default=False, dest='forestci', help='Boolean option to enable forestci uncertainty for random forests. Overrides --uncertmethod.')
 
 args = parser.parse_args()
 
@@ -71,11 +74,12 @@ sfn.import_data(filename=args.filename,replace_inf=True) #import data without in
 suffix = " (No Outliers)" if "_outliers" in args.filename else ""
 
 models = (((args.LR, args.all), "Linear Regression", LinearRegression, {}),
-            ((args.SVR, args.all), "Support Vector Regression - Linear", SVR, {'kernel':'rbf', 'C':100, 'epsilon':0.1, 'gamma':0.1, 'degree':1}),
+            ((args.SVR, args.all), "Support Vector Regression - Optimized", SVR, {}),
+            ((args.SVR, args.all), "Support Vector Regression - Optimized", SVR, {'kernel':'rbf', 'C':100, 'epsilon':0.1, 'gamma':0.1, 'degree':1}),
             ((args.ELASTIC, args.all), "Elastic Net - Unoptimized", ElasticNet, {}),
             ((args.ELASTIC, args.all), "Elastic Net - Optimized", ElasticNet, {'alpha':1e-05, 'l1_ratio':0.0}),
             ((args.DT, args.all), "Decision Tree - Unoptimized", DecisionTreeRegressor, {}),
-            ((args.DT, args.all), "Decision Tree - Optimized", DecisionTreeRegressor, {'criterion':'poisson', 'max_depth':5, 'max_features':0.5}),
+            ((args.DT, args.all), "Decision Tree - Optimized", DecisionTreeRegressor, {'criterion':'poisson', 'max_features':0.5, 'random_state':43}),
             ((args.RFR, args.all), "Random Forest", RandomForestRegressor, {}),
             ((args.RFR, args.all), "Random Forest - Optimized", RandomForestRegressor, {'max_features': 10, 'n_estimators': 904}),
             ((args.LRFR,), "Random Forest - Lolopy", lolopy.learners.RandomForestRegressor, {}), #note that the all argument does not enable lolopy 
@@ -99,6 +103,6 @@ for [enabled, model_name, regressor, parameters] in models: #optimize enabled mo
     model_name += suffix
     if True in enabled: #if model is enabled or all models are enabled
         print(f'Starting training on {model_name}')
-        sfn.evaluate_one(model_name, regressor, parameters, image=True, csv=args.csv, export_feat_importance=args.fi, background=args.background)
+        sfn.evaluate_one(model_name, regressor, parameters, image=True, csv=args.csv, export_feat_importance=args.fi, background=args.background, uncertainty=args.uncert, forestci=args.forestci, method=args.method)
     else:
         print(f"Skipping {model_name} as it is not enabled.")
