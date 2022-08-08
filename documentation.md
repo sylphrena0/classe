@@ -271,27 +271,40 @@ Documents daily work in the REU program, including events, meetings, and broad d
 
 ---
 
-## Monday, July 25th, 2022
+## Monday, August 1st, 2022
 * **REU Weekly Meeting**
 * **Trained models based on bayesian optimization (in [code/training.ipynb](code/training.ipynb))**
 * **Worked on presentation and paper**
 * **Restructed code (moved results to seperate folder, renamed some files)**
 * **Added explaination of filestructure and purpose of all files**
 
-## Tuesday, July 26th, 2022
+## Tuesday, August 2nd, 2022
 * **Further work on presentation and paper (mainly discussion of optimization)**
 * **Fixed random state to normalize results, reran training**
 
-## Wednesday, July 27th, 2022
+## Wednesday, August 3rd, 2022
 * **Further work on presentation and paper (mainly intial results)**
 * **Added option to generate result plots without background (for the paper)**
 
-## Thursday, July 28th, 2022
+## Thursday, August 4th, 2022
 * **Further work on presentation and paper**
 
-## Friday, July 29th, 2022
+## Friday, August 5th, 2022
 * **Further work on presentation and paper**
 * **Generated new plots without background for paper**
+
+</details>
+<br>
+
+<details>
+<summary><font size=5>Week 9</font></summary>
+
+---
+
+## Monday,  August 8th, 2022
+* **REU Weekly Meeting**
+* **Generated Random Forest Models with other MAPIE methods**
+* **Worked on presentation and paper**
 
 </details>
 <br>
