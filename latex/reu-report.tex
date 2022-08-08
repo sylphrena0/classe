@@ -239,16 +239,17 @@ Our base models provided good results and the top two models, Random Forest and 
 
 Our linear models performed poorly, with none of these models exceeding an R2 value of 0.4, and with MAE above 14K. Additionally, uncertainty is quite high for these models, with the confidence interval widths (MWS) exceeding 90K. The decision tree and KNeighbors models perform a little better, with R2 values around 0.65 and MAE around 7K. Our ensemble models stole the show—the extra trees model consistently performed the best, with an R2 value of 0.819, MAE around 5K, and confidence intervals around 50K. Random Forest had marginally worse R2 and MAE scores. These results are shown graphically in Figure~\ref{fig:results}.
 
+\null
+\newpage
 As shown in Figure~\ref{fig:results}, the linear models do not make good predictions at high critical temperatures. All the linear models make very similar predictions - the ensemble methods and KNeighbors have better predictions and are less uniform.
 
-\subsection{Comparing Uncertainty}
-As discussed in Section~\ref{sec:uncertainty}, we quantified uncertainty for our predictions, mainly using MAPIE. Since our other uncertainty libraries only work for Random Forest Models, we used MAPIE to evaluate our models. We trained a Random Forest Model model with ForestCI to compare with MAPIE methods of uncertainty quantification. These models are shown in Figure~\ref{fig:mapie-forestci}.
+\clearpage %this fixes some nightmares with figures that span columns and column text being teleported to different pages
 
 \onecolumngrid
 \begin{figure*}[!ht] %star makes figure and caption span both columns
       \centering
-      \includegraphics[height=2.23in]{images/subfigures/random_forest_optimized_forestci.png} %\nolinebreak
-      \includegraphics[height=2.23in]{images/subfigures/random_forest_optimized_mapie-naive.png}
+      \includegraphics[height=2.23in]{images/subfigures/random_forest_optimized_forestci.png} \nolinebreak
+      \includegraphics[height=2.23in]{images/subfigures/random_forest_optimized_mapie-naive.png} \nolinebreak
       \includegraphics[height=2.23in]{images/subfigures/random_forest_optimized_mapie-plus.png}
       % \includegraphics[height=2.23in]{images/subfigures/random_forest_optimized_mapie-base.png} %\nolinebreak
       % \includegraphics[height=2.23in]{images/subfigures/random_forest_optimized_mapie-minmax.png}
@@ -258,18 +259,22 @@ As discussed in Section~\ref{sec:uncertainty}, we quantified uncertainty for our
 \twocolumngrid
 
 
+\subsection{Comparing Uncertainty}
+As discussed in Section~\ref{sec:uncertainty}, we quantified uncertainty for our predictions, mainly using MAPIE. Since our other uncertainty libraries only work for Random Forest Models, we used MAPIE to evaluate our models. We trained a Random Forest Model model with ForestCI to compare with MAPIE methods of uncertainty quantification. These models are shown in Figure~\ref{fig:mapie-forestci}.
 
 
 % \newpage
 
 %TODO: compare with other MAPIE methods when complete - if none are similar, look at paper if I have time (finish results/abstract/presentation before that)
 
+\clearpage
+
 \subsection{Uncertainty Models}
 Since MAPIE is model agnostic, we have uncertainty predictions for all our models. We discussed our chosen MAPIE numerical uncertainty metric in Section~\ref{sec:optimized-models}, but we can also represent the prediction interval graphically, showing the prediction interval for each predicted point. This is shown in Figure~\ref{fig:results-uncertainty}.
 
 \onecolumngrid
 \vspace*{\fill}
- \begin{figure*}[!htb] %star makes figure and caption span both columns
+ \begin{figure*}[!t] %star makes figure and caption span both columns
     \centering
     \includegraphics[height=2.23in]{images/subfigures/uncertainty/elastic_net_optimized.png}
     \includegraphics[height=2.23in]{images/subfigures/uncertainty/bayesian_regression_optimized.png}
