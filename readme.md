@@ -48,10 +48,10 @@ root
 │       │   ...
 │
 └───data    ~  contains datasets, features, and various generated files about the data - feature files include target
-│   │   dataset.csv                 ~ superconducter database from vstanev1/Supercon
-│   │   dataset_no_outliers.csv     ~ superconductor database, removing outliers from the data
-│   │   features.csv                ~ features for training, generated from dataset with ../code/build_features.py
-│   │   features_no_outliers.csv    ~ features for training using data without outliers
+│   │   dataset.csv                 ~ superconducter database from Stanev2018
+│   │   dataset_hamidieh.csv        ~ superconductor database, cleaned - https://arxiv.org/pdf/1803.10260.pdf
+│   │   features.csv                ~ features for training, generated from Stanev2018 dataset with ../code/build_features.py
+│   │   features_hamidieh.csv       ~ features for training using data from https://arxiv.org/pdf/1803.10260.pdf
 │   │   dataset_histogram.png       ~ histogram of critical tempurtures in the dataset
 │   │   feature_heatmap.png         ~ heatmap of the correlations between features and the target
 │   │   feature_histograms.png      ~ histograms of all the features in the data

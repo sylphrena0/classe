@@ -59,7 +59,7 @@ args = parser.parse_args()
 sfn.syncdir() #ensures working directory is inside code on compute farm
 sfn.import_data(filename=args.filename,replace_inf=True) #import data without infinities
 
-suffix = " (No Outliers) " if "_outliers" in args.filename else ""
+suffix = " (Hamidieh 2018) " if "_hamidieh" in args.filename else ""
 
 if args.optimized:
     optimized = "Optimized"
