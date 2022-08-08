@@ -305,6 +305,16 @@ Documents daily work in the REU program, including events, meetings, and broad d
 * **REU Weekly Meeting**
 * **Generated Random Forest Models with other MAPIE methods**
 * **Worked on presentation and paper**
+* **Rerunning all models, dropping materials with Tc=0**
+
+<!-- 
+TODO:   Finish reruning code
+            - compute training_single.py --all --csv --background (running)
+            - compute training_single.py --all --csv
+            - compute training_single.py --all --csv --uncert
+            - compute training_single.py --all --csv --uncert --background
+
+ -->
 
 </details>
 <br>
