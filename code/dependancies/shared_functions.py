@@ -39,7 +39,7 @@ def syncdir():
 ################################################
 ############ Define Import Function ############
 ################################################
-def import_data(filename="features.csv", replace_inf=False, drop=None, split=True):
+def import_data(filename="features.csv", replace_inf=False, drop_undef_tc=True, drop=None, split=True):
     '''
     Imports the data from get_featurizers. Drop argument can be a list of columns to drop or a string like
     '''
@@ -51,12 +51,13 @@ def import_data(filename="features.csv", replace_inf=False, drop=None, split=Tru
 
     #TODO: debug feaurizers - NaN is entered when there is an error in the featurizer
     data.drop(['name','Unnamed: 0', 'composition'], axis=1, inplace=True) #drop columns irrelevant to training
-    if drop is not None:
-        data.drop(drop, axis=1, inplace=True) #drop columns, if specified
+    if drop is not None: data.drop(drop, axis=1, inplace=True) #drop columns, if specified
     data = data[data.columns[data.notnull().any()]] #drop columns that are entirely NaN (12 columns) 
 
     for col in data: #replaces NaN with zeros
-        data[col] = pd.to_numeric(data[col], errors ='coerce').fillna(0).astype('float')
+        data[col] = pd.to_numeric(data[col], errors='coerce').fillna(0).astype('float')
+
+    if drop_undef_tc: data.drop(data[data['Tc'] == 0].index, inplace=True) #drop Tc = 0 from data (materials without a recorded Tc)
 
     if split: #this is for our feature anaylsis notebook. to drop data based on Tc without a mess of operator if-elif statements, we need to not pop Tc or split our data yet
         target = data.pop('Tc') #remove target (critical temp) from data
