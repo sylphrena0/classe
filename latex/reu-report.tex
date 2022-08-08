@@ -125,7 +125,9 @@ Our evaluation functions can produce uncertainty calculations using forestci, ma
 
 Forestci is python implementation of an algorithm from \cite{Wager2014} that predicts confidence intervals for random forest models. It is the fastest of the uncertainty methods listed. 
 
-The Model Agnostic Prediction Interval Estimator (MAPIE) python library is more recent implementation of jackknife based on \cite{Foygel2020}. MAPIE uses various resampling methods. Most methods require the use of MAPIE's own MapieRegressor, which accepts an Scikit-Learn regressor and keeps track of uncertainty as the model is trained. MAPIE also has a prefit method, but it is difficult to extract uncertainty bars for individual points from this data - it splits a celebration set off the test set to generate uncertainty, so it can't be easily added to our plot of test set predictions. Thus, we will only compare the normal MAPIE methods with the other libraries. MAPIE trains much slower than other models, particularly on our superlearner, but it is still considerably faster than our final uncertainty model, lolopy.
+The Model Agnostic Prediction Interval Estimator (MAPIE) python library is more recent implementation of jackknife based on \cite{Foygel2020}. MAPIE uses various resampling methods. Most methods require the use of MAPIE's own MapieRegressor, which accepts an Scikit-Learn regressor and keeps track of uncertainty as the model is trained. We chose to use the MAPIE-plus method, which is based of the Jackknife+ algorithm. This is the default uncertainty method for MAPIE and is recommended by the developers.
+
+MAPIE also has a prefit method, but it is difficult to extract uncertainty bars for individual points from this data - it splits a celebration set off the test set to generate uncertainty, so it can't be easily added to our plot of test set predictions. Thus, we will only compare the normal MAPIE methods with the other libraries. MAPIE trains much slower than other models, particularly on our superlearner, but it is still considerably faster than our final uncertainty model, lolopy.
 
 Lolo is a Scala random forest machine learning library and is not a native python implementation. Lolopy is a python wrapper for lolo, but this implementation is very slow for large datasets. We were unable to successfully train a lolopy model due to these factors and time limitations of the project, but our code supports lolopy models.
 
@@ -186,11 +188,11 @@ The performance of each optimizer on selected high performance models is shown i
 \end{table}
 
 \subsection{Optimized Models}\label{sec:optimized-models}
-Our base models provided good results and the top two models, Random Forest and Extra Trees, only improved their scores marginally with optimization. Our numerical results of the optimized and optimized models are shown in Table~\ref{tab:results}.
+
 
 % WARN: UPDATE SVR and match with figure 2
 
-\begin{table}[!hbt]
+\begin{table}[!hb]
 \centering
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{clcccc}
@@ -237,10 +239,10 @@ Our base models provided good results and the top two models, Random Forest and 
 % \twocolumngrid
 % \newpage
 
+Our base models provided good results and the top two models, Random Forest and Extra Trees, only improved their scores marginally with optimization. Our numerical results of the optimized and optimized models are shown in Table~\ref{tab:results}.
+
 Our linear models performed poorly, with none of these models exceeding an R2 value of 0.4, and with MAE above 14K. Additionally, uncertainty is quite high for these models, with the confidence interval widths (MWS) exceeding 90K. The decision tree and KNeighbors models perform a little better, with R2 values around 0.65 and MAE around 7K. Our ensemble models stole the show—the extra trees model consistently performed the best, with an R2 value of 0.819, MAE around 5K, and confidence intervals around 50K. Random Forest had marginally worse R2 and MAE scores. These results are shown graphically in Figure~\ref{fig:results}.
 
-\null
-\newpage
 As shown in Figure~\ref{fig:results}, the linear models do not make good predictions at high critical temperatures. All the linear models make very similar predictions - the ensemble methods and KNeighbors have better predictions and are less uniform.
 
 % \clearpage 
@@ -267,7 +269,7 @@ As shown in Figure~\ref{fig:results}, the linear models do not make good predict
     \includegraphics[height=2.23in]{images/subfigures/uncertainty/random_forest_optimized.png}
     \includegraphics[height=2.23in]{images/subfigures/uncertainty/extra_trees_optimized.png}
     \includegraphics[height=2.23in]{images/subfigures/uncertainty/superlearner.png}
-    \caption{Graph of optimized model predictions versus actual critical temperatures for selected base model with confidence intervals.}
+    \caption{Graph of optimized model predictions versus actual critical temperatures for selected base model with confidence intervals. Other models have similar invervals but are omitted here for brevity.}
     \label{fig:results-uncertainty}
  \end{figure*}
 
@@ -275,19 +277,18 @@ As shown in Figure~\ref{fig:results}, the linear models do not make good predict
 \clearpage %this fixes some nightmares with figures that span columns and column text being teleported to different pages
 
 \subsection{Comparing Uncertainty}
-As discussed in Section~\ref{sec:uncertainty}, we quantified uncertainty for our predictions, mainly using MAPIE. Since our other uncertainty libraries only work for Random Forest Models, we used MAPIE to evaluate our models. We trained a Random Forest Model model with ForestCI to compare with MAPIE methods of uncertainty quantification. These models are shown in Figure~\ref{fig:mapie-forestci}.
+As discussed in Section~\ref{sec:uncertainty}, we quantified uncertainty for our predictions, mainly using MAPIE. Since our other uncertainty libraries only work for Random Forest Models, we used MAPIE to evaluate our models. We trained a Random Forest Model model with ForestCI to compare with MAPIE methods of uncertainty quantification. 
 
+As shown in Figure~\ref{fig:mapie-forestci}, MAPIE's naive confidence interval method has very similar to the ForestCI calculations. MAPIE has other prediction methods (base and minmax) that produce somewhat similar results to the MAPIE-plus (Jackknife+) method, but since we are not using those algorithms, we chose to compare our selected MAPIE method and the ForestCI-like method to compare to ForestCI.
 
-% \newpage
-
-%TODO: compare with other MAPIE methods when complete - if none are similar, look at paper if I have time (finish results/abstract/presentation before that)
-
-% \clearpage
+ForestCI and MAPIE-naive produce very similar results, with MAPIE-naive making slightly more optimistic prediction intervals. However, MAPIE-plus produces prediction intervals which intersect with the actual value much more reliably. Thus, MAPIE-plus may be a better choice for our models, regardless of ForestCI's limited scope (only Random Forest Regression models).
 
 \subsection{Uncertainty Models}
 Since MAPIE is model agnostic, we have uncertainty predictions for all our models. We discussed our chosen MAPIE numerical uncertainty metric in Section~\ref{sec:optimized-models}, but we can also represent the prediction interval graphically, showing the prediction interval for each predicted point. This is shown in Figure~\ref{fig:results-uncertainty}.
 
 In Figure~\ref{fig:results-uncertainty}, each point has error bars that show the confidence interval. The model can be visually evaluated by seeing how many of the error bars intersect the dotted line, which represents the ideal prediction. While smaller prediction intervals are great, a model is not useful if it most predictions are not within error of the actual value. The bottom three models, ensemble models, have the smallest error bars and most prediction points have the actual value within the prediction interval. 
+
+The linear models in Figure~\ref{fig:results-uncertainty} have unacceptablely large prediction intervals, in addition to their poor R2 and error metrics. KNeighbors is slightly better, but the uncertainty is still very high. Once again, our ensemble methods show the best metrics, with much smaller prediction intervals that still almost always include the actual value.
 
 \subsection{Cleaned Models} %IMPORTANT - TODO: describe how data was cleaned / where the source is from
 Introduction/Description of how we cleaned data
