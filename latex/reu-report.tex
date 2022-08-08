@@ -49,7 +49,9 @@ Calculating uncertainty is also important, as it can give research a confidence 
 
 \section{Methodology}
 \subsection{Database}
-We chose to use one of the most popular experimental datasets, the supercon database from Japan's National Institute for Materials Science. This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. Unfortunately, the database is not currently available on their website for unspecified reasons, so we obtained the dataset from a github repository that used this data \cite{vstanev1_2018}. 
+We chose to use data sourced from one most popular experimental datasets, the supercon database from Japan's National Institute for Materials Science. This dataset is not available publicaly from the National Institute for Materials Science's website, so we used data obtained from \cite{Stanev2018}. This is the same database, but Stanev Et al. resolved conflicts in the data and dropped obvious erroneous data.
+
+This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. 
 
 In this dataset, there are 10,154 samples with a critical temperature below 10K and 6,210 samples above 10K. There are 159 samples with temperatures above 100K and 0 samples above 260K. A histogram represents this information graphically in Figure~\ref{fig:data-histogram}. Since most of this data is at low temperatures, we can expect less accuracy in our models for higher critical temperature superconductors.
 
@@ -290,11 +292,11 @@ In Figure~\ref{fig:results-uncertainty}, each point has error bars that show the
 
 The linear models in Figure~\ref{fig:results-uncertainty} have unacceptablely large prediction intervals, in addition to their poor R2 and error metrics. KNeighbors is slightly better, but the uncertainty is still very high. Once again, our ensemble methods show the best metrics, with much smaller prediction intervals that still almost always include the actual value.
 
-\subsection{Cleaned Models} %IMPORTANT - TODO: describe how data was cleaned / where the source is from
+\subsection{Cleaned Models} %IMPORTANT - TODO: describe how data was cleaned / the source 
 Introduction/Description of how we cleaned data
 
 \subsection{Feature Selection}
-Our 
+Insert here
 
 \section{Conclusion}
 \subsection{Future Work}
