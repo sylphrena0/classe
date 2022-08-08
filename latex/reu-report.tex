@@ -243,10 +243,9 @@ Our linear models performed poorly, with none of these models exceeding an R2 va
 \newpage
 As shown in Figure~\ref{fig:results}, the linear models do not make good predictions at high critical temperatures. All the linear models make very similar predictions - the ensemble methods and KNeighbors have better predictions and are less uniform.
 
-\clearpage %this fixes some nightmares with figures that span columns and column text being teleported to different pages
+% \clearpage 
 
-\onecolumngrid
-\begin{figure*}[!ht] %star makes figure and caption span both columns
+\begin{figure*}[!t] %star makes figure and caption span both columns
       \centering
       \includegraphics[height=2.23in]{images/subfigures/random_forest_optimized_forestci.png} \nolinebreak
       \includegraphics[height=2.23in]{images/subfigures/random_forest_optimized_mapie-naive.png} \nolinebreak
@@ -256,8 +255,24 @@ As shown in Figure~\ref{fig:results}, the linear models do not make good predict
       \caption{Comparision MAPIE methods and ForestCI uncertainty calculations for Random Forest models with plot of optimized model predictions versus actual critical temperatures. Note that all other uncertainty calculations in this paper use the MAPIE-plus method, which uses a Jackknife+ algorithm. This is the default method for MAPIE.}
    \label{fig:mapie-forestci}
 \end{figure*}
-\twocolumngrid
 
+ \begin{figure*}[!b] %star makes figure and caption span both columns
+    \centering
+    \includegraphics[height=2.23in]{images/subfigures/uncertainty/elastic_net_optimized.png}
+    \includegraphics[height=2.23in]{images/subfigures/uncertainty/bayesian_regression_optimized.png}
+    \includegraphics[height=2.23in]{images/subfigures/uncertainty/kneighbors_optimized.png}
+   %  \includegraphics[height=2.23in]{images/subfigures/uncertainty/support_vector_regression_optimized.png}
+   %  \includegraphics[height=2.23in]{images/subfigures/uncertainty/decision_tree_optimized.png}
+   %  \includegraphics[height=2.23in]{images/subfigures/uncertainty/linear_regression.png}
+    \includegraphics[height=2.23in]{images/subfigures/uncertainty/random_forest_optimized.png}
+    \includegraphics[height=2.23in]{images/subfigures/uncertainty/extra_trees_optimized.png}
+    \includegraphics[height=2.23in]{images/subfigures/uncertainty/superlearner.png}
+    \caption{Graph of optimized model predictions versus actual critical temperatures for selected base model with confidence intervals.}
+    \label{fig:results-uncertainty}
+ \end{figure*}
+
+\null
+\clearpage %this fixes some nightmares with figures that span columns and column text being teleported to different pages
 
 \subsection{Comparing Uncertainty}
 As discussed in Section~\ref{sec:uncertainty}, we quantified uncertainty for our predictions, mainly using MAPIE. Since our other uncertainty libraries only work for Random Forest Models, we used MAPIE to evaluate our models. We trained a Random Forest Model model with ForestCI to compare with MAPIE methods of uncertainty quantification. These models are shown in Figure~\ref{fig:mapie-forestci}.
@@ -267,29 +282,10 @@ As discussed in Section~\ref{sec:uncertainty}, we quantified uncertainty for our
 
 %TODO: compare with other MAPIE methods when complete - if none are similar, look at paper if I have time (finish results/abstract/presentation before that)
 
-\clearpage
+% \clearpage
 
 \subsection{Uncertainty Models}
 Since MAPIE is model agnostic, we have uncertainty predictions for all our models. We discussed our chosen MAPIE numerical uncertainty metric in Section~\ref{sec:optimized-models}, but we can also represent the prediction interval graphically, showing the prediction interval for each predicted point. This is shown in Figure~\ref{fig:results-uncertainty}.
-
-\onecolumngrid
-\vspace*{\fill}
- \begin{figure*}[!t] %star makes figure and caption span both columns
-    \centering
-    \includegraphics[height=2.23in]{images/subfigures/uncertainty/elastic_net_optimized.png}
-    \includegraphics[height=2.23in]{images/subfigures/uncertainty/bayesian_regression_optimized.png}
-    \includegraphics[height=2.23in]{images/subfigures/uncertainty/linear_regression.png}
-    \includegraphics[height=2.23in]{images/subfigures/uncertainty/support_vector_regression_optimized.png}
-    \includegraphics[height=2.23in]{images/subfigures/uncertainty/decision_tree_optimized.png}
-    \includegraphics[height=2.23in]{images/subfigures/uncertainty/kneighbors_optimized.png}
-    \includegraphics[height=2.23in]{images/subfigures/uncertainty/random_forest_optimized.png}
-    \includegraphics[height=2.23in]{images/subfigures/uncertainty/extra_trees_optimized.png}
-    \includegraphics[height=2.23in]{images/subfigures/uncertainty/superlearner.png}
-    \caption{Graph of optimized model predictions versus actual critical temperatures for each base model with confidence intervals.}
-    \label{fig:results-uncertainty}
- \end{figure*}
- \twocolumngrid
-% \newpage
 
 In Figure~\ref{fig:results-uncertainty}, each point has error bars that show the confidence interval. The model can be visually evaluated by seeing how many of the error bars intersect the dotted line, which represents the ideal prediction. While smaller prediction intervals are great, a model is not useful if it most predictions are not within error of the actual value. The bottom three models, ensemble models, have the smallest error bars and most prediction points have the actual value within the prediction interval. 
 
