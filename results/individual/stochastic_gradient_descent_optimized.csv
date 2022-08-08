@@ -1,0 +1,2 @@
+model,mean_squared_error,mean_absolute_error,max_error,r2_score,mapie_eff_mean_width
+Stochastic Gradient Descent - Optimized,991.31,19.762,124.755,-0.237,156.171

@@ -1,0 +1,2 @@
+model,mean_squared_error,mean_absolute_error,max_error,r2_score,mapie_eff_mean_width
+Bayesian Regression - Optimized,314.711,13.172,88.627,0.607,76.994

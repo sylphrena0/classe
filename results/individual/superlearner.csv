@@ -1,2 +1,2 @@
 model,mean_squared_error,mean_absolute_error,max_error,r2_score,mapie_eff_mean_width
-Superlearner,133.0,5.237,91.043,0.817,48.578
+Superlearner,59.458,3.777,77.929,0.926,35.939

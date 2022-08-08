@@ -1,0 +1,2 @@
+model,mean_squared_error,mean_absolute_error,max_error,r2_score,mapie_eff_mean_width
+Stochastic Gradient Descent - Unoptimized,3.8117605712248174e+29,536574840323749.6,1431530450595909.5,-4.756979862254909e+26,2824355404075612.5

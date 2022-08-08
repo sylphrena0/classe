@@ -1,0 +1,2 @@
+model,mean_squared_error,mean_absolute_error,max_error,r2_score,mapie_eff_mean_width
+Elastic Net - Unoptimized,389.897,14.877,85.514,0.513,86.375

@@ -1,0 +1,2 @@
+model,mean_squared_error,mean_absolute_error,max_error,r2_score,mapie_eff_mean_width
+Support Vector Regression - Optimized,232.02,9.026,100.992,0.71,64.056

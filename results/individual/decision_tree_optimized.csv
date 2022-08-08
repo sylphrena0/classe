@@ -1,0 +1,2 @@
+model,mean_squared_error,mean_absolute_error,max_error,r2_score,mapie_eff_mean_width
+Decision Tree - Optimized,145.964,5.598,106.55,0.818,58.729

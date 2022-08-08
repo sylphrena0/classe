@@ -1,0 +1,2 @@
+model,mean_squared_error,mean_absolute_error,max_error,r2_score,mapie_eff_mean_width
+KNeighbors - Optimized,141.308,6.503,85.227,0.824,54.446

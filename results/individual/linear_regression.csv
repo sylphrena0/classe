@@ -1,0 +1,2 @@
+model,mean_squared_error,mean_absolute_error,max_error,r2_score,mapie_eff_mean_width
+Linear Regression,314.499,13.147,92.049,0.608,76.753

@@ -1,0 +1,2 @@
+model,mean_squared_error,mean_absolute_error,max_error,r2_score,mapie_eff_mean_width
+Decision Tree - Unoptimized,132.458,5.473,91.8,0.835,55.754
