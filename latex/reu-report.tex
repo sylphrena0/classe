@@ -51,9 +51,9 @@ Calculating uncertainty is also important, as it can give research a confidence 
 \subsection{Database}
 We chose to use data sourced from one most popular experimental datasets, the supercon database from Japan's National Institute for Materials Science. This dataset is not available publicaly from the National Institute for Materials Science's website, so we used data obtained from \cite{Stanev2018}. This is the same database, but Stanev Et al. resolved conflicts in the data and dropped obvious erroneous data.
 
-This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. 
+This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. According to \cite{Stanev2018}, around 5700 of these materials are cuprates and 1500 are iron-based. More demographic metadata is available in their paper. We dropped materials that did not have a critical temperature recorded, about 4,000 materials. This leaves us with a dataset of around 12,500 materials. 
 
-In this dataset, there are 10,154 samples with a critical temperature below 10K and 6,210 samples above 10K. There are 159 samples with temperatures above 100K and 0 samples above 260K. A histogram represents this information graphically in Figure~\ref{fig:data-histogram}. Since most of this data is at low temperatures, we can expect less accuracy in our models for higher critical temperature superconductors.
+In this dataset, there are 6,188 samples with a critical temperature below 10K and 6,210 samples above 10K. There are 159 samples with temperatures above 100K and 0 samples above 260K. A histogram represents this information graphically in Figure~\ref{fig:data-histogram}. Since most of this data is at low temperatures, we can expect less accuracy in our models for higher critical temperature superconductors.
 
  \begin{figure}[!htb]
     \centering % add numbers to columns
