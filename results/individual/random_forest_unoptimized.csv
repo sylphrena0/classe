@@ -1,2 +1,2 @@
 model,mean_squared_error,mean_absolute_error,max_error,r2_score,mapie_eff_mean_width
-Random Forest,71.956,4.36,81.838,0.91,38.916
+Random Forest - Unoptimized,71.956,4.36,81.838,0.91,38.916
