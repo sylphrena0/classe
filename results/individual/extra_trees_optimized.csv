@@ -1,2 +1,2 @@
 model,mean_squared_error,mean_absolute_error,max_error,r2_score,mapie_eff_mean_width
-Extra Trees - Optimized,58.994,3.782,76.01,0.926,35.422
+Extra Trees - Optimized,58.706,3.771,75.803,0.927,35.635
