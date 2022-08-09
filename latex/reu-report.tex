@@ -8,6 +8,7 @@
 \usepackage{subfigure}
 \usepackage{amsmath}
 \usepackage{afterpage}
+\usepackage{placeins}
 
 \newcommand{\revtex}{REV\TeX\ }
 \newcommand{\classoption}[1]{\texttt{#1}}
@@ -188,19 +189,18 @@ We also implemented Bayesian optimization using Gaussian Processes methods from 
    \caption{Comparison of optimization methods by model.}
 \end{table}\label{tab:optimizers}
 
-
 \begin{figure*}[t] %star makes figure and caption span both columns
    %star enviroment floats are placed on the top of the next page or on dedicated float pages in revtex, no easy way around it
    \centering
-   \includegraphics[height=2.23in]{images/subfigures/no_uncertainty/elastic_net_optimized.png}
-   \includegraphics[height=2.23in]{images/subfigures/no_uncertainty/bayesian_regression_optimized.png}
-   \includegraphics[height=2.23in]{images/subfigures/no_uncertainty/linear_regression.png}
-   \includegraphics[height=2.23in]{images/subfigures/no_uncertainty/support_vector_regression_optimized.png}
-   \includegraphics[height=2.23in]{images/subfigures/no_uncertainty/decision_tree_optimized.png}
-   \includegraphics[height=2.23in]{images/subfigures/no_uncertainty/kneighbors_optimized.png}
-   \includegraphics[height=2.23in]{images/subfigures/no_uncertainty/random_forest_optimized.png}
-   \includegraphics[height=2.23in]{images/subfigures/no_uncertainty/extra_trees_optimized.png}
-   \includegraphics[height=2.23in]{images/subfigures/no_uncertainty/superlearner.png}
+   \includegraphics[height=2.25in]{images/subfigures/no_uncertainty/elastic_net_optimized.png}
+   \includegraphics[height=2.25in]{images/subfigures/no_uncertainty/bayesian_regression_optimized.png}
+   \includegraphics[height=2.25in]{images/subfigures/no_uncertainty/linear_regression.png}
+   \includegraphics[height=2.25in]{images/subfigures/no_uncertainty/support_vector_regression_optimized.png}
+   \includegraphics[height=2.25in]{images/subfigures/no_uncertainty/decision_tree_optimized.png}
+   \includegraphics[height=2.25in]{images/subfigures/no_uncertainty/kneighbors_optimized.png}
+   \includegraphics[height=2.25in]{images/subfigures/no_uncertainty/random_forest_optimized.png}
+   \includegraphics[height=2.25in]{images/subfigures/no_uncertainty/extra_trees_optimized.png}
+   \includegraphics[height=2.25in]{images/subfigures/no_uncertainty/superlearner.png}
    \caption{Graph of optimized model predictions versus actual critical temperatures for each base model. The dotted line represents the optimal prediction for any given critical temperature.}
 \end{figure*}\label{fig:results}
 
@@ -227,46 +227,26 @@ We also implemented Bayesian optimization using Gaussian Processes methods from 
 %move this page down if we can, after finishing draft:
 \begin{figure*}[!h]
    \centering
-   \includegraphics[height=2.23in]{images/subfigures/random_forest_optimized_forestci.png} \nolinebreak
-   \includegraphics[height=2.23in]{images/subfigures/random_forest_optimized_mapie-naive.png} \nolinebreak
-   \includegraphics[height=2.23in]{images/subfigures/random_forest_optimized_mapie-plus.png}
+   \includegraphics[height=2.25in]{images/subfigures/random_forest_optimized_forestci.png} \nolinebreak
+   \includegraphics[height=2.25in]{images/subfigures/random_forest_optimized_mapie-naive.png} \nolinebreak
+   \includegraphics[height=2.25in]{images/subfigures/random_forest_optimized_mapie-plus.png}
    \caption{Comparision MAPIE methods and ForestCI uncertainty calculations for Random Forest models with plot of optimized model predictions versus actual critical temperatures. Note that all other uncertainty calculations in this paper use the MAPIE-plus method, which uses a Jackknife+ algorithm. This is the default method for MAPIE.}
 \end{figure*}\label{fig:mapie-forestci}
 
 \begin{figure*}[!h]
     \centering
-    \includegraphics[height=2.23in]{images/subfigures/uncertainty/elastic_net_optimized.png}
-    \includegraphics[height=2.23in]{images/subfigures/uncertainty/bayesian_regression_optimized.png}
-    \includegraphics[height=2.23in]{images/subfigures/uncertainty/kneighbors_optimized.png}
-   %  \includegraphics[height=2.23in]{images/subfigures/uncertainty/support_vector_regression_optimized.png}
-   %  \includegraphics[height=2.23in]{images/subfigures/uncertainty/decision_tree_optimized.png}
-   %  \includegraphics[height=2.23in]{images/subfigures/uncertainty/linear_regression.png}
-    \includegraphics[height=2.23in]{images/subfigures/uncertainty/random_forest_optimized.png}
-    \includegraphics[height=2.23in]{images/subfigures/uncertainty/extra_trees_optimized.png}
-    \includegraphics[height=2.23in]{images/subfigures/uncertainty/superlearner.png}
+    \includegraphics[height=2.25in]{images/subfigures/uncertainty/elastic_net_optimized.png}
+    \includegraphics[height=2.25in]{images/subfigures/uncertainty/bayesian_regression_optimized.png}
+    \includegraphics[height=2.25in]{images/subfigures/uncertainty/kneighbors_optimized.png}
+   %  \includegraphics[height=2.25in]{images/subfigures/uncertainty/support_vector_regression_optimized.png}
+   %  \includegraphics[height=2.25in]{images/subfigures/uncertainty/decision_tree_optimized.png}
+   %  \includegraphics[height=2.25in]{images/subfigures/uncertainty/linear_regression.png}
+    \includegraphics[height=2.25in]{images/subfigures/uncertainty/random_forest_optimized.png}
+    \includegraphics[height=2.25in]{images/subfigures/uncertainty/extra_trees_optimized.png}
+    \includegraphics[height=2.25in]{images/subfigures/uncertainty/superlearner.png}
     \caption{Graph of optimized model predictions versus actual critical temperatures for selected base model with confidence intervals. Other models have similar invervals but are omitted here for brevity.}
 \end{figure*}\label{fig:results-uncertainty}
 \clearpage
-
-\begin{table*}[!t] 
-   \centering
-   \resizebox{\textwidth}{!}{%
-   \begin{tabular}{|lc|lc|lc}
-   \hline
-   \multicolumn{2}{|c|}{\textbf{Extra Trees}}                      & \multicolumn{2}{c|}{\textbf{Random Forest}}                     & \multicolumn{2}{c|}{\textbf{Decision Trees}}                                          \\ \hline
-   \textbf{Feature}                          & \textbf{Importance} & \textbf{Feature}                          & \textbf{Importance} & \textbf{Feature}                          & \multicolumn{1}{c|}{\textbf{Importance}} \\
-   $\lvert\mu \rvert$ Sim. Packing Efficiency\footnote{$\lvert\mu \rvert$ Sim. Packing Efficiency is the mean absolute value of the simulated packing efficiency.} & 15.62\%             & $\lvert\mu \rvert$ Sim. Packing Efficiency & 32.73\%             & $\lvert\mu \rvert$ Sim. Packing Efficiency & \multicolumn{1}{c|}{32.90\%}             \\
-   Mean NUnfilled                            & 7.71\%              & Mean NUnfilled                            & 11.53\%             & Mean NUnfilled                            & \multicolumn{1}{c|}{11.83\%}             \\
-   0-norm                                    & 6.67\%              & frac d valence electrons                            & 3.80\%              & frac d valence electrons                  & \multicolumn{1}{c|}{4.57\%}              \\
-   Mean NfUnfilled                           & 3.25\%              & 0-norm                                    & 3.66\%              & Mean NdValence                            & \multicolumn{1}{c|}{3.53\%}              \\
-   Mean NdUnfilled                           & 3.25\%              & Mean MeltingT                             & 2.68\%              & 0-norm                                    & \multicolumn{1}{c|}{3.43\%}              \\
-   Mean SpaceGroupNumber                     & 3.02\%              & Mean GSvolume\_pa                          & 2.52\%              & Mean MeltingT                             & \multicolumn{1}{c|}{3.42\%}              \\
-   Mean Electronegativity                    & 2.95\%              & 2-norm                                    & 2.44\%              & Mean CovalentRadius                       & \multicolumn{1}{c|}{2.94\%}              \\
-   2-norm                                    & 2.79\%              & 10-norm                                   & 2.12\%              & 2-norm                                    & \multicolumn{1}{c|}{2.87\%}              \\ \hline
-   \end{tabular}%
-   }
-   \caption{Comparison of feature importance for Scikit-Learn ensemble models. Note that the top two features are the same for all three models.}
-\end{table*}\label{tab:feature-importance}
 
 The performance of each optimizer on selected high performance models is shown in Table~\ref{tab:optimizers}. Note that the optimal method for each model (shown in bold), was found with various methods. The Bayesian optimization was much less computationally expensive than GridSearchCV, however, and is the recommended method for large datasets.
 
@@ -322,24 +302,97 @@ In Figure~\ref{fig:results-uncertainty}, each point has error bars that show the
 The linear models in Figure~\ref{fig:results-uncertainty} have unacceptablely large prediction intervals, in addition to their poor R2 and error metrics. KNeighbors is slightly better, but the uncertainty is still very high. Once again, our ensemble methods show the best metrics, with much smaller prediction intervals that still almost always include the actual value.
 
 \subsection{Feature Selection}
-The results shown thus far have included all features produced with matminer. We decided to perform some feature selection to reduce complexity and training time for our models. 
 
-First, we used Scikit-Learn's feature importance method for our ensemble methods to find the most important features for each model. These are shown in Table~\ref{tab:feature-importance}.
-
-\begin{figure}[!h] %star makes figure and caption span both columns
+\begin{figure}[!h]
    \centering
    \includegraphics[width=\columnwidth]{images/feature_heatmap_eti.png}
    \caption{Heatmap of correlations between most important features for our Extra Trees model and the critical temperatures.}
 \end{figure}\label{fig:feature-correlations}
 
-\section{Conclusion}
+\begin{figure*}[]
+   \centering
+   \includegraphics[height=2.25in]{images/subfigures/random_forest_selected_features.png}\nolinebreak
+   \includegraphics[height=2.25in]{images/subfigures/superlearner_selected_features.png}\nolinebreak
+   \includegraphics[height=2.25in]{images/subfigures/extra_trees_selected_features.png}
+   \caption{Top three optimized models, using their top ten most important features. Note that the Superlearner model is using the Extra Trees feature importance, as the mlens model does not have a feature importance method.}
+\end{figure*}\label{fig:selected-features}
+
+\begin{figure*}[]
+   \centering
+   \includegraphics[height=2.5in]{images/subfigures/random_forest_t_c_<_23k.png}%\\
+   \includegraphics[height=2.5in]{images/subfigures/random_forest_t_c_>_23k.png}\\
+   \includegraphics[height=2.5in]{images/subfigures/extra_trees_t_c_<_23k.png}
+   \includegraphics[height=2.5in]{images/subfigures/extra_trees_t_c_>_23k.png}
+   \caption{Random Forest and Extra Trees models using temperature limited data, $T_C$ above or below 23K.}
+\end{figure*}\label{fig:temp-limited}
+
+The results shown thus far have included all features produced with matminer. We decided to perform some feature selection to reduce complexity and training time for our models. First, we used Scikit-Learn's feature importance method for our ensemble methods to find the relative importance for each model. The most important features for Random Forest and Extra Trees are shown in Table~\ref{tab:feature-importance}. Notably, Table~\ref{tab:feature-importance} shows that both models have the same top two features, with varying less important features below it.
+
+\begin{table}[!h]
+   \centering
+   \resizebox{\columnwidth}{!}{%
+   \begin{tabular}{|lc|}
+   \hline
+   \multicolumn{2}{|c|}{\textbf{Extra Trees}}                      \\ \hline
+   \textbf{Feature}                          & \textbf{Importance} \\
+   Mean Absolute Sim. Packing Efficiency & 15.62\%             \\
+   Mean NUnfilled                            & 7.71\%              \\
+   0-norm                                    & 6.67\%              \\
+   Mean NfUnfilled                           & 3.25\%              \\
+   Mean NdUnfilled                           & 3.25\%              \\
+   Mean SpaceGroupNumber                     & 3.02\%              \\
+   Mean Electronegativity                    & 2.95\%              \\
+   2-norm                                    & 2.79\%              \\ \hline
+   \multicolumn{2}{|c|}{\textbf{Random Forest}}                    \\ \hline
+   \textbf{Feature}                          & \textbf{Importance} \\
+   Mean Absolute Sim. Packing Efficiency & 32.73\%             \\
+   Mean NUnfilled                            & 11.53\%             \\
+   D Valence $e^-$                           & 3.80\%              \\
+   0-norm                                    & 3.66\%              \\
+   Mean MeltingT                             & 2.68\%              \\
+   Mean GSvolume\_pa                         & 2.52\%              \\
+   2-norm                                    & 2.44\%              \\
+   10-norm                                   & 2.12\%              \\ \hline
+   \end{tabular}%
+   }
+   \caption{Comparison of feature importance for Scikit-Learn ensemble models. Note that the top two features are the same for all three models.}
+\end{table}\label{tab:feature-importance}
+
+
+%  switch to this table if possible (horizontal, star enviroment being impossible)
+% \begin{table*}[!t] 
+%    \centering
+%    \resizebox{\textwidth}{!}{%
+%    \begin{tabular}{|lc|lc|lc}
+%    \hline
+%    \multicolumn{2}{|c|}{\textbf{Extra Trees}}                      & \multicolumn{2}{c|}{\textbf{Random Forest}}                     & \multicolumn{2}{c|}{\textbf{Decision Trees}}                                          \\ \hline
+%    \textbf{Feature}                          & \textbf{Importance} & \textbf{Feature}                          & \textbf{Importance} & \textbf{Feature}                          & \multicolumn{1}{c|}{\textbf{Importance}} \\
+%    $\lvert\mu \rvert$ Sim. Packing Efficiency\footnote{$\lvert\mu \rvert$ Sim. Packing Efficiency is the mean absolute value of the simulated packing efficiency.} & 15.62\%             & $\lvert\mu \rvert$ Sim. Packing Efficiency & 32.73\%             & $\lvert\mu \rvert$ Sim. Packing Efficiency & \multicolumn{1}{c|}{32.90\%}             \\
+%    Mean NUnfilled                            & 7.71\%              & Mean NUnfilled                            & 11.53\%             & Mean NUnfilled                            & \multicolumn{1}{c|}{11.83\%}             \\
+%    0-norm                                    & 6.67\%              & frac d valence electrons                            & 3.80\%              & frac d valence electrons                  & \multicolumn{1}{c|}{4.57\%}              \\
+%    Mean NfUnfilled                           & 3.25\%              & 0-norm                                    & 3.66\%              & Mean NdValence                            & \multicolumn{1}{c|}{3.53\%}              \\
+%    Mean NdUnfilled                           & 3.25\%              & Mean MeltingT                             & 2.68\%              & 0-norm                                    & \multicolumn{1}{c|}{3.43\%}              \\
+%    Mean SpaceGroupNumber                     & 3.02\%              & Mean GSvolume\_pa                          & 2.52\%              & Mean MeltingT                             & \multicolumn{1}{c|}{3.42\%}              \\
+%    Mean Electronegativity                    & 2.95\%              & 2-norm                                    & 2.44\%              & Mean CovalentRadius                       & \multicolumn{1}{c|}{2.94\%}              \\
+%    2-norm                                    & 2.79\%              & 10-norm                                   & 2.12\%              & 2-norm                                    & \multicolumn{1}{c|}{2.87\%}              \\ \hline
+%    \end{tabular}%
+%    }
+%    \caption{Comparison of feature importance for Scikit-Learn ensemble models. Note that the top two features are the same for all three models.}
+% \end{table*}\label{tab:feature-importance}
+Finally, we trained some models on temperature limited data, temperatures above 23K or below 23K. The models, shown in Figure~\ref{fig:temp-limited}, show the weaknesses of the models. While the high temperature model has a higher R2, the error and uncertainty scores are much worse than the low temperature model. This reflects our understanding of superconductors. We know little about unconventional temperature superconductors and have limited data on them, so our model is likely to have higher error at those points.
+
+Next, we trained three models using only the most important features for the given model. The results are shown in Figure~\ref{fig:selected-features}. Each model has slightly worse metrics than the full model, but the decreased complexity of the model is valuable.
+
+We also used our top model's most important features and made a correlations plot, shown in Figure~\ref{fig:feature-correlations}. A full correlation plot is available on github, but is too large for this paper.
+
+\section{Conclusions}
 \subsection{Future Work}
 
-NOTE: Superlearner is not using random state, hence inconsistant results. Retrain with random state.
 
 \begin{acknowledgments}
 I would like to thank my mentor, Suchismita Sarker, for her guidance and support with this project. This work is supported by the U.S. National Science Foundation under award number NSF PHY-2150125, REU Site: Accelerator Physics and Synchrotron Radiation Science.
 \end{acknowledgments}
+
 
 \bibliographystyle{apsrev4-2}
 \bibliography{reu-report}
