@@ -68,7 +68,7 @@ if args.optimized:
     ELASTIC_ARGS = {'alpha':1e-05, 'l1_ratio':0.0}
     BAYES_ARGS = {}
     SVR_ARGS = {'kernel':'rbf', 'C':100, 'epsilon':0.1, 'gamma':0.1, 'degree':1}
-    RFR_ARGS = {'max_features': 10, 'n_estimators': 904}
+    RFR_ARGS = {'max_features': 'auto', 'n_estimators': 250}
     SP_ARGS = {'X': sfn.train_data}
     KNN_ARGS = {'metric':'manhattan', 'n_jobs':-1, 'n_neighbors':5}
     DT_ARGS = {'criterion':'poisson', 'max_features':0.5, 'random_state':43}
