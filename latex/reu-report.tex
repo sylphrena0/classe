@@ -309,7 +309,7 @@ The linear models in Figure~\ref{fig:results-uncertainty} have unacceptablely la
    \caption{Heatmap of correlations between most important features for our Extra Trees model and the critical temperatures.}
 \end{figure}\label{fig:feature-correlations}
 
-\begin{figure*}[]
+\begin{figure*}[!b]
    \centering
    \includegraphics[height=2.25in]{images/subfigures/random_forest_selected_features.png}\nolinebreak
    \includegraphics[height=2.25in]{images/subfigures/superlearner_selected_features.png}\nolinebreak
@@ -386,17 +386,18 @@ Next, we trained three models using only the most important features for the giv
 We also used our top model's most important features and made a correlations plot, shown in Figure~\ref{fig:feature-correlations}. A full correlation plot is available on github, but is too large for this paper.
 
 \section{Conclusions}
-\subsection{Future Work}
+We successfully created various machine learning models to predict superconductor critical temperatures, including unconventional models like mlens superlearners. For each model, we successfully quantified uncertainty of our predictions and optimized our hyperparameters with bayesian regression. 
+
+This project focused on experimental data and used matminer to generate our features. Further work could include expansion of models to simulated datasets and application to potential superconductors. This could expose weaknesses in our model and illustrate improvements we could make to predict more accurately.
 
 
 \begin{acknowledgments}
 I would like to thank my mentor, Suchismita Sarker, for her guidance and support with this project. This work is supported by the U.S. National Science Foundation under award number NSF PHY-2150125, REU Site: Accelerator Physics and Synchrotron Radiation Science.
 \end{acknowledgments}
 
+\clearpage
 
 \bibliographystyle{apsrev4-2}
 \bibliography{reu-report}
-
-
 
 \end{document}
