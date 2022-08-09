@@ -74,7 +74,7 @@ sfn.import_data(filename=args.filename,replace_inf=True) #import data without in
 suffix = " (Hamidieh 2018)" if "_hamidieh" in args.filename else ""
 
 models = (((args.LR, args.all), "Linear Regression", LinearRegression, {}),
-            ((args.SVR, args.all), "Support Vector Regression - Optimized", SVR, {}),
+            ((args.SVR, args.all), "Support Vector Regression - Unoptimized", SVR, {}),
             ((args.SVR, args.all), "Support Vector Regression - Optimized", SVR, {'kernel':'rbf', 'C':100, 'epsilon':0.1, 'gamma':0.1, 'degree':1}),
             ((args.ELASTIC, args.all), "Elastic Net - Unoptimized", ElasticNet, {}),
             ((args.ELASTIC, args.all), "Elastic Net - Optimized", ElasticNet, {'alpha':1e-05, 'l1_ratio':0.0}),
@@ -84,9 +84,9 @@ models = (((args.LR, args.all), "Linear Regression", LinearRegression, {}),
             ((args.RFR, args.all), "Random Forest - Optimized", RandomForestRegressor, {'max_features': 'auto', 'n_estimators': 250}),
             ((args.LRFR,), "Random Forest - Lolopy", lolopy.learners.RandomForestRegressor, {}), #note that the all argument does not enable lolopy 
             ((args.KNN, args.all), "KNeighbors - Unoptimized", KNeighborsRegressor, {}),
-            ((args.KNN, args.all), "KNeighbors - Optimized", KNeighborsRegressor, {'metric':'manhattan', 'n_jobs':-1, 'n_neighbors':8}),
+            ((args.KNN, args.all), "KNeighbors - Optimized", KNeighborsRegressor, {'metric':'manhattan', 'n_jobs':-1, 'n_neighbors':5}),
             ((args.TREES, args.all), "Extra Trees - Unoptimized", ExtraTreesRegressor, {}),
-            ((args.TREES, args.all), "Extra Trees - Optimized", ExtraTreesRegressor, {'n_estimators': 708, 'n_jobs':-1}),
+            ((args.TREES, args.all), "Extra Trees - Optimized", ExtraTreesRegressor, {'n_estimators': 291, 'n_jobs':-1}),
             ((args.SGD, args.all), "Stochastic Gradient Descent - Unoptimized", SGDRegressor, {}),
             ((args.SGD, args.all), "Stochastic Gradient Descent - Optimized", SGDRegressor, {'alpha':1000.0, 'loss':'epsilon_insensitive', 'max_iter':1500, 'penalty':'l1'}),
             ((args.BAYES, args.all), "Bayesian Regression - Unoptimized", BayesianRidge, {}),

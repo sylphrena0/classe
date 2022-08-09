@@ -1,9 +1,9 @@
 model,mean_squared_error,mean_absolute_error,max_error,r2_score,mapie_eff_mean_width
-Elastic Net Regression,315.162,13.161,87.075,0.607,
-Decision Tree Regression,145.964,5.598,106.55,0.818,
-Bayesian Regression,314.711,13.172,88.627,0.607,
-Random Forest Regression,71.91,4.358,80.613,0.91,
-Support Vector Machines,232.02,9.026,100.992,0.71,
-Extra Trees Regression,59.214,3.784,76.721,0.926,
-Superlearner,60.844,3.827,77.261,0.924,
-KNeighbors Regression,126.106,5.976,85.564,0.843,
+Elastic Net Regression,315.162,13.161,87.075,0.607,77.033
+Decision Tree Regression,145.964,5.598,106.55,0.818,58.664
+Bayesian Regression,314.711,13.172,88.627,0.607,76.994
+Random Forest Regression,71.209,4.31,81.678,0.911,38.504
+Support Vector Machines,232.02,9.026,100.992,0.71,64.056
+Extra Trees Regression,59.421,3.787,76.633,0.926,35.615
+Superlearner,59.421,3.787,76.633,0.926,35.615
+KNeighbors Regression,126.106,5.976,85.564,0.843,52.631

@@ -51,7 +51,7 @@ Calculating uncertainty is also important, as it can give research a confidence 
 \subsection{Database}
 We chose to use data sourced from one most popular experimental datasets, the supercon database from Japan's National Institute for Materials Science. This dataset is not available publicaly from the National Institute for Materials Science's website, so we used data obtained from \cite{Stanev2018}. This is the same database, but Stanev Et al. resolved conflicts in the data and dropped obvious erroneous data.
 
-This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. According to \cite{Stanev2018}, around 5700 of these materials are cuprates and 1500 are iron-based. More demographic metadata is available in their paper. We dropped materials that did not have a critical temperature recorded, about 4,000 materials. This leaves us with a dataset of around 12,500 materials. 
+This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. According to \cite{Stanev2018}, around 5700 of these materials are cuprates and 1500 are iron-based. More demographic metadata is available in their paper. We dropped materials that did not have a critical temperature recorded, about 4,000 materials. This leaves us with a dataset of around 12,500 materials. %IMPORTANT - cite Hamidieh if we use the other dataset
 
 In this dataset, there are 6,188 samples with a critical temperature below 10K and 6,210 samples above 10K. There are 159 samples with temperatures above 100K and 0 samples above 260K. A histogram represents this information graphically in Figure~\ref{fig:data-histogram}. Since most of this data is at low temperatures, we can expect less accuracy in our models for higher critical temperature superconductors.
 
@@ -160,39 +160,37 @@ Each model's hyperparameters\footnote{Hyperparameters are machine learning param
 
 We also implemented Bayesian optimization using Gaussian Processes methods from the Scikit-Optimize library \cite{head_tim_2021_5565057}. Bayesian optimization attempts to optimize models intelligently, instead of randomly testing specified hyperparameters. We provide a range of hyperparamters values for Bayesian optimization to test, and the algorithm uses acquisition functions to decide which specific values to use within the specified range. This is different from GridSearchCV, which is simpler but can take much longer to find optimal hyperparameters. We only implemented Bayesian optimization on our top models.
 
-The performance of each optimizer on selected high performance models is shown in Table~\ref{tab:optimizers}. Note that the optimal method for each model (shown in bold), was found with a different method each time. The Bayesian optimization was much less computationally expensive than GridSearchCV, however, and is the recommended method for large datasets.
+The performance of each optimizer on selected high performance models is shown in Table~\ref{tab:optimizers}. Note that the optimal method for each model (shown in bold), was found with various methods. The Bayesian optimization was much less computationally expensive than GridSearchCV, however, and is the recommended method for large datasets.
 
-\begin{table}[!htb] %remove red and orange
-\centering 
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{crcccc}
-\hline
-\multicolumn{1}{l}{\textbf{Model}}           & \multicolumn{1}{r}{\textbf{Optimizer}} & \textbf{R2}                   & \textbf{MSE}                    & \textbf{MAE}                  & \textbf{MWS}                   \\ \hline
-                               & Base Model                             & \cellcolor[HTML]{F4CCCC}0.807 & \cellcolor[HTML]{F4CCCC}140.482 & \cellcolor[HTML]{F4CCCC}5.791 & \cellcolor[HTML]{F4CCCC}53.135 \\
-                               & GridSearchCv                           & \cellcolor[HTML]{F4CCCC}0.804 & \cellcolor[HTML]{F4CCCC}142.524 & \cellcolor[HTML]{F4CCCC}5.816 & \cellcolor[HTML]{F4CCCC}52.416 \\
-                               & \textbf{Bayesian – PI}                 & \cellcolor[HTML]{D9EAD3}0.815 & \cellcolor[HTML]{D9EAD3}134.509 & \cellcolor[HTML]{D9EAD3}5.72  & \cellcolor[HTML]{D9EAD3}50.985 \\
-                               & Bayesian – EI                          & \cellcolor[HTML]{FCE5CD}0.814 & \cellcolor[HTML]{FCE5CD}135.267 & \cellcolor[HTML]{FCE5CD}5.763 & \cellcolor[HTML]{FCE5CD}51.533 \\
-\multirow{-5}{*}{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering Random Forest}}}} & Bayesian – gp\_hedge                   & \cellcolor[HTML]{D9EAD3}0.815 & \cellcolor[HTML]{D9EAD3}134.785 & \cellcolor[HTML]{D9EAD3}5.747 & \cellcolor[HTML]{D9EAD3}51.021 \\ \hline
-                               & Base Model                             & \cellcolor[HTML]{FCE5CD}0.818 & \cellcolor[HTML]{FCE5CD}132.395 & \cellcolor[HTML]{FCE5CD}5.214 & \cellcolor[HTML]{FCE5CD}48.153 \\
-                               & GridSearchCv                           & \cellcolor[HTML]{FCE5CD}0.818 & \cellcolor[HTML]{FCE5CD}132.374 & \cellcolor[HTML]{FCE5CD}5.215 & \cellcolor[HTML]{FCE5CD}48.231 \\
-                               & Bayesian – PI                          & \cellcolor[HTML]{FCE5CD}0.818 & \cellcolor[HTML]{FCE5CD}132.104 & \cellcolor[HTML]{FCE5CD}5.225 & \cellcolor[HTML]{FCE5CD}48.154 \\
-                               & Bayesian – EI                          & \cellcolor[HTML]{F4CCCC}0.816 & \cellcolor[HTML]{F4CCCC}133.5   & \cellcolor[HTML]{F4CCCC}5.257 & \cellcolor[HTML]{F4CCCC}48.757 \\
-\multirow{-5}{*}{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{1cm}{\centering Extra Trees}}}}  & \textbf{Bayesian – gp\_hedge}          & \cellcolor[HTML]{D9EAD3}0.819 & \cellcolor[HTML]{D9EAD3}131.783 & \cellcolor[HTML]{D9EAD3}5.202 & \cellcolor[HTML]{D9EAD3}47.732 \\ \hline
-                               & Base Model                             & \cellcolor[HTML]{FCE5CD}0.646 & \cellcolor[HTML]{FCE5CD}257.108 & \cellcolor[HTML]{F4CCCC}8.563 & \cellcolor[HTML]{FCE5CD}75.612 \\
-                               & \textbf{GridSearchCv}                  & \cellcolor[HTML]{D9EAD3}0.703 & \cellcolor[HTML]{D9EAD3}216.186 & \cellcolor[HTML]{D9EAD3}7.515 & \cellcolor[HTML]{D9EAD3}69.758 \\
-                               & Bayesian – PI                          & \cellcolor[HTML]{D9EAD3}0.652 & \cellcolor[HTML]{FCE5CD}253.137 & \cellcolor[HTML]{FCE5CD}8.201 & \cellcolor[HTML]{D9EAD3}74.177 \\
-                               & Bayesian – EI                          & \cellcolor[HTML]{D9EAD3}0.652 & \cellcolor[HTML]{FCE5CD}253.137 & \cellcolor[HTML]{FCE5CD}8.201 & \cellcolor[HTML]{D9EAD3}74.177 \\
-\multirow{-5}{*}{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering KNN}}}} & Bayesian – gp\_hedge                   & \cellcolor[HTML]{F4CCCC}0.566 & \cellcolor[HTML]{F4CCCC}315.238 & \cellcolor[HTML]{FCE5CD}8.159 & \cellcolor[HTML]{F4CCCC}84.546 \\ \hline
-\end{tabular}%
-}
-\caption{Comparison of optimization methods by model.}
-\label{tab:optimizers}
-\end{table}
+\begin{table}[!hb]
+   \centering
+   \resizebox{\columnwidth}{!}{%
+   \begin{tabular}{clcccc}
+   \hline
+   \multicolumn{1}{l}{} & \multicolumn{1}{c}{\textbf{Optimizer}} & \textbf{R2}                   & \textbf{MSE}                    & \textbf{MAE}                  & \textbf{MWS}                   \\ \hline
+                        & None                                   & 0.910                         & 71.956                          & 4.360                         & 38.916                         \\
+                        & \textbf{GridSearchCv}                  & \cellcolor[HTML]{D9EAD3}0.911 & \cellcolor[HTML]{D9EAD3}71.265  & \cellcolor[HTML]{D9EAD3}4.315 & \cellcolor[HTML]{D9EAD3}38.505 \\
+                        & Bayesian – PI                          & 0.911                         & 71.586                          & 4.329                         & 38.061                         \\
+                        & Bayesian – EI                          & 0.910                         & 72.136                          & 4.335                         & 38.265                         \\
+   \multirow{-5}{*}{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering Random Forest}}}}   & Bayesian – gp\_hedge                   & 0.908                         & 73.659                          & 4.399                         & 38.203                         \\ \hline
+                        & None                                   & 0.927                         & 58.780                          & 3.787                         & 36.137                         \\
+                        & GridSearchCv                           & 0.926                         & 59.181                          & 3.785                         & 35.625                         \\
+                        & Bayesian – PI                          & 0.927                         & 58.860                          & 3.778                         & 35.467                         \\
+                        & Bayesian – EI                          & 0.927                         & 58.708                          & 3.779                         & 36.205                         \\
+   \multirow{-5}{*}{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering Extra\\ Trees}}}}   & \textbf{Bayesian – gp\_hedge}          & \cellcolor[HTML]{D9EAD3}0.927 & \cellcolor[HTML]{D9EAD3}58.706  & \cellcolor[HTML]{D9EAD3}3.771 & \cellcolor[HTML]{D9EAD3}35.635 \\ \hline
+                        & None                                   & 0.803                         & 157.928                         & 6.897                         & 58.230                         \\
+                        & \textbf{GridSearchCv}                  & \cellcolor[HTML]{D9EAD3}0.824 & \cellcolor[HTML]{D9EAD3}141.308 & \cellcolor[HTML]{D9EAD3}6.503 & \cellcolor[HTML]{D9EAD3}54.446 \\
+                        & Bayesian – PI                          & 0.807                         & 154.683                         & 6.748                         & 57.802                         \\
+                        & Bayesian – EI                          & 0.812                         & 150.997                         & 6.302                         & 60.035                         \\
+   \multirow{-5}{*}{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering KNN}}}}   & Bayesian – gp\_hedge                   & 0.790                         & 168.329                         & 6.475                         & 65.486                         \\ \hline
+   \end{tabular}%
+   }
+   \caption{Comparison of optimization methods by model.}
+   \label{tab:optimizers}
+   \end{table}
+
 
 \subsection{Optimized Models}\label{sec:optimized-models}
-
-
-% WARN: UPDATE SVR and match with figure 2
 
 \begin{table}[!hb]
 \centering
@@ -200,22 +198,22 @@ The performance of each optimizer on selected high performance models is shown i
 \begin{tabular}{clcccc}
 \hline
 \multicolumn{1}{l}{}                                                                                 & \textbf{Model}                    & \multicolumn{1}{l}{\textbf{R2}} & \multicolumn{1}{l}{\textbf{MSE}} & \multicolumn{1}{l}{\textbf{MAE}} & \multicolumn{1}{l}{\textbf{MWS}} \\ \hline
-\multirow{8}{*}{\textbf{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering Unoptimized}}}}} & \textbf{Extra Trees Regression}   & 0.818                           & 132.395                          & 5.214                            & 48.153                           \\
-                                                                                                     & \textbf{Random Forest Regression} & 0.807                           & 140.482                          & 5.791                            & 53.135                           \\
-                                                                                                     & \textbf{KNeighbors Regression}    & 0.646                           & 257.108                          & 8.563                            & 75.612                           \\
-                                                                                                     & \textbf{Decision Tree Regression} & 0.644                           & 258.945                          & 6.886                            & 76.715                           \\
-                                                                                                     & \textbf{Bayesian Regression}      & 0.392                           & 441.925                          & 14.52                            & 90.7                             \\
-                                                                                                     & \textbf{Linear Regression}        & 0.392                           & 442.163                          & 14.506                           & 90.705                           \\
-                                                                                                     & \textbf{Elastic Net Regression}   & 0.328                           & 488.242                          & 15.603                           & 97.938                           \\
-                                                                                                     & \textbf{Support Vector Machines}  & 0.084                           & 666.16                           & 15.511                           & 134.628                          \\ \hline
-\multirow{8}{*}{\textbf{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering Optimized}}}}}   & \textbf{Extra Trees Regression}   & 0.819                           & 131.624                          & 5.205                            & 48.088                           \\
-                                                                                                     & \textbf{Random Forest Regression} & 0.816                           & 133.87                           & 5.714                            & 50.759                           \\
-                                                                                                     & \textbf{KNeighbors Regression}    & 0.703                           & 216.186                          & 7.515                            & 69.758                           \\
-                                                                                                     & \textbf{Decision Tree Regression} & 0.664                           & 244.095                          & 7.152                            & 74.834                           \\
-                                                                                                     & \textbf{Elastic Net Regression}   & 0.392                           & 442.133                          & 14.487                           & 90.713                           \\
-                                                                                                     & \textbf{Bayesian Regression}      & 0.392                           & 441.925                          & 14.52                            & 90.7                             \\
-                                                                                                     & \textbf{Linear Regression}        & 0.392                           & 442.163                          & 14.506                           & 90.705                           \\
-                                                                                                     & \textbf{Support Vector Machines}  & 0.325                           & 490.661                          & 14.186                           & 106.946                          \\ \hline
+\multirow{8}{*}{\textbf{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering Unoptimized}}}}} & \textbf{Extra Trees Regression}   & 0.927                           & 58.706                           & 3.771                            & 35.635                           \\
+                                                                                                     & \textbf{Random Forest Regression} & 0.911                           & 71.209                           & 4.310                            & 38.504                           \\
+                                                                                                     & \textbf{KNeighbors Regression}    & 0.843                           & 126.106                          & 5.976                            & 52.631                           \\
+                                                                                                     & \textbf{Decision Tree Regression} & 0.818                           & 145.964                          & 5.598                            & 58.664                           \\
+                                                                                                     & \textbf{Support Vector Machines}  & 0.710                           & 232.020                          & 9.026                            & 64.056                           \\
+                                                                                                     & \textbf{Linear Regression}        & 0.608                           & 314.499                          & 13.147                           & 76.753                           \\
+                                                                                                     & \textbf{Elastic Net Regression}   & 0.607                           & 315.162                          & 13.161                           & 77.033                           \\
+                                                                                                     & \textbf{Bayesian Regression}      & 0.607                           & 314.711                          & 13.172                           & 76.994                           \\ \hline
+\multirow{8}{*}{\textbf{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering Optimized}}}}}   & \textbf{Extra Trees Regression}   & 0.927                           & 58.565                           & 3.792                            & 35.850                           \\
+                                                                                                     & \textbf{Superlearner}             & 0.926                           & 59.421                           & 3.787                            & 35.615                           \\
+                                                                                                     & \textbf{Random Forest Regression} & 0.910                           & 72.112                           & 4.349                            & 39.254                           \\
+                                                                                                     & \textbf{Decision Tree Regression} & 0.831                           & 135.041                          & 5.529                            & 56.136                           \\
+                                                                                                     & \textbf{KNeighbors Regression}    & 0.803                           & 157.928                          & 6.897                            & 58.231                           \\
+                                                                                                     & \textbf{Support Vector Machines}  & 0.710                           & 232.020                          & 9.026                            & 64.056                           \\
+                                                                                                     & \textbf{Bayesian Regression}      & 0.607                           & 314.711                          & 13.172                           & 76.994                           \\
+                                                                                                     & \textbf{Elastic Net Regression}   & 0.513                           & 389.897                          & 14.877                           & 86.375                           \\ \hline
 \end{tabular}%
 }
 \caption{CV scores of the models using all features and data, comparing optimized and base hyperparameters.}
@@ -300,6 +298,8 @@ Insert here
 
 \section{Conclusion}
 \subsection{Future Work}
+
+NOTE: Superlearner is not using random state, hence inconsistant results. Retrain with random state.
 
 \begin{acknowledgments}
 I would like to thank my mentor, Suchismita Sarker, for her guidance and support with this project. This work is supported by the U.S. National Science Foundation under award number NSF PHY-2150125, REU Site: Accelerator Physics and Synchrotron Radiation Science.

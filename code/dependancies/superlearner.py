@@ -28,18 +28,18 @@ from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error, m
 def get_models():
 	models = list()
 	# models.append(SVR())
-	models.append(ElasticNet(alpha=1e-05, l1_ratio=0.0))
-	# models.append(DecisionTreeRegressor())
-	models.append(RandomForestRegressor())
-	models.append(KNeighborsRegressor(metric='manhattan', n_jobs=-1, n_neighbors=8))
-	models.append(ExtraTreesRegressor())
+	# models.append(ElasticNet(alpha=1e-05, l1_ratio=0.0))
+	models.append(DecisionTreeRegressor(criterion='poisson', max_features=0.5, random_state=43))
+	models.append(RandomForestRegressor(max_features='auto', n_estimators=250, random_state=43))
+	models.append(KNeighborsRegressor(metric='manhattan', n_jobs=-1, n_neighbors=5))
+	models.append(ExtraTreesRegressor(n_estimators= 291, n_jobs=-1, random_state=43))
 	# models.append(SGDRegressor(alpha=1000.0, loss='epsilon_insensitive', max_iter=1500, penalty='l1'))
 	# models.append(BayesianRidge(alpha_init=1.2, lambda_init=0.0001))
 
 	return models
 
 def get_superlearner(X, scorer=r2_score, folds=10, shuffle=True):
-	ensemble = SuperLearner(scorer=scorer, folds=folds, shuffle=shuffle, sample_size=len(X), n_jobs=-1)
+	ensemble = SuperLearner(scorer=scorer, folds=folds, shuffle=shuffle, sample_size=len(X), n_jobs=-1, random_state=43)
 	ensemble.add(get_models()) #add base models
 	ensemble.add_meta(LinearRegression()) #add meta model
 

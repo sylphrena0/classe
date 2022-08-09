@@ -72,7 +72,7 @@ if args.optimized:
     SP_ARGS = {'X': sfn.train_data}
     KNN_ARGS = {'metric':'manhattan', 'n_jobs':-1, 'n_neighbors':5}
     DT_ARGS = {'criterion':'poisson', 'max_features':0.5, 'random_state':43}
-    TREES_ARGS = {'n_estimators': 708}
+    TREES_ARGS = {'n_estimators': 291}
 
     #defines the models in a list of pairs of lists. The first item in a pair is the top graph in a column, the second is the bottom. The last item of a model is to enable uncert calc
     models  =  ((("Elastic Net Regression", ElasticNet, ELASTIC_ARGS, args.uncert),   ("Decision Tree Regression", DecisionTreeRegressor, DT_ARGS, args.uncert)),
