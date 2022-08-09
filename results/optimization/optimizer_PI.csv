@@ -1,4 +1,4 @@
 Model,"Best Parameters (using PI, n_calls: 150)",Time Elapsed
-Random Forest Regression,"{'max_features': 10, 'n_estimators': 904}",527.99s
-KNeighbors Regression,"{'n_neighbors': 3, 'algorithm': 'auto'}",151.8s
-Extra Trees Regression,{'n_estimators': 434},563.87s
+Random Forest Regression,"{'max_features': 17, 'n_estimators': 999}",638.82s
+KNeighbors Regression,"{'n_neighbors': 4, 'algorithm': 'kd_tree'}",164.58s
+Extra Trees Regression,{'n_estimators': 933},648.12s
