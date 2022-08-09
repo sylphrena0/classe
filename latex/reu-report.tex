@@ -7,6 +7,7 @@
 \usepackage[table,xcdraw]{xcolor}
 \usepackage{subfigure}
 \usepackage{amsmath}
+\usepackage{afterpage}
 
 \newcommand{\revtex}{REV\TeX\ }
 \newcommand{\classoption}[1]{\texttt{#1}}
@@ -221,7 +222,7 @@ We also implemented Bayesian optimization using Gaussian Processes methods from 
   }
   \caption{CV scores of the models comparing optimized and base hyper-parameters.}
 \end{table*}\label{tab:results}
-%\clearpage
+\afterpage{\clearpage}
 
 %move this page down if we can, after finishing draft:
 \begin{figure*}[!h]
@@ -246,6 +247,26 @@ We also implemented Bayesian optimization using Gaussian Processes methods from 
     \caption{Graph of optimized model predictions versus actual critical temperatures for selected base model with confidence intervals. Other models have similar invervals but are omitted here for brevity.}
 \end{figure*}\label{fig:results-uncertainty}
 \clearpage
+
+\begin{table*}[!t] 
+   \centering
+   \resizebox{\textwidth}{!}{%
+   \begin{tabular}{|lc|lc|lc}
+   \hline
+   \multicolumn{2}{|c|}{\textbf{Extra Trees}}                      & \multicolumn{2}{c|}{\textbf{Random Forest}}                     & \multicolumn{2}{c|}{\textbf{Decision Trees}}                                          \\ \hline
+   \textbf{Feature}                          & \textbf{Importance} & \textbf{Feature}                          & \textbf{Importance} & \textbf{Feature}                          & \multicolumn{1}{c|}{\textbf{Importance}} \\
+   $\lvert\mu \rvert$ Sim. Packing Efficiency\footnote{$\lvert\mu \rvert$ Sim. Packing Efficiency is the mean absolute value of the simulated packing efficiency.} & 15.62\%             & $\lvert\mu \rvert$ Sim. Packing Efficiency & 32.73\%             & $\lvert\mu \rvert$ Sim. Packing Efficiency & \multicolumn{1}{c|}{32.90\%}             \\
+   Mean NUnfilled                            & 7.71\%              & Mean NUnfilled                            & 11.53\%             & Mean NUnfilled                            & \multicolumn{1}{c|}{11.83\%}             \\
+   0-norm                                    & 6.67\%              & frac d valence electrons                            & 3.80\%              & frac d valence electrons                  & \multicolumn{1}{c|}{4.57\%}              \\
+   Mean NfUnfilled                           & 3.25\%              & 0-norm                                    & 3.66\%              & Mean NdValence                            & \multicolumn{1}{c|}{3.53\%}              \\
+   Mean NdUnfilled                           & 3.25\%              & Mean MeltingT                             & 2.68\%              & 0-norm                                    & \multicolumn{1}{c|}{3.43\%}              \\
+   Mean SpaceGroupNumber                     & 3.02\%              & Mean GSvolume\_pa                          & 2.52\%              & Mean MeltingT                             & \multicolumn{1}{c|}{3.42\%}              \\
+   Mean Electronegativity                    & 2.95\%              & 2-norm                                    & 2.44\%              & Mean CovalentRadius                       & \multicolumn{1}{c|}{2.94\%}              \\
+   2-norm                                    & 2.79\%              & 10-norm                                   & 2.12\%              & 2-norm                                    & \multicolumn{1}{c|}{2.87\%}              \\ \hline
+   \end{tabular}%
+   }
+   \caption{Comparison of feature importance for Scikit-Learn ensemble models. Note that the top two features are the same for all three models.}
+\end{table*}\label{tab:feature-importance}
 
 The performance of each optimizer on selected high performance models is shown in Table~\ref{tab:optimizers}. Note that the optimal method for each model (shown in bold), was found with various methods. The Bayesian optimization was much less computationally expensive than GridSearchCV, however, and is the recommended method for large datasets.
 
@@ -285,26 +306,6 @@ The linear models performed a little worse, with none of these models exceeding 
 Our ensemble models stole the show—the extra trees model consistently performed the best, with an R2 value of 0.927, MAE around 3.8K, and confidence intervals around 35K. Our superlearner (using optimizd Extra Trees, Random Forest, Decision Trees, and KNeighbor models) performed quite well, with a slightly smaller MAE than the Extra Trees model and marginally lower R2. Lastly, our Random Forest model had slightly worse R2 and MAE scores. These results are shown graphically in Figure~\ref{fig:results}.
 
 As shown in Figure~\ref{fig:results}, the linear models do not make good predictions at high critical temperatures. All the linear models make very similar predictions - the ensemble methods and KNeighbors have better predictions and are less uniform.
-
-\begin{table*}[!t] 
-   \centering
-   \resizebox{\textwidth}{!}{%
-   \begin{tabular}{|lc|lc|lc}
-   \hline
-   \multicolumn{2}{|c|}{\textbf{Extra Trees}}                      & \multicolumn{2}{c|}{\textbf{Random Forest}}                     & \multicolumn{2}{c|}{\textbf{Decision Trees}}                                          \\ \hline
-   \textbf{Feature}                          & \textbf{Importance} & \textbf{Feature}                          & \textbf{Importance} & \textbf{Feature}                          & \multicolumn{1}{c|}{\textbf{Importance}} \\
-   $\lvert\mu \rvert$ Sim. Packing Efficiency\footnote{$\lvert\mu \rvert$ Sim. Packing Efficiency is the mean absolute value of the simulated packing efficiency.} & 15.62\%             & $\lvert\mu \rvert$ Sim. Packing Efficiency & 32.73\%             & $\lvert\mu \rvert$ Sim. Packing Efficiency & \multicolumn{1}{c|}{32.90\%}             \\
-   Mean NUnfilled                            & 7.71\%              & Mean NUnfilled                            & 11.53\%             & Mean NUnfilled                            & \multicolumn{1}{c|}{11.83\%}             \\
-   0-norm                                    & 6.67\%              & frac d valence electrons                            & 3.80\%              & frac d valence electrons                  & \multicolumn{1}{c|}{4.57\%}              \\
-   Mean NfUnfilled                           & 3.25\%              & 0-norm                                    & 3.66\%              & Mean NdValence                            & \multicolumn{1}{c|}{3.53\%}              \\
-   Mean NdUnfilled                           & 3.25\%              & Mean MeltingT                             & 2.68\%              & 0-norm                                    & \multicolumn{1}{c|}{3.43\%}              \\
-   Mean SpaceGroupNumber                     & 3.02\%              & Mean GSvolume\_pa                          & 2.52\%              & Mean MeltingT                             & \multicolumn{1}{c|}{3.42\%}              \\
-   Mean Electronegativity                    & 2.95\%              & 2-norm                                    & 2.44\%              & Mean CovalentRadius                       & \multicolumn{1}{c|}{2.94\%}              \\
-   2-norm                                    & 2.79\%              & 10-norm                                   & 2.12\%              & 2-norm                                    & \multicolumn{1}{c|}{2.87\%}              \\ \hline
-   \end{tabular}%
-   }
-   \caption{Comparison of feature importance for Scikit-Learn ensemble models. Note that the top two features are the same for all three models.}
-\end{table*}\label{tab:feature-importance}
 
 \subsection{Comparing Uncertainty}
 As discussed in Section~\ref{sec:uncertainty}, we quantified uncertainty for our predictions, mainly using MAPIE. Since our other uncertainty libraries only work for Random Forest Models, we used MAPIE to evaluate our models. We trained a Random Forest Model model with ForestCI to compare with MAPIE methods of uncertainty quantification. 
