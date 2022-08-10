@@ -38,7 +38,7 @@ One of the long-standing challenges in the last century is to find near room-tem
 \maketitle
 %\tableofcontents
 
-\section{Introduction}
+\section{Introduction}%!!!look into top features and what they are, add to paper and presentation
 %get rid of subsections, bulletpoint types of models, incl. references
 %model discussions after dataset
 Superconductors are materials that lose all electrical resistance at low temperatures. These materials have a critical temperature ($T_C$) at which they lose their resistance. Most have very low critical temperatures, but “unconventional superconductors” can have critical temperatures as high as room temperature under non-atmospheric conditions. 
@@ -51,8 +51,8 @@ Machine learning can be an excellent asset in the search for such superconductin
 
 Calculating uncertainty is also important, as it can give research a confidence range for a machine learning model's prediction. This paper attempts to create an accurate model with uncertainty quantification, allowing experimentalists to predict critical temperatures with the confidence intervals.
 
-\section{Methodology}
-\subsection{Database}
+\section{Methodology} %!!!fix double figure page (move 5th page)
+\subsection{Database} %!!!fix figure numbers including section numbers!!
 We chose to use data sourced from one most popular experimental datasets, the supercon database from Japan's National Institute for Materials Science. This dataset is not available publicaly from the National Institute for Materials Science's website, so we used data obtained from \cite{Stanev2018}. This is the same database, but Stanev Et al. resolved conflicts in the data and dropped obvious erroneous data.
 
 This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. According to \cite{Stanev2018}, around 5700 of these materials are cuprates and 1500 are iron-based. More demographic metadata is available in their paper. 
@@ -63,7 +63,8 @@ We dropped materials that did not have a critical temperature recorded, about 4,
    \centering % add numbers to columns
    \includegraphics[width=\columnwidth]{images/dataset_histogram.png}
    \caption{A histogram of critical temperatures in the dataset. Most superconductors are found at low temperatures and this dataset is representative of that.} %more info in caption
-\end{figure}\label{fig:data-histogram}
+   \label{fig:data-histogram}
+\end{figure} % fig:data-histogram
 
 In the remaining data, there are 6,188 samples with a critical temperature below 10K and 6,210 samples above 10K. There are 159 samples with temperatures above 100K and 0 samples above 145K. A histogram represents this information graphically in Figure~\ref{fig:data-histogram}. Since most of this data is at low temperatures, we can expect less accuracy in our models for higher critical temperature superconductors.
 
@@ -77,7 +78,7 @@ Most superconductor databases do not include enough information to train an effe
 
 Our database only provides the superconductor composition data. Matminer's featurizers can generate 53 features from the composition of a material. If we had band structure or other data, we could produce more information that we could use in our model.
 
-\subsection{Machine Learning}
+\subsection{Machine Learning} %!!!add discussion of linear regression
 
 Previous papers have used random forest models to predict critical temperature [citation needed], but this paper will examine eight models before settling on two for further investigation. All models are implemented with Scikit-Learn, with the notable exception of a mlens superlearner \cite{scikit-learn, flennerhag:2017mlens}. We will also use MAPIE models for uncertainty, discussed in Section~\ref{sec:uncertainty}.
 
@@ -136,7 +137,7 @@ MAPIE also has a prefit method, but it is difficult to extract uncertainty bars 
 
 Lolo is a Scala random forest machine learning library and is not a native python implementation. Lolopy is a python wrapper for lolo, but this implementation is very slow for large datasets. We were unable to successfully train a lolopy model due to these factors and time limitations of the project, but our code supports lolopy models.
 
-\subsection{Project Structure} %MENTION PANDAS/NUMPY/ETC
+\subsection{Project Structure}
 The source code used for this paper is available publicly on github at \url{https://github.com/sylphrena0/classe2022}. This repository also includes the source files for this latex paper, data files, images, and documentation files.
 
 Our research uses numpy and pandas throughout our code to handle arrays and tabular data \cite{Harris2020array, Reback2020pandas}. We also use matplotlib and seaborns to generate our graphs \cite{Hunter2007, Waskom2021}.
@@ -187,7 +188,8 @@ We also implemented Bayesian optimization using Gaussian Processes methods from 
    \end{tabular}%
    }
    \caption{Comparison of optimization methods by model.}
-\end{table}\label{tab:optimizers}
+   \label{tab:optimizers}
+\end{table}% tab:optimizers
 
 \begin{figure*}[t] %star makes figure and caption span both columns
    %star enviroment floats are placed on the top of the next page or on dedicated float pages in revtex, no easy way around it
@@ -202,7 +204,8 @@ We also implemented Bayesian optimization using Gaussian Processes methods from 
    \includegraphics[height=2.25in]{images/subfigures/no_uncertainty/extra_trees_optimized.png}
    \includegraphics[height=2.25in]{images/subfigures/no_uncertainty/superlearner.png}
    \caption{Graph of optimized model predictions versus actual critical temperatures for each base model. The dotted line represents the optimal prediction for any given critical temperature.}
-\end{figure*}\label{fig:results}
+   \label{fig:results}
+\end{figure*}% fig:results
 
 \begin{table*}[b]
   \resizebox{\textwidth}{!}{%
@@ -221,7 +224,8 @@ We also implemented Bayesian optimization using Gaussian Processes methods from 
   \end{tabular}
   }
   \caption{CV scores of the models comparing optimized and base hyper-parameters.}
-\end{table*}\label{tab:results}
+  \label{tab:results}
+\end{table*}% tab:results
 \afterpage{\clearpage}
 
 %move this page down if we can, after finishing draft:
@@ -231,7 +235,8 @@ We also implemented Bayesian optimization using Gaussian Processes methods from 
    \includegraphics[height=2.25in]{images/subfigures/random_forest_optimized_mapie-naive.png} \nolinebreak
    \includegraphics[height=2.25in]{images/subfigures/random_forest_optimized_mapie-plus.png}
    \caption{Comparision MAPIE methods and ForestCI uncertainty calculations for Random Forest models with plot of optimized model predictions versus actual critical temperatures. Note that all other uncertainty calculations in this paper use the MAPIE-plus method, which uses a Jackknife+ algorithm. This is the default method for MAPIE.}
-\end{figure*}\label{fig:mapie-forestci}
+   \label{fig:mapie-forestci}
+\end{figure*}% fig:mapie-forestci
 
 \begin{figure*}[!h]
     \centering
@@ -245,41 +250,15 @@ We also implemented Bayesian optimization using Gaussian Processes methods from 
     \includegraphics[height=2.25in]{images/subfigures/uncertainty/extra_trees_optimized.png}
     \includegraphics[height=2.25in]{images/subfigures/uncertainty/superlearner.png}
     \caption{Graph of optimized model predictions versus actual critical temperatures for selected base model with confidence intervals. Other models have similar invervals but are omitted here for brevity.}
-\end{figure*}\label{fig:results-uncertainty}
+    \label{fig:results-uncertainty}
+\end{figure*}% fig:results-uncertainty
 \clearpage
 
 The performance of each optimizer on selected high performance models is shown in Table~\ref{tab:optimizers}. Note that the optimal method for each model (shown in bold), was found with various methods. The Bayesian optimization was much less computationally expensive than GridSearchCV, however, and is the recommended method for large datasets.
 
-\subsection{Optimized Models}\label{sec:optimized-models}
+\subsection{Optimized Models}\label{sec:optimized-models} %explcity say which is best model
 
 Our base models provided good results and the top two models, Random Forest and Extra Trees, only improved their scores marginally with optimization. Our numerical results of the optimized and optimized models are shown in Table~\ref{tab:results}.
-
-% \begin{table}[!hb]
-%    \centering
-%    \resizebox{\columnwidth}{!}{%
-%    \begin{tabular}{clcccc}
-%    \hline
-%    \multicolumn{1}{l}{}                                                                                 & \textbf{Model}                    & \multicolumn{1}{l}{\textbf{R2}} & \multicolumn{1}{l}{\textbf{MSE}} & \multicolumn{1}{l}{\textbf{MAE}} & \multicolumn{1}{l}{\textbf{MWS}} \\ \hline
-%    \multirow{8}{*}{\textbf{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering Unoptimized}}}}} & \textbf{Extra Trees Regression}   & 0.927                           & 58.706                           & 3.771                            & 35.635                           \\
-%                                                                                                         & \textbf{Random Forest Regression} & 0.911                           & 71.209                           & 4.310                            & 38.504                           \\
-%                                                                                                         & \textbf{KNeighbors Regression}    & 0.843                           & 126.106                          & 5.976                            & 52.631                           \\
-%                                                                                                         & \textbf{Decision Tree Regression} & 0.818                           & 145.964                          & 5.598                            & 58.664                           \\
-%                                                                                                         & \textbf{Support Vector Machines}  & 0.710                           & 232.020                          & 9.026                            & 64.056                           \\
-%                                                                                                         & \textbf{Linear Regression}        & 0.608                           & 314.499                          & 13.147                           & 76.753                           \\
-%                                                                                                         & \textbf{Elastic Net Regression}   & 0.607                           & 315.162                          & 13.161                           & 77.033                           \\
-%                                                                                                         & \textbf{Bayesian Regression}      & 0.607                           & 314.711                          & 13.172                           & 76.994                           \\ \hline
-%    \multirow{8}{*}{\textbf{\textbf{\rotatebox[origin=c]{90}{\parbox[c]{2cm}{\centering Optimized}}}}}   & \textbf{Extra Trees Regression}   & 0.927                           & 58.565                           & 3.792                            & 35.850                           \\
-%                                                                                                         & \textbf{Superlearner}             & 0.926                           & 59.133                           & 3.778                            & 35.729                           \\
-%                                                                                                         & \textbf{Random Forest Regression} & 0.910                           & 72.112                           & 4.349                            & 39.254                           \\
-%                                                                                                         & \textbf{Decision Tree Regression} & 0.831                           & 135.041                          & 5.529                            & 56.136                           \\
-%                                                                                                         & \textbf{KNeighbors Regression}    & 0.803                           & 157.928                          & 6.897                            & 58.231                           \\
-%                                                                                                         & \textbf{Support Vector Machines}  & 0.710                           & 232.020                          & 9.026                            & 64.056                           \\
-%                                                                                                         & \textbf{Bayesian Regression}      & 0.607                           & 314.711                          & 13.172                           & 76.994                           \\
-%                                                                                                         & \textbf{Elastic Net Regression}   & 0.513                           & 389.897                          & 14.877                           & 86.375                           \\ \hline
-%    \end{tabular}%
-%    }
-%    \caption{CV scores of the models comparing optimized and base hyperparameters.}
-% \end{table}\label{tab:results}
 
 The linear models performed a little worse, with none of these models exceeding an R2 value of 0.72, and with MAE above 8K. Additionally, uncertainty is quite high for these models, with the confidence interval widths (MWS) exceeding 60K. The decision tree and KNeighbors models perform a little better, with R2 values around 0.8 and MAE around 5K. 
 
@@ -307,7 +286,8 @@ The linear models in Figure~\ref{fig:results-uncertainty} have unacceptablely la
    \centering
    \includegraphics[width=\columnwidth]{images/feature_heatmap_eti.png}
    \caption{Heatmap of correlations between most important features for our Extra Trees model and the critical temperatures.}
-\end{figure}\label{fig:feature-correlations}
+   \label{fig:feature-correlations}
+\end{figure}% fig:feature-correlations
 
 \begin{figure*}[!b]
    \centering
@@ -315,7 +295,8 @@ The linear models in Figure~\ref{fig:results-uncertainty} have unacceptablely la
    \includegraphics[height=2.25in]{images/subfigures/superlearner_selected_features.png}\nolinebreak
    \includegraphics[height=2.25in]{images/subfigures/extra_trees_selected_features.png}
    \caption{Top three optimized models, using their top ten most important features. Note that the Superlearner model is using the Extra Trees feature importance, as the mlens model does not have a feature importance method.}
-\end{figure*}\label{fig:selected-features}
+   \label{fig:selected-features}
+\end{figure*}% fig:selected-features
 
 \begin{figure*}[]
    \centering
@@ -324,9 +305,10 @@ The linear models in Figure~\ref{fig:results-uncertainty} have unacceptablely la
    \includegraphics[height=2.5in]{images/subfigures/extra_trees_t_c_<_23k.png}
    \includegraphics[height=2.5in]{images/subfigures/extra_trees_t_c_>_23k.png}
    \caption{Random Forest and Extra Trees models using temperature limited data, $T_C$ above or below 23K.}
-\end{figure*}\label{fig:temp-limited}
+   \label{fig:temp-limited}
+\end{figure*}% fig:temp-limited
 
-The results shown thus far have included all features produced with matminer. We decided to perform some feature selection to reduce complexity and training time for our models. First, we used Scikit-Learn's feature importance method for our ensemble methods to find the relative importance for each model. The most important features for Random Forest and Extra Trees are shown in Table~\ref{tab:feature-importance}. Notably, Table~\ref{tab:feature-importance} shows that both models have the same top two features, with varying less important features below it.
+The results shown thus far have included all features produced with matminer. We decided to perform some feature selection to reduce complexity and training time for our models. First, we used Scikit-Learn's feature importance method for our ensemble methods to find the relative importance for each model. The most important features for Random Forest and Extra Trees are shown in Table~\ref{tab:feature-importance}. 
 
 \begin{table}[!h]
    \centering
@@ -335,29 +317,31 @@ The results shown thus far have included all features produced with matminer. We
    \hline
    \multicolumn{2}{|c|}{\textbf{Extra Trees}}                      \\ \hline
    \textbf{Feature}                          & \textbf{Importance} \\
-   Mean Absolute Sim. Packing Efficiency & 15.62\%             \\
-   Mean NUnfilled                            & 7.71\%              \\
-   0-norm                                    & 6.67\%              \\
-   Mean NfUnfilled                           & 3.25\%              \\
-   Mean NdUnfilled                           & 3.25\%              \\
-   Mean SpaceGroupNumber                     & 3.02\%              \\
-   Mean Electronegativity                    & 2.95\%              \\
-   2-norm                                    & 2.79\%              \\ \hline
+   Mean Absolute Sim. Packing Efficiency     & 15.62\%             \\
+   Mean Unfilled Valence $e^-$               & 7.71\%              \\
+   $L^0$ Norm Stoichiometric Attributes     & 6.67\%              \\
+   Mean Unfilled F Orbital Valence $e^-$     & 3.25\%              \\
+   Mean Unfilled D Orbital Valence $e^-$     & 3.25\%              \\
+   Mean Space Group Number                     & 3.02\%              \\
+   Mean Electronegativity of Elements        & 2.95\%              \\
+   $L^2$ Norm Stoichiometric Attributes     & 2.79\%              \\ \hline
    \multicolumn{2}{|c|}{\textbf{Random Forest}}                    \\ \hline
    \textbf{Feature}                          & \textbf{Importance} \\
-   Mean Absolute Sim. Packing Efficiency & 32.73\%             \\
-   Mean NUnfilled                            & 11.53\%             \\
-   D Valence $e^-$                           & 3.80\%              \\
-   0-norm                                    & 3.66\%              \\
-   Mean MeltingT                             & 2.68\%              \\
-   Mean GSvolume\_pa                         & 2.52\%              \\
-   2-norm                                    & 2.44\%              \\
-   10-norm                                   & 2.12\%              \\ \hline
+   Mean Absolute Sim. Packing Efficiency     & 32.73\%             \\
+   Mean Unfilled Valence $e^-$               & 11.53\%             \\
+   Weighted Fraction of D Valence $e^-$      & 3.80\%              \\
+   $L^0$ Norm Stoichiometric Attributes     & 3.66\%              \\
+   Mean Melting Temperature of Elements      & 2.68\%              \\
+   Mean DFT Volume of Elemental Solids& 2.52\%              \\
+   $L^2$ Norm Stoichiometric Attributes     & 2.44\%              \\
+   $L^{10}$ Norm Stoichiometric Attributes  & 2.12\%              \\ \hline
    \end{tabular}%
    }
    \caption{Comparison of feature importance for Scikit-Learn ensemble models. Note that the top two features are the same for all three models.}
-\end{table}\label{tab:feature-importance}
+   \label{tab:feature-importance}
+\end{table}% tab:feature-importance
 
+Notably, Table~\ref{tab:feature-importance} shows that both models have the same top two features. Additionally, the mean space group number and mean electronegativity only appear in the Extra Trees model, while the Random Forest model uses DTF calculated volume of elemental solids, $L^{10}$ norms, and mean melting temperature of the composition elements.
 
 %  switch to this table if possible (horizontal, star enviroment being impossible)
 % \begin{table*}[!t] 
@@ -378,8 +362,10 @@ The results shown thus far have included all features produced with matminer. We
 %    \end{tabular}%
 %    }
 %    \caption{Comparison of feature importance for Scikit-Learn ensemble models. Note that the top two features are the same for all three models.}
-% \end{table*}\label{tab:feature-importance}
-Finally, we trained some models on temperature limited data, temperatures above 23K or below 23K. The models, shown in Figure~\ref{fig:temp-limited}, show the weaknesses of the models. While the high temperature model has a higher R2, the error and uncertainty scores are much worse than the low temperature model. This reflects our understanding of superconductors. We know little about unconventional temperature superconductors and have limited data on them, so our model is likely to have higher error at those points.
+%    \label{tab:feature-importance}
+% \end{table*}% tab:feature-importance
+
+We also trained some models on temperature limited data, temperatures above 23K or below 23K. The models, shown in Figure~\ref{fig:temp-limited}, show the weaknesses of the models. While the high temperature model has a higher R2, the error and uncertainty scores are much worse than the low temperature model. This reflects our understanding of superconductors. We know little about unconventional temperature superconductors and have limited data on them, so our model is likely to have higher error at those points.
 
 Next, we trained three models using only the most important features for the given model. The results are shown in Figure~\ref{fig:selected-features}. Each model has slightly worse metrics than the full model, but the decreased complexity of the model is valuable.
 
