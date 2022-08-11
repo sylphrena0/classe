@@ -39,7 +39,8 @@ def syncdir():
 ################################################
 ############ Define Import Function ############
 ################################################
-def import_data(filename="features.csv", #change filename, using files from ../../data
+def import_data(
+                    filename="features.csv", #change filename, using files from ../../data
                     replace_inf=False, #toggle replacing infinities in data with NaN
                     drop_undef_tc=True, #toggle dropping undefined Tc in dataset (Tc=0)
                     drop=None, #specify list of columns to drop
@@ -71,7 +72,8 @@ def import_data(filename="features.csv", #change filename, using files from ../.
 ###############################################
 ######### Define Evaluation Functions #########
 ###############################################
-def evaluate_one(model_name, #pass model name for plot titles and files
+def evaluate_one(
+                    model_name, #pass model name for plot titles and files
                     model, #pass scikit-learn model object for training
                     parameters, #pass scikit-learn model parm dictionary
                     uncertainty=True, #boolean to toggle uncertainty measurements
@@ -134,7 +136,10 @@ def evaluate_one(model_name, #pass model name for plot titles and files
         mae = round(mean_absolute_error(test_target, model_pred),3) #find mean square error
         r2 = round(r2_score(test_target, model_pred),3) #find r2 score
 
-        if predictions_csv: predictions = pd.DataFrame(test_target, model_pred, columns=("Test Target", "Test Prediction")) #store predictions in datafram if we want to export
+        if predictions_csv: 
+            predictions = pd.DataFrame() #store predictions in dataframe if we want to export
+            predictions["Test Target"] = test_target
+            predictions["Test Prediction"] = model_pred
         difference = np.abs(test_target - model_pred) #function that finds the absolute difference between predicted and actual value
         im = plt.scatter(test_target, model_pred, cmap='plasma_r', norm=plt.Normalize(0, 120), c=difference, label="Critical Temperature (K)", zorder=2) #create scatter plot of data 
         plt.plot((0,maxexpected), (0,maxexpected), 'k--', alpha=0.75, zorder=3) #add expected line. Values must be changed with different data to look good
@@ -155,7 +160,7 @@ def evaluate_one(model_name, #pass model name for plot titles and files
                 yerror = np.abs(model_pis[:,:,0].transpose() - np.tile(model_pred, (2, 1))) #error must be in shape (n, 2) for errorbars
                 mws = round(regression_mws(model_pis[:,:,0][:,0],model_pis[:,:,0][:,1]),3) #generate mean width score metric from mapie data
             plt.errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1, label="Prediction Intervals")
-            if predictions_csv: predictions["Uncertainty"] = yerror
+            if predictions_csv: predictions["Uncertainty"] = yerror[0]
         else:
             save_name = "no-uncertainty/" + save_name #moves into no-uncertainty directory
 
@@ -180,7 +185,8 @@ def evaluate_one(model_name, #pass model name for plot titles and files
         if show: plt.show() #show plot if enabled
         plt.clf() #clear plot (added after some wierd script glitching)
 
-def evaluate(models, #list of list of models to plot
+def evaluate(
+                models, #list of list of models to plot
                 title, #set supertitle of plot
                 filename='results', #set filename to export
                 method="plus", #string - choose mapie uncertainty estimator method
@@ -248,7 +254,9 @@ def evaluate(models, #list of list of models to plot
                         #model_pis contains absolute points for upper/lower bounds. We need absolute error, like (3, 3) for ± 3:
                         yerror = np.abs(model_pis[:,:,0].transpose() - np.tile(model_pred, (2, 1))) #error must be in shape (n, 2) for errorbars
                         mws = round(regression_mws(model_pis[:,:,0][:,0],model_pis[:,:,0][:,1]),3) #generate mean width score metric from mapie data
-                    ax[x, y].errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1) #removed ", label="Prediction Intervals", as it is covers other data for bulk plots 
+                    ax[x, y].errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1) #removed ", label="Prediction Intervals", as it is covers other data for bulk plots
+                else:
+                    save_name += "_no_uncertainty" #adds uncertainty suffix
 
                 if dumpdb: dill.dump_session(f'../results/bulk_{filename}.db') #dump python session for external use
 
