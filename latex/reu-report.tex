@@ -19,10 +19,6 @@
 
 \begin{document}
 
-%show just eight optimized models w/o error
-%comparison of base model, then cleaned - extra trees
-%ADD THIS REF: https://doi.org/10.1515/znb-2019-0103
-
 \begin{abstract}
 One of the long-standing challenges in the last century is to find near room-temperature superconductors. There are limited technological applications due to the insufficient fundamental understanding of the physics of these unconventional superconductors. Researchers have recently explored machine learning models to predict superconducting critical temperatures in several papers, but these researchers have not attempted to quantify uncertainty. This paper expands upon that work by exploring alternative models to improve the utility of such models and addressing the  uncertainty quantification. Our research produced multiple models exceeding R2 scores of 0.9 and mean absolute errors below 4.5K. We also made our code available publicly on Github and intend for it to be as functional and reusable as possible. 
 \end{abstract}
@@ -53,9 +49,9 @@ Calculating uncertainty is also important, as it can give research a confidence 
 
 \section{Methodology}
 \subsection{Database}
-We chose to use data sourced from one most popular experimental datasets, the supercon database from Japan's National Institute for Materials Science. This dataset is not available publicaly from the National Institute for Materials Science's website, so we used data obtained from \cite{Stanev2018}. This is the same database, but Stanev Et al. resolved conflicts in the data and dropped obvious erroneous data.
+We chose to use data sourced from one most popular experimental datasets, the supercon database from Japan's National Institute for Materials Science. This dataset is not available publicaly from the National Institute for Materials Science's website, so we used data obtained from \cite{Stanev2018}. This is the same database, but Stanev et al. resolved conflicts in the data and dropped obvious erroneous data.
 
-This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. According to \cite{Stanev2018}, around 5700 of these materials are cuprates and 1500 are iron-based. More demographic metadata is available in their paper. 
+This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. According to Stanev's paper, around 5700 of these materials are cuprates and 1500 are iron-based. More demographic metadata is available in their paper \cite{Stanev2018}. 
 
 We dropped materials that did not have a critical temperature recorded, about 4,000 materials. This leaves us with a dataset of around 12,500 materials. %IMPORTANT - cite Hamidieh if we use the other dataset
 
@@ -66,7 +62,7 @@ We dropped materials that did not have a critical temperature recorded, about 4,
    \label{fig:data-histogram}
 \end{figure} % fig:data-histogram
 
-In the remaining data, there are 6,188 samples with a critical temperature below 10K and 6,210 samples above 10K. There are 159 samples with temperatures above 100K and 0 samples above 145K. A histogram represents this information graphically in Figure~\ref{fig:data-histogram}. Since most of this data is at low temperatures, we can expect less accuracy in our models for higher critical temperature superconductors.
+In the remaining data, there are 8,373 samples with a critical temperature below 23K and 4,037 samples above 23K. There are 159 samples with temperatures above 100K and 0 samples above 145K. A histogram represents this information graphically in Figure~\ref{fig:data-histogram}. Since most of this data is at low temperatures, we can expect less accuracy in our models for higher critical temperature superconductors.
 
 Most superconductor databases do not include enough information to train an effective machine learning model, but such data can be extracted from the data they do provide. We use matminer to produce our features from the provided material data. Matminer is a python library that generates data from various measured properties of a material \cite{WARD201860}. Matminer collects existing calculations into a machine learning friendly python package. %Our matminer workflow is shown in Figure~\ref{fig:matminer-flowchart}.
 
@@ -140,12 +136,12 @@ MAPIE also has a prefit method, but it is difficult to extract uncertainty bars 
 
 Lolo is a Scala random forest machine learning library and is not a native python implementation. Lolopy is a python wrapper for lolo, but this implementation is very slow for large datasets. We were unable to successfully train a lolopy model due to these factors and time limitations of the project, but our code supports lolopy models.
 
-\subsection{Project Structure}
+\subsection{Project Structure} %spell out CLASSE, link/cite CLASSE - move data/code availabilty to it's own subsection
 The source code used for this paper is available publicly on github at \url{https://github.com/sylphrena0/classe2022}. This repository also includes the source files for this latex paper, data files, images, and documentation files.
 
 Our research uses numpy and pandas throughout our code to handle arrays and tabular data \cite{Harris2020array, Reback2020pandas}. We also use matplotlib and seaborns to generate our graphs \cite{Hunter2007, Waskom2021}.
 
-The code is split into multiple python files so processes could be completed in stages and to maintain readability in the code. Most of our testing and final training was completed in juypter notebooks, but some computations were highly computationally expensive and needed to be run remotely. For these jobs, we created simple python files and made bash scripts to run them on Cornell's CLASSE compute farm. We also made several bash aliases and functions to simplify the compute farm workflow, which are also available on the github repository. 
+The code is split into multiple python files so processes could be completed in stages and to maintain readability in the code. Most of our testing and final training was completed in juypter notebooks, but some computations were highly computationally expensive and needed to be run remotely. For these jobs, we created simple python files and made bash scripts to run them on The Cornell Laboratory for Accelerator-based Sciences and Education (CLASSE) compute farm. We also made several bash aliases and functions to simplify the compute farm workflow, which are also available on the github repository. 
 
 Since we used multiple files, we chose to create shared dependencies files where we defined functions to import data, train models, and generate our graphs. These files are then imported in all the relevant scripts to reduce redundancy. More detailed explainations of the purpose of each file is available in the github readme file and documentation within the files.
 
@@ -285,7 +281,7 @@ The linear models in Figure~\ref{fig:results-uncertainty} have unacceptablely la
 
 \clearpage
 
-\subsection{Feature Selection}
+\subsection{Feature Selection} %abbriviate feature names for correlation plot, maybe use feature importance table
 
 
 The results shown thus far have included all features produced with matminer. We decided to perform some feature selection to reduce complexity and training time for our models. First, we used Scikit-Learn's feature importance method for our ensemble methods to find the relative importance for each model. The most important features for Random Forest and Extra Trees are shown in Table~\ref{tab:feature-importance}. 
@@ -345,9 +341,9 @@ Notably, Table~\ref{tab:feature-importance} shows that both models have the same
 %    \label{tab:feature-importance}
 % \end{table*}% tab:feature-importance
 
-We also trained some models on temperature limited data, temperatures above 23K or below 23K. The models, shown in Figure~\ref{fig:temp-limited}, show the weaknesses of the models. While the high temperature model has a higher R2, the error and uncertainty scores are much worse than the low temperature model. This reflects our understanding of superconductors. We know little about unconventional temperature superconductors and have limited data on them, so our model is likely to have higher error at those points.
-
 Next, we trained three models using only the most important features for the given model. The results are shown in Figure~\ref{fig:selected-features}. Each model has slightly worse metrics than the full model, but the decreased complexity of the model is valuable.
+
+We also trained some models on temperature limited data, temperatures above 23K or below 23K. The models, shown in Figure~\ref{fig:temp-limited}, show the weaknesses of the models. While the high temperature model has a higher R2, the error and uncertainty scores are much worse than the low temperature model. This reflects our understanding of superconductors. We know little about unconventional temperature superconductors and have limited data on them, so our model is likely to have higher error at those points.
 
 We also used our top model's most important features and made a correlations plot, shown in Figure~\ref{fig:feature-correlations}. A full correlation plot is available on github, but is too large for this paper.
 
@@ -359,7 +355,7 @@ We also used our top model's most important features and made a correlations plo
    \label{fig:feature-correlations}
 \end{figure}% fig:feature-correlations
 
-\section{Conclusions}
+\section{Conclusions} %add discussion of Active learning bayesian optimization with prediction and uncertainty 
 We successfully created various machine learning models to predict superconductor critical temperatures, including unconventional models like mlens superlearners. For each model, we successfully quantified uncertainty of our predictions and optimized our hyperparameters with bayesian regression. 
 
 This project focused on experimental data and used matminer to generate our features. Further work could include expansion of models to simulated datasets and application to potential superconductors. This could expose weaknesses in our model and illustrate improvements we could make to predict more accurately.
@@ -392,4 +388,4 @@ I would like to thank my mentor, Suchismita Sarker, for her guidance and support
 \bibliographystyle{apsrev4-2}
 \bibliography{reu-report}
 
-\end{document}
+\end{document} %add option to export csv with prediction vs actual
