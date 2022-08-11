@@ -107,7 +107,7 @@ We decided to test a variety of machine learning models to ensure we would find 
   \end{itemize}
   \item Random Forest Regression (RFR)
   \begin{itemize}
-  		\item RFR is an ensemble method that uses numerous decision trees and subsamples the data with replacement. This means that the model replace data after using it in a subset.
+  		\item RFR is an ensemble method that uses numerous decision trees and subsamples the data with replacement. This means that the model replaces data after using it in a subset.
   \end{itemize}
   \item Extra Trees
   \begin{itemize}
@@ -123,26 +123,26 @@ We decided to test a variety of machine learning models to ensure we would find 
 
 %Additionally, we trialed Decision Tree and KNeighbors (KNN) models. Decision trees are very interpretable - they break predictions into nodes of the tree, eventually leading to a prediction value. These trees can be represented graphically and show how they produce results, unlike most machine learning models. KNN models are a little different, they store all the data and predict values based on a similarity measure. The model looks at a specified number of similar neighbors to produce a prediction.
 
-%Finally, we tried multiple ensemble models - Random Forest Regression (RFR), Extra Trees, and a superlearner. RFR models use numerous decision trees and subsamples the data with replacement. This means that the model replace data after using it in a subset. Extra Trees is like RFR, but it does not replace the data after use in a subset. The final ensemble model we tested is a superlearner, a model that can combine multiple high-scoring Scikit-Learn model predictions and sometimes improve the performance from the individual models.
+%Finally, we tried multiple ensemble models - Random Forest Regression (RFR), Extra Trees, and a superlearner. RFR models use numerous decision trees and subsamples the data with replacement. This means that the model replaces data after using it in a subset. Extra Trees is like RFR, but it does not replace the data after use in a subset. The final ensemble model we tested is a superlearner, a model that can combine multiple high-scoring Scikit-Learn model predictions and sometimes improve the performance from the individual models.
 
 \subsection{Quantifying Uncertainty}\label{sec:uncertainty}
 Our evaluation functions can produce uncertainty calculations using forestci, mapie, or lolopy \cite{Polimis2017, Taquet2022, Hutchinson2022}. 
 
-Forestci is python implementation of an algorithm from \cite{Wager2014} that predicts confidence intervals for random forest models. It is the fastest of the uncertainty methods listed. 
+Forestci is a python implementation of an algorithm from \cite{Wager2014} that predicts confidence intervals for random forest models. It is the fastest of the uncertainty methods listed. 
 
-The Model Agnostic Prediction Interval Estimator (MAPIE) python library is more recent implementation of jackknife based on \cite{Foygel2020}. MAPIE uses various resampling methods. Most methods require the use of MAPIE's own MapieRegressor, which accepts an Scikit-Learn regressor and keeps track of uncertainty as the model is trained. We chose to use the MAPIE-plus method, which is based of the Jackknife+ algorithm. This is the default uncertainty method for MAPIE and is recommended by the developers.
+The Model Agnostic Prediction Interval Estimator (MAPIE) python library is a more recent implementation of jackknife based on \cite{Foygel2020}. MAPIE uses various resampling methods. Most methods require the use of MAPIE's own MapieRegressor, which accepts an Scikit-Learn regressor and keeps track of uncertainty as the model is trained. We chose to use the MAPIE-plus method, which is based on the Jackknife+ algorithm. This is the default uncertainty method for MAPIE and is recommended by the developers.
 
 MAPIE also has a prefit method, but it is difficult to extract uncertainty bars for individual points from this data - it splits a celebration set off the test set to generate uncertainty, so it can't be easily added to our plot of test set predictions. Thus, we will only compare the normal MAPIE methods with the other libraries. MAPIE trains much slower than other models, particularly on our superlearner, but it is still considerably faster than our final uncertainty model, lolopy.
 
 Lolo is a Scala random forest machine learning library and is not a native python implementation. Lolopy is a python wrapper for lolo, but this implementation is very slow for large datasets. We were unable to successfully train a lolopy model due to these factors and time limitations of the project, but our code supports lolopy models.
 
-\subsection{Project Structure} %spell out CLASSE, link/cite CLASSE - move data/code availabilty to it's own subsection
+\subsection{Project Structure} 
 
 Our research uses numpy and pandas throughout our code to handle arrays and tabular data \cite{Harris2020array, Reback2020pandas}. We also use matplotlib and seaborns to generate our graphs \cite{Hunter2007, Waskom2021}.
 
-The code is split into multiple python files so processes could be completed in stages and to maintain readability in the code. Most of our testing and final training was completed in juypter notebooks, but some computations were highly computationally expensive and needed to be run remotely. For these jobs, we created simple python files and made bash scripts to run them on The Cornell Laboratory for Accelerator-based Sciences and Education (CLASSE) compute farm. We also made several bash aliases and functions to simplify the compute farm workflow, which are also available on the github repository. 
+The code is split into multiple python files so processes could be completed in stages and to maintain readability in the code. Most of our testing and final training was completed in Jupyter notebooks, but some computations were highly computationally expensive and needed to be run remotely. For these jobs, we created simple python files and made bash scripts to run them on The Cornell Laboratory for Accelerator-based Sciences and Education (CLASSE) compute farm. We also made several bash aliases and functions to simplify the compute farm workflow, which are also available on the github repository. 
 
-Since we used multiple files, we chose to create shared dependencies files where we defined functions to import data, train models, and generate our graphs. These files are then imported in all the relevant scripts to reduce redundancy. More detailed explainations of the purpose of each file is available in the github readme file and documentation within the files.
+Since we used multiple files, we chose to create shared dependencies files where we defined functions to import data, train models, and generate our graphs. These files are then imported in all the relevant scripts to reduce redundancy. More detailed explanations of the purpose of each file is available in the github readme file and documentation within the files.
 
 \subsection{Project Evaluation}
 
@@ -156,14 +156,12 @@ The optimizer script then uses a grid of manually defined hyperparameters to opt
 
 We evaluated our models using several metrics - R2 scores (R2) for regression evaluation, Mean Squared Error (MSE) and Mean Absolute Error (MAE) for error evaluation, and MAPIE Effective Mean Widths (MWS) for uncertainty evaluation.
 
-\subsection{Data Availabilty}
+\subsection{Data Availability}
 The source code used for this paper is available publicly on github at \url{https://github.com/sylphrena0/classe2022}. This repository also includes the source files for this latex paper, datasets, images, and documentation for the code.
 
 \section{Results}
 \subsection{Model Optimization}
 Each model's hyperparameters were optimized with various optimization methods. Optimization can be computationally expensive, so we chose to optimize on a randomly selected subset of 2,000 materials, using a numpy random state for reproducibility. To start, we used Scikit-Learn's GridSearchCV, which tests combinations from a grid of hyperparameters and returns the best performing model based on a specified metric. 
-
-We also implemented Bayesian optimization using Gaussian Processes methods from the Scikit-Optimize library \cite{head_tim_2021_5565057}. Bayesian optimization attempts to optimize models intelligently, instead of randomly testing specified hyperparameters. We provide a range of hyperparamters values for Bayesian optimization to test, and the algorithm uses acquisition functions to decide which specific values to use within the specified range. This is different from GridSearchCV, which is simpler but can take much longer to find optimal hyperparameters. We only implemented Bayesian optimization on our top models.
 
 \begin{table}[!h]
    \centering
@@ -192,8 +190,10 @@ We also implemented Bayesian optimization using Gaussian Processes methods from 
    \label{tab:optimizers}
 \end{table}% tab:optimizers
 
+We also implemented Bayesian optimization using Gaussian Processes methods from the Scikit-Optimize library \cite{head_tim_2021_5565057}. Bayesian optimization attempts to optimize models intelligently, instead of randomly testing specified hyperparameters. We provide a range of hyperparameters values for Bayesian optimization to test, and the algorithm uses acquisition functions to decide which specific
+
 \begin{figure*}[t] %star makes figure and caption span both columns
-   %star enviroment floats are placed on the top of the next page or on dedicated float pages in revtex, no easy way around it
+   %star environment floats are placed on the top of the next page or on dedicated float pages in revtex, no easy way around it
    \centering
    \includegraphics[height=2.25in]{images/subfigures/no_uncertainty/elastic_net_optimized.png}
    \includegraphics[height=2.25in]{images/subfigures/no_uncertainty/bayesian_regression_optimized.png}
@@ -230,15 +230,18 @@ We also implemented Bayesian optimization using Gaussian Processes methods from 
 
 \clearpage
 
+\noindent
+values to use within the specified range. This is different from GridSearchCV, which is simpler but can take much longer to find optimal hyperparameters. We only implemented Bayesian optimization on our top models.
+
 The performance of each optimizer on selected high performance models is shown in Table~\ref{tab:optimizers}. Note that the optimal method for each model (shown in bold), was found with various methods. The Bayesian optimization was much less computationally expensive than GridSearchCV, however, and is the recommended method for large datasets.
 
-\subsection{Optimized Models}\label{sec:optimized-models} %explcity say which is best model
+\subsection{Optimized Models}\label{sec:optimized-models}
 
 Our base models provided good results and the top two models, Random Forest and Extra Trees, only improved their scores marginally with optimization. Our numerical results of the optimized and optimized models are shown in Table~\ref{tab:results}.
 
 The linear models performed a little worse, with none of these models exceeding an R2 value of 0.72, and with MAE above 8K. Additionally, uncertainty is quite high for these models, with the confidence interval widths (MWS) exceeding 60K. The decision tree and KNeighbors models perform a little better, with R2 values around 0.8 and MAE around 5K. 
 
-Our ensemble models stole the show—the extra trees model consistently performed the best, with an R2 value of 0.927, MAE around 3.8K, and confidence intervals around 35K. Our superlearner (using optimizd Extra Trees, Random Forest, Decision Trees, and KNeighbor models) performed quite well, with a slightly smaller MAE than the Extra Trees model and marginally lower R2. Lastly, our Random Forest model had slightly worse R2 and MAE scores. These results are shown graphically in Figure~\ref{fig:results}.
+Our ensemble models stole the show—the extra trees model was consistently the best performing model, with an R2 value of 0.927, MAE around 3.8K, and confidence intervals around 35K. Our superlearner (using optimized Extra Trees, Random Forest, Decision Trees, and KNeighbor models) performed quite well, with a slightly smaller MAE than the Extra Trees model and marginally lower R2. Lastly, our Random Forest model had slightly worse R2 and MAE scores. These results are shown graphically in Figure~\ref{fig:results}.
 
 As shown in Figure~\ref{fig:results}, the linear models do not make good predictions at high critical temperatures. All the linear models make very similar predictions - the ensemble methods and KNeighbors have better predictions and are less uniform.
 
@@ -252,9 +255,9 @@ ForestCI and MAPIE-naive produce very similar results, with MAPIE-naive making s
 \subsection{Uncertainty Models}
 Since MAPIE is model agnostic, we have uncertainty predictions for all our models. We discussed our chosen MAPIE numerical uncertainty metric in Section~\ref{sec:optimized-models}, but we can also represent the prediction interval graphically, showing the prediction interval for each predicted point. This is shown in Figure~\ref{fig:results-uncertainty}.
 
-In Figure~\ref{fig:results-uncertainty}, each point has error bars that show the confidence interval. The model can be visually evaluated by seeing how many of the error bars intersect the dotted line, which represents the ideal prediction. While smaller prediction intervals are great, a model is not useful if it most predictions are not within error of the actual value. The bottom three models, ensemble models, have the smallest error bars and most prediction points have the actual value within the prediction interval. 
+In Figure~\ref{fig:results-uncertainty}, each point has error bars that show the confidence interval. The model can be visually evaluated by seeing how many of the error bars intersect the dotted line, which represents the ideal prediction. While smaller prediction intervals are great, a model is not useful if most predictions are not within error of the actual value. The bottom three models, ensemble models, have the smallest error bars and most prediction points have the actual value within the prediction interval. 
 
-The linear models in Figure~\ref{fig:results-uncertainty} have unacceptablely large prediction intervals, in addition to their poor R2 and error metrics. KNeighbors is slightly better, but the uncertainty is still very high. Once again, our ensemble methods show the best metrics, with much smaller prediction intervals that still almost always include the actual value.
+The linear models in Figure~\ref{fig:results-uncertainty} have unacceptably large prediction intervals, in addition to their poor R2 and error metrics. KNeighbors is slightly better, but the uncertainty is still very high. Once again, our ensemble methods show the best metrics, with much smaller prediction intervals that still almost always include the actual value.
 
 %move this page down if we can, after finishing draft:
 \begin{figure*}[!h]
@@ -262,7 +265,7 @@ The linear models in Figure~\ref{fig:results-uncertainty} have unacceptablely la
    \includegraphics[height=2.25in]{images/subfigures/random_forest_optimized_forestci.png} \nolinebreak
    \includegraphics[height=2.25in]{images/subfigures/random_forest_optimized_mapie-naive.png} \nolinebreak
    \includegraphics[height=2.25in]{images/subfigures/random_forest_optimized_mapie-plus.png}
-   \caption{Comparision MAPIE methods and ForestCI uncertainty calculations for Random Forest models with plot of optimized model predictions versus actual critical temperatures. Note that all other uncertainty calculations in this paper use the MAPIE-plus method, which uses a Jackknife+ algorithm. This is the default method for MAPIE.}
+   \caption{Comparison MAPIE methods and ForestCI uncertainty calculations for Random Forest models with plot of optimized model predictions versus actual critical temperatures. Note that all other uncertainty calculations in this paper use the MAPIE-plus method, which uses a Jackknife+ algorithm. This is the default method for MAPIE.}
    \label{fig:mapie-forestci}
 \end{figure*}% fig:mapie-forestci
 
@@ -277,13 +280,13 @@ The linear models in Figure~\ref{fig:results-uncertainty} have unacceptablely la
     \includegraphics[height=2.25in]{images/subfigures/uncertainty/random_forest_optimized.png}
     \includegraphics[height=2.25in]{images/subfigures/uncertainty/extra_trees_optimized.png}
     \includegraphics[height=2.25in]{images/subfigures/uncertainty/superlearner.png}
-    \caption{Graph of optimized model predictions versus actual critical temperatures for selected base model with confidence intervals. Other models have similar invervals but are omitted here for brevity.}
+    \caption{Graph of optimized model predictions versus actual critical temperatures for selected base model with confidence intervals. Other models have similar intervals but are omitted here for brevity.}
     \label{fig:results-uncertainty}
 \end{figure*}% fig:results-uncertainty
 
 \clearpage
 
-\subsection{Feature Selection} %abbriviate feature names for correlation plot, maybe use feature importance table
+\subsection{Feature Selection} %abbreviate feature names for correlation plot, maybe use feature importance table
 
 
 The results shown thus far have included all features produced with matminer. We decided to perform some feature selection to reduce complexity and training time for our models. First, we used Scikit-Learn's feature importance method for our ensemble methods to find the relative importance for each model. The most important features for Random Forest and Extra Trees are shown in Table~\ref{tab:feature-importance}. 
@@ -321,7 +324,7 @@ The results shown thus far have included all features produced with matminer. We
 
 Notably, Table~\ref{tab:feature-importance} shows that both models have the same top two features. Additionally, the mean space group number and mean electronegativity only appear in the Extra Trees model, while the Random Forest model uses DTF calculated volume of elemental solids, $L^{10}$ norms, and mean melting temperature of the composition elements.
 
-%  switch to this table if possible (horizontal, star enviroment being impossible)
+%  switch to this table if possible (horizontal, star environment being impossible)
 % \begin{table*}[!t] 
 %    \centering
 %    \resizebox{\textwidth}{!}{%
