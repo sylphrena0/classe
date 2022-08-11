@@ -135,6 +135,8 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
                 yerror = np.abs(model_pis[:,:,0].transpose() - np.tile(model_pred, (2, 1))) #error must be in shape (n, 2) for errorbars
                 mws = round(regression_mws(model_pis[:,:,0][:,0],model_pis[:,:,0][:,1]),3) #generate mean width score metric from mapie data
             plt.errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1, label="Prediction Intervals")
+        else:
+            save_name = "no-uncertainty/" #moves into no-uncertainty directory
 
         if dumpdb: dill.dump_session(f'../results/bulk_{filename}.db') #dump python session for external use
 
