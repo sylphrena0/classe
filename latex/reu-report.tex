@@ -288,7 +288,6 @@ The linear models in Figure~\ref{fig:results-uncertainty} have unacceptably larg
 
 \subsection{Feature Selection} %abbreviate feature names for correlation plot, maybe use feature importance table
 
-
 The results shown thus far have included all features produced with matminer. We decided to perform some feature selection to reduce complexity and training time for our models. First, we used Scikit-Learn's feature importance method for our ensemble methods to find the relative importance for each model. The most important features for Random Forest and Extra Trees are shown in Table~\ref{tab:feature-importance}. 
 
 \begin{table}[!h]
@@ -296,26 +295,26 @@ The results shown thus far have included all features produced with matminer. We
    \resizebox{\columnwidth}{!}{%
    \begin{tabular}{|lc|}
    \hline
-   \multicolumn{2}{|c|}{\textbf{Extra Trees}}                      \\ \hline
-   \textbf{Feature}                          & \textbf{Importance} \\
-   Mean Absolute Sim. Packing Efficiency     & 15.62\%             \\
-   Mean Unfilled Valence $e^-$               & 7.71\%              \\
-   $L^0$ Norm Stoichiometric Attributes     & 6.67\%              \\
-   Mean Unfilled F Orbital Valence $e^-$     & 3.25\%              \\
-   Mean Unfilled D Orbital Valence $e^-$     & 3.25\%              \\
-   Mean Space Group Number                     & 3.02\%              \\
-   Mean Electronegativity of Elements        & 2.95\%              \\
-   $L^2$ Norm Stoichiometric Attributes     & 2.79\%              \\ \hline
-   \multicolumn{2}{|c|}{\textbf{Random Forest}}                    \\ \hline
-   \textbf{Feature}                          & \textbf{Importance} \\
-   Mean Absolute Sim. Packing Efficiency     & 32.73\%             \\
-   Mean Unfilled Valence $e^-$               & 11.53\%             \\
-   Weighted Fraction of D Valence $e^-$      & 3.80\%              \\
-   $L^0$ Norm Stoichiometric Attributes     & 3.66\%              \\
-   Mean Melting Temperature of Elements      & 2.68\%              \\
-   Mean DFT Volume of Elemental Solids& 2.52\%              \\
-   $L^2$ Norm Stoichiometric Attributes     & 2.44\%              \\
-   $L^{10}$ Norm Stoichiometric Attributes  & 2.12\%              \\ \hline
+   \multicolumn{2}{|c|}{\textbf{Extra Trees}}                              \\ \hline
+   \textbf{Feature}                                & \textbf{Importance}   \\
+   Mean Absolute Sim. Packing Efficiency           & 20.98\%               \\
+   Mean Unfilled Valence $e^-$                     & 8.48\%                \\
+   $L^0$ Norm Stoichiometric Attributes            & 5.61\%                \\
+   Mean Space Group Number                         & 5.07\%                \\
+   Mean Melting Temperature of Elements            & 3.92\%                \\
+   Weighted Fraction of P Valence $e^-$            & 3.73\%                \\
+   Mean Electronegativity of Elements              & 3.57\%                \\
+   $L^2$ Norm Stoichiometric Attributes            & 2.78\%                \\ \hline
+   \multicolumn{2}{|c|}{\textbf{Random Forest}}                            \\ \hline
+   \textbf{Feature}                                & \textbf{Importance}   \\
+   Mean Absolute Sim. Packing Efficiency           & 49.90\%               \\
+   Mean Unfilled Valence $e^-$                     & 8.14\%                \\
+   Weighted Fraction of D Valence $e^-$            & 6.21\%                \\
+   $L^0$ Norm Stoichiometric Attributes            & 4.32\%                \\
+   $L^2$ Norm Stoichiometric Attributes            & 1.90\%                \\
+   Mean DFT Volume of Elemental Solids             & 1.88\%                \\
+   Mean Unfilled P Orbital Valence $e^-$           & 1.81\%                \\
+   Dist. from 1 Cluster $\lvert APE\rvert<0.010$\footnote{alloy composition and the cluster that has a packing efficiency below 0.010}    & 1.49\%                \\ \hline
    \end{tabular}%
    }
    \caption{Comparison of feature importance for Scikit-Learn ensemble models. Note that the top two features are the same for all three models.}
@@ -323,28 +322,6 @@ The results shown thus far have included all features produced with matminer. We
 \end{table}% tab:feature-importance
 
 Notably, Table~\ref{tab:feature-importance} shows that both models have the same top two features. Additionally, the mean space group number and mean electronegativity only appear in the Extra Trees model, while the Random Forest model uses DTF calculated volume of elemental solids, $L^{10}$ norms, and mean melting temperature of the composition elements.
-
-%  switch to this table if possible (horizontal, star environment being impossible)
-% \begin{table*}[!t] 
-%    \centering
-%    \resizebox{\textwidth}{!}{%
-%    \begin{tabular}{|lc|lc|lc}
-%    \hline
-%    \multicolumn{2}{|c|}{\textbf{Extra Trees}}                      & \multicolumn{2}{c|}{\textbf{Random Forest}}                     & \multicolumn{2}{c|}{\textbf{Decision Trees}}                                          \\ \hline
-%    \textbf{Feature}                          & \textbf{Importance} & \textbf{Feature}                          & \textbf{Importance} & \textbf{Feature}                          & \multicolumn{1}{c|}{\textbf{Importance}} \\
-%    $\lvert\mu \rvert$ Sim. Packing Efficiency\footnote{$\lvert\mu \rvert$ Sim. Packing Efficiency is the mean absolute value of the simulated packing efficiency.} & 15.62\%             & $\lvert\mu \rvert$ Sim. Packing Efficiency & 32.73\%             & $\lvert\mu \rvert$ Sim. Packing Efficiency & \multicolumn{1}{c|}{32.90\%}             \\
-%    Mean NUnfilled                            & 7.71\%              & Mean NUnfilled                            & 11.53\%             & Mean NUnfilled                            & \multicolumn{1}{c|}{11.83\%}             \\
-%    0-norm                                    & 6.67\%              & frac d valence electrons                            & 3.80\%              & frac d valence electrons                  & \multicolumn{1}{c|}{4.57\%}              \\
-%    Mean NfUnfilled                           & 3.25\%              & 0-norm                                    & 3.66\%              & Mean NdValence                            & \multicolumn{1}{c|}{3.53\%}              \\
-%    Mean NdUnfilled                           & 3.25\%              & Mean MeltingT                             & 2.68\%              & 0-norm                                    & \multicolumn{1}{c|}{3.43\%}              \\
-%    Mean SpaceGroupNumber                     & 3.02\%              & Mean GSvolume\_pa                          & 2.52\%              & Mean MeltingT                             & \multicolumn{1}{c|}{3.42\%}              \\
-%    Mean Electronegativity                    & 2.95\%              & 2-norm                                    & 2.44\%              & Mean CovalentRadius                       & \multicolumn{1}{c|}{2.94\%}              \\
-%    2-norm                                    & 2.79\%              & 10-norm                                   & 2.12\%              & 2-norm                                    & \multicolumn{1}{c|}{2.87\%}              \\ \hline
-%    \end{tabular}%
-%    }
-%    \caption{Comparison of feature importance for Scikit-Learn ensemble models. Note that the top two features are the same for all three models.}
-%    \label{tab:feature-importance}
-% \end{table*}% tab:feature-importance
 
 Next, we trained three models using only the most important features for the given model. The results are shown in Figure~\ref{fig:selected-features}. Each model has slightly worse metrics than the full model, but the decreased complexity of the model is valuable.
 
@@ -363,7 +340,7 @@ We also used our top model's most important features and made a correlations plo
 \section{Conclusions} %add discussion of Active learning bayesian optimization with prediction and uncertainty 
 We successfully created various machine learning models to predict superconductor critical temperatures, including unconventional models like mlens superlearners. For each model, we successfully quantified uncertainty of our predictions and optimized our hyperparameters with bayesian regression. 
 
-This project focused on experimental data and used matminer to generate our features. Further work could include expansion of models to simulated datasets and application to potential superconductors. This could expose weaknesses in our model and illustrate improvements we could make to predict more accurately.
+This project focused on experimental data and used matminer to generate our features. Further work could include expansion of models to simulated datasets and application to potential superconductors. This could expose weaknesses in our model and illustrate improvements we could make to predict more accurately. We could also implement Bayesian Optimization with our predictions and uncertainty to determine optimial materials to synthesize.
 
 \begin{figure*}[!b]
    \centering
