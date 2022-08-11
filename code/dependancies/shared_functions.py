@@ -66,7 +66,7 @@ def import_data(filename="features.csv", replace_inf=False, drop_undef_tc=True, 
 ###############################################
 ######### Define Evaluation Functions #########
 ###############################################
-def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus", forestci=False, export_feat_importance=False, image=False, background=True, csv=False, show=True, verbose=True, dumpdb=False, maxexpected=135):
+def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus", forestci=False, export_feat_importance=False, image=False, background=True, results_csv=False, show=True, verbose=True, dumpdb=False, maxexpected=135):
     """
     Defines function that trains a model to predict critical temp and plots with metrics and optional uncertainty.
     Uncertainty and forestci arguments override method specifications. forestci is much faster than mapie and is only applicable to random forest models.
@@ -75,7 +75,7 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
     warnings.filterwarnings("ignore", category=FutureWarning)
     np.random.seed(43)
-    rc_context_dict = {'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'} if background else {} #define rc_context dictionary
+    rc_context_dict = {'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'} if background else {'figure.facecolor':(0,0,0,0)} #define rc_context dictionary
     title_color = 'white' if background else 'black' #define color for text in graph
     with plt.rc_context(rc_context_dict):
         plt.title(f"{model_name} - Prediction vs. Actual Value (CV)", color=title_color)
@@ -158,10 +158,10 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
         if show: plt.show() #show plot if enabled
         plt.clf() #clear plot (added after some wierd script glitching)
 
-def evaluate(models, title, filename='results', method="plus", forestci=False, image=True, background=True, csv=True, dumpdb=False, verbose=True): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
+def evaluate(models, title, filename='results', method="plus", forestci=False, image=True, background=True, results_csv=True, dumpdb=False, verbose=True): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
     np.random.seed(43)
-    rc_context_dict = {'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'} if background else {} #define rc_context dictionary
+    rc_context_dict = {'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'} if background else {'figure.facecolor':(0,0,0,0)}  #define rc_context dictionary
     title_color = 'white' if background else 'black' #define color for text in graph
     with plt.rc_context(rc_context_dict):
         warnings.filterwarnings("ignore")

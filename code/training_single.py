@@ -103,6 +103,6 @@ for [enabled, model_name, regressor, parameters] in models: #optimize enabled mo
     model_name += suffix
     if True in enabled: #if model is enabled or all models are enabled
         print(f'Starting training on {model_name}')
-        sfn.evaluate_one(model_name, regressor, parameters, image=True, csv=args.csv, export_feat_importance=args.fi, background=args.background, uncertainty=args.uncert, forestci=args.forestci, method=args.method)
+        sfn.evaluate_one(model_name, regressor, parameters, image=True, results_csv=args.csv, export_feat_importance=args.fi, background=args.background, uncertainty=args.uncert, forestci=args.forestci, method=args.method)
     else:
         print(f"Skipping {model_name} as it is not enabled.")
