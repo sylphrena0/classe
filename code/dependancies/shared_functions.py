@@ -39,7 +39,12 @@ def syncdir():
 ################################################
 ############ Define Import Function ############
 ################################################
-def import_data(filename="features.csv", replace_inf=False, drop_undef_tc=True, drop=None, split=True):
+def import_data(filename="features.csv", #change filename, using files from ../../data
+                    replace_inf=False, #toggle replacing infinities in data with NaN
+                    drop_undef_tc=True, #toggle dropping undefined Tc in dataset (Tc=0)
+                    drop=None, #specify list of columns to drop
+                    split=True #toggle test train split, if modifications are needed
+                ):
     '''
     Imports the data from get_featurizers. Drop argument can be a list of columns to drop or a string like
     '''
@@ -66,7 +71,22 @@ def import_data(filename="features.csv", replace_inf=False, drop_undef_tc=True, 
 ###############################################
 ######### Define Evaluation Functions #########
 ###############################################
-def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus", forestci=False, export_feat_importance=False, image=False, background=True, results_csv=False, show=True, verbose=True, dumpdb=False, maxexpected=135):
+def evaluate_one(model_name, #pass model name for plot titles and files
+                    model, #pass scikit-learn model object for training
+                    parameters, #pass scikit-learn model parm dictionary
+                    uncertainty=True, #boolean to toggle uncertainty measurements
+                    method="plus", #string - choose mapie uncertainty estimator method
+                    forestci=False, #toggle ForestCI uncertainty (only works on random forest, overrides MAPIE)
+                    feature_importance=False, #toggle exporting feature importance (only works w/o uncertainty)
+                    image=False, #toggle image exporting
+                    background=True, #toggle between dark mode (True) and no background (False)
+                    predictions_csv=False, #toggle exporting prediction csv
+                    results_csv=False, #toggle export results csv
+                    show=True, #toggle showing plt plot when running
+                    verbose=True, #toggle verbose running
+                    dumpdb=False, #toggle dumping a dill db to import file variables for later use
+                    maxexpected=135 #limit on actual value line, uses for temp limited plots
+                ):
     """
     Defines function that trains a model to predict critical temp and plots with metrics and optional uncertainty.
     Uncertainty and forestci arguments override method specifications. forestci is much faster than mapie and is only applicable to random forest models.
@@ -99,13 +119,13 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
                 regressor.fit(train_data, train_target) #fit the model
             model_pred = regressor.predict(test_data) #make predictions on test data
         
-        if export_feat_importance and hasattr(regressor, 'feature_importances_'): #if we are exporting feature importance and model has attribute "feature_importances_"
+        if feature_importance and hasattr(regressor, 'feature_importances_'): #if we are exporting feature importance and model has attribute "feature_importances_"
             feat_columns = data.columns.tolist()
             feat_importance = pd.DataFrame(feat_columns, columns=('Feature',)) #get feature importances from model
             feat_importance['Importance'] = regressor.feature_importances_.astype(float)
             feat_importance = feat_importance.sort_values('Importance', ascending=False)
             feat_importance.to_csv(f'../data/importance/{save_name}_importance.csv', index=False) #save csv
-        elif export_feat_importance:
+        elif feature_importance:
             warnings.warn("Cannot calculate feature importance, this model might not have feature_importances_, or you may be trying to run with uncertainty calculations, which is not supported.", category=Warning)
             
         mws = None #needed if uncertainty disabled
@@ -114,7 +134,7 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
         mae = round(mean_absolute_error(test_target, model_pred),3) #find mean square error
         r2 = round(r2_score(test_target, model_pred),3) #find r2 score
 
-        #make our plot - with plt.rc_context sets theme to look good in dark mode
+        if predictions_csv: predictions = pd.DataFrame(test_target, model_pred, columns=("Test Target", "Test Prediction")) #store predictions in datafram if we want to export
         difference = np.abs(test_target - model_pred) #function that finds the absolute difference between predicted and actual value
         im = plt.scatter(test_target, model_pred, cmap='plasma_r', norm=plt.Normalize(0, 120), c=difference, label="Critical Temperature (K)", zorder=2) #create scatter plot of data 
         plt.plot((0,maxexpected), (0,maxexpected), 'k--', alpha=0.75, zorder=3) #add expected line. Values must be changed with different data to look good
@@ -135,8 +155,9 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
                 yerror = np.abs(model_pis[:,:,0].transpose() - np.tile(model_pred, (2, 1))) #error must be in shape (n, 2) for errorbars
                 mws = round(regression_mws(model_pis[:,:,0][:,0],model_pis[:,:,0][:,1]),3) #generate mean width score metric from mapie data
             plt.errorbar(test_target, model_pred, yerr=yerror, fmt="none", ecolor="black", alpha=0.5, zorder=1, label="Prediction Intervals")
+            if predictions_csv: predictions["Uncertainty"] = yerror
         else:
-            save_name = "no-uncertainty/" #moves into no-uncertainty directory
+            save_name = "no-uncertainty/" + save_name #moves into no-uncertainty directory
 
         if dumpdb: dill.dump_session(f'../results/bulk_{filename}.db') #dump python session for external use
 
@@ -154,11 +175,25 @@ def evaluate_one(model_name, model, parameters, uncertainty=True, method="plus",
         plt.legend()
         plt.colorbar().set_label(label="Difference from Actual (K)", color=title_color) #using .set_label() as colorbar() does accept color arguments
         if image: plt.savefig(f'../results/individual/{save_name}.png', bbox_inches='tight') #export image if enabled
-        if csv: results.to_csv(f'../results/individual/{save_name}.csv', index=False) #export csv if enabled
+        if results_csv: results.to_csv(f'../results/individual/{save_name}.csv', index=False) #export csv if enabled
+        if predictions_csv: predictions.to_csv(f'../results/individual/{save_name}_predictions.csv', index=False)
         if show: plt.show() #show plot if enabled
         plt.clf() #clear plot (added after some wierd script glitching)
 
-def evaluate(models, title, filename='results', method="plus", forestci=False, image=True, background=True, results_csv=True, dumpdb=False, verbose=True): #define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
+def evaluate(models, #list of list of models to plot
+                title, #set supertitle of plot
+                filename='results', #set filename to export
+                method="plus", #string - choose mapie uncertainty estimator method
+                forestci=False, #toggle ForestCI uncertainty (only works on random forest, overrides MAPIE)
+                image=True, #toggle image exporting
+                background=True, #toggle between dark mode (True) and no background (False)
+                results_csv=True, #toggle export results csv
+                dumpdb=False, #toggle dumping a dill db to import file variables for later use
+                verbose=True #toggle verbose running
+            ): 
+    """
+    Define function that trains up to eight models at once plots with each model in a subplot. Includes model scores
+    """
     global train_data, train_data, test_data, test_target #we need these variables and don't want to pass them as arguments
     np.random.seed(43)
     rc_context_dict = {'xtick.color':'white', 'ytick.color':'white','axes.titlecolor':'white','figure.facecolor':'#1e1e1e','text.color':'white','legend.labelcolor':'black'} if background else {'figure.facecolor':(0,0,0,0)}  #define rc_context dictionary
@@ -234,5 +269,5 @@ def evaluate(models, title, filename='results', method="plus", forestci=False, i
 
         fig.colorbar(im, ax=ax.ravel().tolist()).set_label(label="Difference from Actual (K)", color=title_color) #using .set_label() as colorbar() does accept color arguments
         if image: plt.savefig(f'../results/{filename}.png', bbox_inches='tight') #export image if enabled
-        if csv: results.to_csv(f'../results/{filename}.csv', index=False) #export csv if enabled
+        if results_csv: results.to_csv(f'../results/{filename}.csv', index=False) #export csv if enabled
         plt.show() #show plot
