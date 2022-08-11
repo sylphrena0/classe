@@ -137,7 +137,6 @@ MAPIE also has a prefit method, but it is difficult to extract uncertainty bars 
 Lolo is a Scala random forest machine learning library and is not a native python implementation. Lolopy is a python wrapper for lolo, but this implementation is very slow for large datasets. We were unable to successfully train a lolopy model due to these factors and time limitations of the project, but our code supports lolopy models.
 
 \subsection{Project Structure} %spell out CLASSE, link/cite CLASSE - move data/code availabilty to it's own subsection
-The source code used for this paper is available publicly on github at \url{https://github.com/sylphrena0/classe2022}. This repository also includes the source files for this latex paper, data files, images, and documentation files.
 
 Our research uses numpy and pandas throughout our code to handle arrays and tabular data \cite{Harris2020array, Reback2020pandas}. We also use matplotlib and seaborns to generate our graphs \cite{Hunter2007, Waskom2021}.
 
@@ -156,6 +155,9 @@ Next, the training\_single jupyter notebook or script can train individual model
 The optimizer script then uses a grid of manually defined hyperparameters to optimize models based on R2 score. This allowed significant improvements to baseline models. After optimization, the optimized models can be plotted in our single training notebook. After confirmation that the model is better than the baseline, the models can then be plotted together in a single graph using our bulk training notebook. 
 
 We evaluated our models using several metrics - R2 scores (R2) for regression evaluation, Mean Squared Error (MSE) and Mean Absolute Error (MAE) for error evaluation, and MAPIE Effective Mean Widths (MWS) for uncertainty evaluation.
+
+\subsection{Data Availabilty}
+The source code used for this paper is available publicly on github at \url{https://github.com/sylphrena0/classe2022}. This repository also includes the source files for this latex paper, datasets, images, and documentation for the code.
 
 \section{Results}
 \subsection{Model Optimization}
