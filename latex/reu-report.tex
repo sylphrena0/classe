@@ -38,7 +38,7 @@ One of the long-standing challenges in the last century is to find near room-tem
 \maketitle
 %\tableofcontents
 
-\section{Introduction}%!!!look into top features and what they are, add to paper and presentation
+\section{Introduction}
 %get rid of subsections, bulletpoint types of models, incl. references
 %model discussions after dataset
 Superconductors are materials that lose all electrical resistance at low temperatures. These materials have a critical temperature ($T_C$) at which they lose their resistance. Most have very low critical temperatures, but “unconventional superconductors” can have critical temperatures as high as room temperature under non-atmospheric conditions. 
@@ -51,8 +51,8 @@ Machine learning can be an excellent asset in the search for such superconductin
 
 Calculating uncertainty is also important, as it can give research a confidence range for a machine learning model's prediction. This paper attempts to create an accurate model with uncertainty quantification, allowing experimentalists to predict critical temperatures with the confidence intervals.
 
-\section{Methodology} %!!!fix double figure page (move 5th page)
-\subsection{Database} %!!!fix figure numbers including section numbers!!
+\section{Methodology}
+\subsection{Database}
 We chose to use data sourced from one most popular experimental datasets, the supercon database from Japan's National Institute for Materials Science. This dataset is not available publicaly from the National Institute for Materials Science's website, so we used data obtained from \cite{Stanev2018}. This is the same database, but Stanev Et al. resolved conflicts in the data and dropped obvious erroneous data.
 
 This datasets contains 16,414 superconductor chemical compositions and their experimentally measured critical temperatures. According to \cite{Stanev2018}, around 5700 of these materials are cuprates and 1500 are iron-based. More demographic metadata is available in their paper. 
@@ -78,7 +78,7 @@ Most superconductor databases do not include enough information to train an effe
 
 Our database only provides the superconductor composition data. Matminer's featurizers can generate 53 features from the composition of a material. If we had band structure or other data, we could produce more information that we could use in our model.
 
-\subsection{Machine Learning} %!!!add discussion of linear regression
+\subsection{Machine Learning}
 
 Previous papers have used random forest models to predict critical temperature [citation needed], but this paper will examine eight models before settling on two for further investigation. All models are implemented with Scikit-Learn, with the notable exception of a mlens superlearner \cite{scikit-learn, flennerhag:2017mlens}. We will also use MAPIE models for uncertainty, discussed in Section~\ref{sec:uncertainty}.
 
@@ -86,6 +86,9 @@ We decided to test a variety of machine learning models to ensure we would find 
 
 \begin{itemize}
   \item Linear Regression
+  \begin{itemize}
+   \item  Linear Regression works by minimizing a cost function, in this case the residual sum of squares between targets ($T_C$) in the dataset. 
+  \end{itemize}
   \item Support Vector Regression (SVR)
   \begin{itemize}
   		\item  SVR makes predictions with decision boundaries, which are lines parallel to the regression line or curve. The model aims to maximize the amount of data within the decision boundaries and has hyperparameters to modify sensitivity to prevent overfitting.\footnote{Overfitting occurs when a model is trained to be too specific to a particular dataset and is not generalizable.}
@@ -226,32 +229,7 @@ We also implemented Bayesian optimization using Gaussian Processes methods from 
   \caption{CV scores of the models comparing optimized and base hyper-parameters.}
   \label{tab:results}
 \end{table*}% tab:results
-\afterpage{\clearpage}
 
-%move this page down if we can, after finishing draft:
-\begin{figure*}[!h]
-   \centering
-   \includegraphics[height=2.25in]{images/subfigures/random_forest_optimized_forestci.png} \nolinebreak
-   \includegraphics[height=2.25in]{images/subfigures/random_forest_optimized_mapie-naive.png} \nolinebreak
-   \includegraphics[height=2.25in]{images/subfigures/random_forest_optimized_mapie-plus.png}
-   \caption{Comparision MAPIE methods and ForestCI uncertainty calculations for Random Forest models with plot of optimized model predictions versus actual critical temperatures. Note that all other uncertainty calculations in this paper use the MAPIE-plus method, which uses a Jackknife+ algorithm. This is the default method for MAPIE.}
-   \label{fig:mapie-forestci}
-\end{figure*}% fig:mapie-forestci
-
-\begin{figure*}[!h]
-    \centering
-    \includegraphics[height=2.25in]{images/subfigures/uncertainty/elastic_net_optimized.png}
-    \includegraphics[height=2.25in]{images/subfigures/uncertainty/bayesian_regression_optimized.png}
-    \includegraphics[height=2.25in]{images/subfigures/uncertainty/kneighbors_optimized.png}
-   %  \includegraphics[height=2.25in]{images/subfigures/uncertainty/support_vector_regression_optimized.png}
-   %  \includegraphics[height=2.25in]{images/subfigures/uncertainty/decision_tree_optimized.png}
-   %  \includegraphics[height=2.25in]{images/subfigures/uncertainty/linear_regression.png}
-    \includegraphics[height=2.25in]{images/subfigures/uncertainty/random_forest_optimized.png}
-    \includegraphics[height=2.25in]{images/subfigures/uncertainty/extra_trees_optimized.png}
-    \includegraphics[height=2.25in]{images/subfigures/uncertainty/superlearner.png}
-    \caption{Graph of optimized model predictions versus actual critical temperatures for selected base model with confidence intervals. Other models have similar invervals but are omitted here for brevity.}
-    \label{fig:results-uncertainty}
-\end{figure*}% fig:results-uncertainty
 \clearpage
 
 The performance of each optimizer on selected high performance models is shown in Table~\ref{tab:optimizers}. Note that the optimal method for each model (shown in bold), was found with various methods. The Bayesian optimization was much less computationally expensive than GridSearchCV, however, and is the recommended method for large datasets.
@@ -280,33 +258,35 @@ In Figure~\ref{fig:results-uncertainty}, each point has error bars that show the
 
 The linear models in Figure~\ref{fig:results-uncertainty} have unacceptablely large prediction intervals, in addition to their poor R2 and error metrics. KNeighbors is slightly better, but the uncertainty is still very high. Once again, our ensemble methods show the best metrics, with much smaller prediction intervals that still almost always include the actual value.
 
+%move this page down if we can, after finishing draft:
+\begin{figure*}[!h]
+   \centering
+   \includegraphics[height=2.25in]{images/subfigures/random_forest_optimized_forestci.png} \nolinebreak
+   \includegraphics[height=2.25in]{images/subfigures/random_forest_optimized_mapie-naive.png} \nolinebreak
+   \includegraphics[height=2.25in]{images/subfigures/random_forest_optimized_mapie-plus.png}
+   \caption{Comparision MAPIE methods and ForestCI uncertainty calculations for Random Forest models with plot of optimized model predictions versus actual critical temperatures. Note that all other uncertainty calculations in this paper use the MAPIE-plus method, which uses a Jackknife+ algorithm. This is the default method for MAPIE.}
+   \label{fig:mapie-forestci}
+\end{figure*}% fig:mapie-forestci
+
+\begin{figure*}[!h]
+    \centering
+    \includegraphics[height=2.25in]{images/subfigures/uncertainty/elastic_net_optimized.png}
+    \includegraphics[height=2.25in]{images/subfigures/uncertainty/bayesian_regression_optimized.png}
+    \includegraphics[height=2.25in]{images/subfigures/uncertainty/kneighbors_optimized.png}
+   %  \includegraphics[height=2.25in]{images/subfigures/uncertainty/support_vector_regression_optimized.png}
+   %  \includegraphics[height=2.25in]{images/subfigures/uncertainty/decision_tree_optimized.png}
+   %  \includegraphics[height=2.25in]{images/subfigures/uncertainty/linear_regression.png}
+    \includegraphics[height=2.25in]{images/subfigures/uncertainty/random_forest_optimized.png}
+    \includegraphics[height=2.25in]{images/subfigures/uncertainty/extra_trees_optimized.png}
+    \includegraphics[height=2.25in]{images/subfigures/uncertainty/superlearner.png}
+    \caption{Graph of optimized model predictions versus actual critical temperatures for selected base model with confidence intervals. Other models have similar invervals but are omitted here for brevity.}
+    \label{fig:results-uncertainty}
+\end{figure*}% fig:results-uncertainty
+
+\clearpage
+
 \subsection{Feature Selection}
 
-\begin{figure}[!h]
-   \centering
-   \includegraphics[width=\columnwidth]{images/feature_heatmap_eti.png}
-   \caption{Heatmap of correlations between most important features for our Extra Trees model and the critical temperatures.}
-   \label{fig:feature-correlations}
-\end{figure}% fig:feature-correlations
-
-\begin{figure*}[!b]
-   \centering
-   \includegraphics[height=2.25in]{images/subfigures/random_forest_selected_features.png}\nolinebreak
-   \includegraphics[height=2.25in]{images/subfigures/superlearner_selected_features.png}\nolinebreak
-   \includegraphics[height=2.25in]{images/subfigures/extra_trees_selected_features.png}
-   \caption{Top three optimized models, using their top ten most important features. Note that the Superlearner model is using the Extra Trees feature importance, as the mlens model does not have a feature importance method.}
-   \label{fig:selected-features}
-\end{figure*}% fig:selected-features
-
-\begin{figure*}[]
-   \centering
-   \includegraphics[height=2.5in]{images/subfigures/random_forest_t_c_<_23k.png}%\\
-   \includegraphics[height=2.5in]{images/subfigures/random_forest_t_c_>_23k.png}\\
-   \includegraphics[height=2.5in]{images/subfigures/extra_trees_t_c_<_23k.png}
-   \includegraphics[height=2.5in]{images/subfigures/extra_trees_t_c_>_23k.png}
-   \caption{Random Forest and Extra Trees models using temperature limited data, $T_C$ above or below 23K.}
-   \label{fig:temp-limited}
-\end{figure*}% fig:temp-limited
 
 The results shown thus far have included all features produced with matminer. We decided to perform some feature selection to reduce complexity and training time for our models. First, we used Scikit-Learn's feature importance method for our ensemble methods to find the relative importance for each model. The most important features for Random Forest and Extra Trees are shown in Table~\ref{tab:feature-importance}. 
 
@@ -371,11 +351,37 @@ Next, we trained three models using only the most important features for the giv
 
 We also used our top model's most important features and made a correlations plot, shown in Figure~\ref{fig:feature-correlations}. A full correlation plot is available on github, but is too large for this paper.
 
+
+\begin{figure}[!h]
+   \centering
+   \includegraphics[width=\columnwidth]{images/feature_heatmap_eti.png}
+   \caption{Heatmap of correlations between most important features for our Extra Trees model and the critical temperatures.}
+   \label{fig:feature-correlations}
+\end{figure}% fig:feature-correlations
+
 \section{Conclusions}
 We successfully created various machine learning models to predict superconductor critical temperatures, including unconventional models like mlens superlearners. For each model, we successfully quantified uncertainty of our predictions and optimized our hyperparameters with bayesian regression. 
 
 This project focused on experimental data and used matminer to generate our features. Further work could include expansion of models to simulated datasets and application to potential superconductors. This could expose weaknesses in our model and illustrate improvements we could make to predict more accurately.
 
+\begin{figure*}[!b]
+   \centering
+   \includegraphics[height=2.25in]{images/subfigures/random_forest_selected_features.png}\nolinebreak
+   \includegraphics[height=2.25in]{images/subfigures/superlearner_selected_features.png}\nolinebreak
+   \includegraphics[height=2.25in]{images/subfigures/extra_trees_selected_features.png}
+   \caption{Top three optimized models, using their top ten most important features. Note that the Superlearner model is using the Extra Trees feature importance, as the mlens model does not have a feature importance method.}
+   \label{fig:selected-features}
+\end{figure*}% fig:selected-features
+
+\begin{figure*}[]
+   \centering
+   \includegraphics[height=2.5in]{images/subfigures/random_forest_t_c_<_23k.png}%\\
+   \includegraphics[height=2.5in]{images/subfigures/random_forest_t_c_>_23k.png}\\
+   \includegraphics[height=2.5in]{images/subfigures/extra_trees_t_c_<_23k.png}
+   \includegraphics[height=2.5in]{images/subfigures/extra_trees_t_c_>_23k.png}
+   \caption{Random Forest and Extra Trees models using temperature limited data, $T_C$ above or below 23K.}
+   \label{fig:temp-limited}
+\end{figure*}% fig:temp-limited
 
 \begin{acknowledgments}
 I would like to thank my mentor, Suchismita Sarker, for her guidance and support with this project. This work is supported by the U.S. National Science Foundation under award number NSF PHY-2150125, REU Site: Accelerator Physics and Synchrotron Radiation Science.
