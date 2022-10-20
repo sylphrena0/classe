@@ -1,5 +1,5 @@
 # **Cornell CLASSE REU Repository**
-*Author/Mentee: Kirk Kleinsasser*
+*Author/Mentee: Sylphrena Kleinsasser*
 
 *Mentor: Suchismita Sarker*
 
