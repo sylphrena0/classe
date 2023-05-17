@@ -5,7 +5,7 @@
 # and this file can be imported from our code in .. with import dependancies.shared_functions as sfn. 
 # This file is used for ../training_bulk.ipynb and ../training_single.ipynb.
 #
-# Author: Kirk Kleinsasser
+# Author: Sylphrena Kleinsasser
 ################################################
 
 ###############################################

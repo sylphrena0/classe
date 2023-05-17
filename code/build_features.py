@@ -5,7 +5,7 @@
 # and data from the composition. This data is then exported to ../data/features.csv, after which machine learning models 
 # can be trained to predict the Tc of superconductors based on composition.
 #
-# Author: Kirk Kleinsasser
+# Author: Sylphrena Kleinsasser
 #################################################
 
 #################################################

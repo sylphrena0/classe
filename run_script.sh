@@ -7,7 +7,7 @@
 # and accepts arguments for qsub and for the python script. 
 # Syntax (using ./.bashrc) is "compute --pythonscript <scriptname> <scriptarguments>"
 #
-# Author: Kirk Kleinsasser
+# Author: Sylphrena Kleinsasser
 ######################################################
 #
 # Passes variable to set the run time name of the job

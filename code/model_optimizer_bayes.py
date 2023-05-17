@@ -4,7 +4,7 @@
 # Trains models to predict critical temperatures based on features found with "*../code/get_featurizers.ipynb*". 
 # Imports data from "*../data/supercon_feat.csv*", which is produced in *get_featurizers.ipynb*. The orginal data is from the supercon database. 
 # Compute-Farm version
-# Author: Kirk Kleinsasser
+# Author: Sylphrena Kleinsasser
 ################################################
 
 ######################################################

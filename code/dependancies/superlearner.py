@@ -4,7 +4,7 @@
 # This python file creates functions needed to run a superlearner and allows us to run a mlens superlearner with the same syntax
 # as sklearn models, using get_superlearner(). This file is used for ../training_bulk.ipynb and ../training_single.ipynb.
 #
-# Author: Kirk Kleinsasser
+# Author: Sylphrena Kleinsasser
 ################################################
 
 ################################################

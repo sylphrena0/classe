@@ -1,7 +1,7 @@
 # **REU Documentation**
 Documents daily work in the REU program, including events, meetings, and broad descriptions of programming work.
 
-*Author: Kirk Kleinsasser*
+*Author: Sylphrena Kleinsasser*
 
 <br>
 

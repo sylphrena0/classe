@@ -5,7 +5,7 @@
 # Imports data from "*../data/features.csv*", which is produced in *get_featurizers.ipynb*. 
 # The orginal data is from the supercon database. This notebook is for testing single models.
 # Compute-Farm version
-# Author: Kirk Kleinsasser
+# Author: Sylphrena Kleinsasser
 #################################################
 
 ######################################################

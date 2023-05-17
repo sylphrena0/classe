@@ -5,7 +5,7 @@
 # This bash script runs python scripts on the Cornell CLASSE compute farm
 # and accepts arguments for qsub and for the python script [attempts to accept qsub args]
 #
-# Author: Kirk Kleinsasser
+# Author: Sylphrena Kleinsasser
 ######################################################
 #TODO: Figure out why this won't run
 
